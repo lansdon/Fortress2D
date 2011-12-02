@@ -1,0 +1,12 @@
+Fortress2D
+By Lansdon Page
+
+A 2D Fortress Defense / Building game using OpenGL.
+
+Library dependencies:
+FreeGLUT
+OpenGL
+Box2D
+
+Comments or questions:
+lobotomizer2000@yahoo.com
