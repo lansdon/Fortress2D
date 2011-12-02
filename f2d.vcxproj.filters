@@ -1,0 +1,198 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\GO">
+      <UniqueIdentifier>{6c77d5dc-3c49-41f2-82ab-f2b551304d6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GO">
+      <UniqueIdentifier>{a5dec9fb-bb82-491a-aad8-567143621971}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\GLText.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GUIButton.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GUIButtonMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Input.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\LevelLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MyContactListener.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Performance_Counter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TextureLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Util.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Vector3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\WinParems.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Fort.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GOArcher.cpp">
+      <Filter>Source Files\GO</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GOWoodWall.cpp">
+      <Filter>Source Files\GO</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GOArcherTower.cpp">
+      <Filter>Source Files\GO</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GOBarbarian.cpp">
+      <Filter>Source Files\GO</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GOCatapult.cpp">
+      <Filter>Source Files\GO</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GOFence.cpp">
+      <Filter>Source Files\GO</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GOMageTower.cpp">
+      <Filter>Source Files\GO</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GOMote.cpp">
+      <Filter>Source Files\GO</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GOOilTower.cpp">
+      <Filter>Source Files\GO</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GOSeigeEngine.cpp">
+      <Filter>Source Files\GO</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GOStoneWall.cpp">
+      <Filter>Source Files\GO</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GOWarDog.cpp">
+      <Filter>Source Files\GO</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameObj.cpp">
+      <Filter>Source Files\GO</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameObjectManager.cpp">
+      <Filter>Source Files\GO</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameObjectFactory.cpp">
+      <Filter>Source Files\GO</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\GLText.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GUIButton.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GUIButtonMenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Input.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\LevelLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\MyContactListener.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Performance_Counter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TextureLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Util.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Vector3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\WinParems.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Fort.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GOArcher.h">
+      <Filter>Header Files\GO</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GOWoodWall.h">
+      <Filter>Header Files\GO</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GOArcherTower.h">
+      <Filter>Header Files\GO</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GOBarbarian.h">
+      <Filter>Header Files\GO</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GOCatapult.h">
+      <Filter>Header Files\GO</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GOFence.h">
+      <Filter>Header Files\GO</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GOMageTower.h">
+      <Filter>Header Files\GO</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GOMote.h">
+      <Filter>Header Files\GO</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GOOilTower.h">
+      <Filter>Header Files\GO</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GOSeigeEngine.h">
+      <Filter>Header Files\GO</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GOStoneWall.h">
+      <Filter>Header Files\GO</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GOWarDog.h">
+      <Filter>Header Files\GO</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameObj.h">
+      <Filter>Header Files\GO</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameObjectManager.h">
+      <Filter>Header Files\GO</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameObjectFactory.h">
+      <Filter>Header Files\GO</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

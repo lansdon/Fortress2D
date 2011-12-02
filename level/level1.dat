@@ -1,0 +1,17 @@
+Chronological order of monsters being spawned
+0=NONE
+1=WARDOG
+2=SPEARMAN
+3=ARCHER
+4=SEIGE ENGINE
+
+Enter numbers 1 per line after the "begin" tag.
+
+level_begin
+3
+3
+3
+3
+3
+3
+3
