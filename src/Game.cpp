@@ -146,7 +146,6 @@ void Game::draw() {
 
 
 // Main "Loop" function  (the loop actually comes from winMain)
-//bool Game::update() {
 bool Game::update() {
 
 	// TEMP - Load an object for testing
@@ -156,8 +155,6 @@ bool Game::update() {
 		level.loadLevel(lvl);
 	}
 
-
-
 	// Timer - Get elapsed time since last update
 	Timer.Calculate_Ellapsed_Time();
 	frameElapsedTime = Timer.TotalTime();
@@ -166,13 +163,10 @@ bool Game::update() {
 	//if(frameElapsedTime > 0.25)
 	//	frameElapsedTime = 0.25;
 
-
 	// Physics Update - Box2d
-//	bool didTimeStep = false;
 	double ts = winParems.getTimeStep();
 	while( accumulator >= ts ) {
 		++timeStepCount;
-//		didTimeStep = true;
 		winParems.step();
 		accumulator -= winParems.getTimeStep();
 	}
@@ -180,7 +174,6 @@ bool Game::update() {
 	// Game Objects
 	go->updateDefenders();
 	updateAttackers();
-
 
 	// Input
 	processInput();
@@ -206,13 +199,10 @@ void Game::drawMenu() {
 // draws the level background
 void Game::drawBackground() {		
 
-//	double x = 0, y = 0; // 2D x/y coordinates
-
 	glLoadIdentity();
 	glColor3f(DEF_DRAW_COLOR.r, DEF_DRAW_COLOR.g, DEF_DRAW_COLOR.b);
 	
 	// Draw ground plane
-//	glTranslatef((GLfloat)-winParems.width()/2, (GLfloat)-winParems.height()/2, (GLfloat)winParems.depth());       // Move to 0,0 in bottom left corner of coord system
 //	glTranslatef((GLfloat)0, (GLfloat)0, (GLfloat)winParems.depth());       // Move to 0,0 in bottom left corner of coord system
 	glBegin(GL_QUADS);                      // Draw A Quad
 		glVertex2f(0, winParems.floor());              // Top Left
@@ -228,17 +218,6 @@ void Game::drawBackground() {
 		glVertex2d(winParems.mid()+1, winParems.floor()-5);              // Bottom Right
 		glVertex2d(winParems.mid(), winParems.floor()-5);              // Bottom Left
 	glEnd();                            // Done Drawing The Quad
-
-
-	// POSITION TEST
-	//glColor3f(DEF_DRAW_COLOR.r, DEF_DRAW_COLOR.g, DEF_DRAW_COLOR.b);
-	//for (int i=-800; i < 800; i+=50) {
-	//	for (int j=-600; j < 600; j+=50) {
-	//		std::stringstream ss;
-	//		ss << "(" << i << "," << j << ")";
-	//		text.text(ss, i, j, winParems.depth());
-	//	}
-	//}
 
 }
 
@@ -264,7 +243,6 @@ void Game::drawScoreboard() {
 		glVertex2d(0, winParems.height()-SCOREBOARD_HEIGHT-1);              // Bottom Left
 	glEnd();                            // Done Drawing The Quad
 
-
   // Display score:
 	float sPosX = 30;
 	float sPosY = winParems.height() - SCOREBOARD_HEIGHT/2;
@@ -280,8 +258,6 @@ void Game::drawScoreboard() {
 	text.text(s2, sPosX + (1*(winParems.width()/4)), sPosY, winParems.depth());
 	text.text(s3, sPosX + (2*(winParems.width()/4)), sPosY, winParems.depth());
 	text.text(s4, sPosX + (3*(winParems.width()/4)), sPosY, winParems.depth());
-
-
 }
 
 
@@ -319,55 +295,6 @@ void Game::updateAttackers() {
 	go->updateAttackers();
 }
 
-//
-//// Load Level Objects
-//void Game::loadLevel(int level) {
-////	lvl = level;
-//
-//	// NEW BOX2d Method
-//	// Define the dynamic body. We set its position and call the body factory.
-//
-////	for(int i=0; i <= 2; ++i) {
-//		
-////		makeAttacker();
-//
-//		//// USER DATA - Added to body
-//		//GameObj *temp = new GameObj(&winParems);
-//		//temp->setArmorMax(1);
-//		//temp->setArmor(2);
-//		//temp->setHP(100);
-//		//temp->setHPMax(100);
-//		//temp->setName("FODDER");
-//		//temp->setType(GameObj::ATTACKER);
-//		//temp->setDamage(10);
-//		//temp->setTeam(true);
-//
-//	
-//		//b2BodyDef bodyDef;
-//		//bodyDef.type = b2_dynamicBody;
-//		//bodyDef.position.Set(-400 + i*10, -winParems.height()/2 + winParems.floor() + 1);
-//		//bodyDef.linearVelocity(Util::meter2Pixel(5));
-//		//bodyDef.userData = temp;
-//		//temp->body = winParems.getWorld()->CreateBody(&bodyDef);
-//		//attackerObj.push_back(temp);
-//
-//		//// Define another box shape for our dynamic body.
-//		//b2PolygonShape dynamicBox;
-//		//dynamicBox.SetAsBox(temp->getTextWidth()/2, temp->getTextHeight()/2);
-//		//// Define the dynamic body fixture.
-//		//b2FixtureDef fixtureDef;
-//		//fixtureDef.shape = &dynamicBox;
-//		//// Set the box density to be non-zero, so it will be dynamic.
-//		//fixtureDef.density = 1.0f;
-//		//// Override the default friction.
-//		//fixtureDef.friction = 0.00f;
-//		//temp->body->SetLinearVelocity(b2Vec2(i*10+10, 0.0));
-//		//// Add the shape to the body.
-//		//temp->body->CreateFixture(&fixtureDef);
-//
-////	}
-//}
-
 
 void Game::makeAttacker() {
 	t_lvlSpawn.Calculate_Ellapsed_Time();
@@ -378,7 +305,6 @@ void Game::makeAttacker() {
 }
 
 void Game::keyPressed(unsigned char key, int x, int y) {
-
 	// Get modifiers
 	int alt, ctrl, modifiers, shift;
 	modifiers = glutGetModifiers();
@@ -400,7 +326,6 @@ void Game::keyPressed(unsigned char key, int x, int y) {
 
 
 void Game::specialKeyPressed(int key, int x, int y) {
-
 	// Get modifiers
 	int alt, ctrl, modifiers, shift;
 	modifiers = glutGetModifiers();
@@ -410,7 +335,6 @@ void Game::specialKeyPressed(int key, int x, int y) {
 
 	// PROCESS KEYBOARD INPUT
 	switch(key) {
-
 		case 'L':
 		case 'l': {
 			std::string msg("L IS PRESSED!!");

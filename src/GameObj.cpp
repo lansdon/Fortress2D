@@ -174,7 +174,7 @@ void GameObj::draw() {						// draw the object on screen
 	if(winParems->useTextures()) {
 		glEnable(GL_TEXTURE_2D); //Switch back to using colors instead of textures
 		glBindTexture(GL_TEXTURE_2D, textureID);
- 		glColor3f(1, 1, 1);
+		glColor3f(1, 1, 1);
 		 //Use blurry texture mapping (replace GL_LINEAR with GL_NEAREST for blocky)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
 	//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
@@ -205,17 +205,15 @@ void GameObj::draw() {						// draw the object on screen
 			glVertex2d(pos.x - Util::meter2Pixel(textWidth)/2, pos.y - Util::meter2Pixel(textHeight)/2);      // Bottom Left
 		glEnd();                            // Done Drawing The Quad
 
-
 	}	
-
 
 //	text.text(name, posX - (name.length()/2), textHeight, winParems.depth());
 	std::stringstream ss;
 	ss << name << " " << "x=" << body->GetPosition().x << " y=" << body->GetPosition().y;
 	std::stringstream ss2;
 	ss2 << "hp=" << getHP() << " enemies=" << enemies.size();
-	text.text(ss, (body->GetPosition().x+(*winParems).width()/2), (body->GetPosition().y+((*winParems).height()/2))+textHeight*3, (*winParems).depth());
-	text.text(ss2, (body->GetPosition().x+(*winParems).width()/2), (body->GetPosition().y+((*winParems).height()/2))+textHeight*2.5, (*winParems).depth());
+	text.text(ss, body->GetPosition().x, body->GetPosition().y+textHeight*4, winParems->depth());
+	text.text(ss2, body->GetPosition().x, body->GetPosition().y+textHeight*2.5, winParems->depth());
 }
 
 
