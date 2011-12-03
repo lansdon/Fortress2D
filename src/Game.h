@@ -80,18 +80,16 @@ public:
 
 	~Game(void);
 
-	bool update(); // Main "Loop" function  (the loop actually comes from winMain)
 	bool initGL();
-	//void setHDC(HDC *hDC) { this->winParems.setHDC(hDC); }
-	//void setGLObj(HDC *hDC, HWND *hWnd); // pass main windown handle and hardware device context
+
+	bool update(); // Main "Loop" function  (the loop actually comes from winMain)
+	void Game::draw();
 	int getScreenWidth() { return winParems.width(); }
 	int getScreenHeight() { return winParems.height(); }
 	int getScreenDepth() { return winParems.depth(); }
 
-
 	// Input
 	Input in;
-
 
 
 private:
@@ -109,17 +107,19 @@ private:
 	int lvl;					// current game level
 	int lvl_time_length;		// total timer
 	int lvl_time_remaining;		// remaining timer
-	double frameElapsedTime;			// Amount of time passed since last frame
 	void updateAttackers();
 	//void updateDefenders();
-	void Game::loadLevel(int level=0);
+//	void Game::loadLevel(int level=0);
 
 	// TIMERS
-	double t;
+	int timeStepCount;
+	double frameElapsedTime;			// Amount of time passed since last frame
+	double lastFrameElapsedTime;		// previous frame time for draw function reference
+//	double t;
 //	const double dt;
 	double accumulator;
-	double previousState;
-	double currentState;
+//	double previousState;
+//	double currentState;
 	Performance_Counter Timer;	// timer object for tracking high resolution time inbetween updates
 	Performance_Counter leftBtnTimer;	// timer object for tracking high resolution time inbetween updates
 	float LEFT_BUTTON_INTERVAL;			// amount of time inbetween single mouse clicks

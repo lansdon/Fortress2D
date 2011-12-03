@@ -49,26 +49,30 @@ int h1;
 //}
 
 
-void orthogonalStart () {
-    glMatrixMode(GL_PROJECTION);
-    glPushMatrix();
-    glLoadIdentity();
-    gluOrtho2D(0, w1, 0, h1);
-    glScalef(1, -1, 1);
-    glTranslatef(0, -h1, 0);
-    glMatrixMode(GL_MODELVIEW);
-}
-
-void orthogonalEnd () {
-    glMatrixMode(GL_PROJECTION);
-    glPopMatrix();
-    glMatrixMode(GL_MODELVIEW);
-}
+//void orthogonalStart () {
+//    glMatrixMode(GL_PROJECTION);
+//    glPushMatrix();
+//    glLoadIdentity();
+//    gluOrtho2D(0, w1, 0, h1);
+//    glScalef(1, -1, 1);
+//    glTranslatef(0, -h1, 0);
+//    glMatrixMode(GL_MODELVIEW);
+//}
+//
+//void orthogonalEnd () {
+//    glMatrixMode(GL_PROJECTION);
+//    glPopMatrix();
+//    glMatrixMode(GL_MODELVIEW);
+//}
 
 void display() {
-	game.update();
+	game.draw();
 }
 
+
+void loop() {
+	game.update();
+}
 
 void reshape (int w, int h) {
     glViewport (0, 0, (GLsizei)w, (GLsizei)h);
@@ -151,7 +155,7 @@ int main(int argc, char **argv)
  
 	// Game loop callback
 	glutDisplayFunc(display);
-	glutIdleFunc(display);
+	glutIdleFunc(loop);
 	// Input callbacks
 	glutKeyboardFunc(addKeyDown);
 	glutKeyboardUpFunc(addKeyUp);

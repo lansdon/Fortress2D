@@ -196,3 +196,19 @@ void GameObjectManager::updateAttackers() {
 		}
 	}
 }
+
+
+// This function updates the attacking mobs / movement / collision / attacks
+void GameObjectManager::drawAll() {
+
+	std::list<GameObj*>::iterator it = attackers.begin();
+	while(it != attackers.end()) {
+		(*it)->draw();
+		++it;
+	}
+	it = defenders.begin();
+	while(it != defenders.end()) {
+		(*it)->draw();
+		++it;
+	}
+}

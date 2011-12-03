@@ -67,6 +67,7 @@ public:
 	void setRangeDamage(int damage) { damage_range = damage; }
 	int getRangeDamage() { return damage_range; }
 	bool isAlive();
+	void draw();						// draw the object on screen
 
 //	void setCoordDepth(int *z) { COORD_DEPTH = z; }
 //	void setGLObj(HDC *hDC, HWND *hWnd) { winParems.setHDC(hDC); winParems.setHWND(hWnd); } // pass main windown handle and hardware device context
@@ -85,6 +86,7 @@ public:
 	void addEnemy(GameObj *enemy, bool ranged = false);
 	void removeEnemy(GameObj *enemy, bool ranged = false);
 	bool cleanEnemiesList();
+	b2Vec2 getPos() { return body->GetPosition(); }
 
 protected:
 	std::string name;	// in game name of object
@@ -105,8 +107,6 @@ protected:
 	float friction;
 
 	double elapsedTime;
-
-	void draw();						// draw the object on screen
 
 	void recalculate();
 

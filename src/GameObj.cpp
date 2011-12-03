@@ -116,7 +116,7 @@ void GameObj::update(double elapsedTime) {
 
 	if(isAlive()) {
 		move();
-		draw();
+//		draw();
 
 		for(std::list<GameObj*>::iterator it = enemies.begin(); it != enemies.end(); ++it) {
 			if(!(*it)->isAlive()) {

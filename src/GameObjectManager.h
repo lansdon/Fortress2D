@@ -65,7 +65,7 @@ public:
 
 	void updateDefenders();
 	void updateAttackers();
-
+	void drawAll();
 
 	std::list<GameObj*> &getAttackers() { return attackers; }
 	std::list<GameObj*> &getDefenders() { return defenders; }

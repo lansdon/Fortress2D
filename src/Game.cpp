@@ -19,11 +19,12 @@ Game::Game() {
 	lvl_time_remaining = 0;		// remaining timer
 	
 	// Timers
-	t = 0.0;
+	timeStepCount=0;
+//	t = 0.0;
 //	dt = 0.01;
 	accumulator = 0.0;
-	previousState = 0;
-	currentState = 0;
+//	previousState = 0;
+//	currentState = 0;
 
 	frameElapsedTime = 0.0;		// elapsed time between frames
 
@@ -103,6 +104,47 @@ bool Game::initGL() {
 	return true;
 }
 
+
+
+void Game::draw() {
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);     // Clear The Screen And The Depth Buffer
+	glLoadIdentity();
+	glEnable2D();
+
+	// Draw Functions
+	drawBackground();
+	drawScoreboard();
+	drawMenu();
+	fort.draw(in.getMousePos());
+	go->drawAll();
+
+	// Debug /////////////////////////////////////////////////////////////////////////////////////////////
+	std::stringstream ss;
+	ss << "Manager: Attackers=" << go->getAttackers().size() << " Defenders=" << go->getDefenders().size();
+	text.text(ss, 10, 450, winParems.depth());
+	
+	if(lastFrameElapsedTime != 0.0) {
+		std::stringstream fps;
+		fps << "FPS = " << (1 / lastFrameElapsedTime);				// Instant FPS
+		fps << "step:" << timeStepCount;
+		text.text(fps, 10, 5, winParems.depth()+10);
+
+		// DEBUG
+		std::stringstream ss;
+		ss << "MOUSE x=" << in.getMousePos().x() << " Y=" << in.getMousePos().y();
+		text.text(ss, in.getMousePos().x(), in.getMousePos().y(), winParems.depth());			
+	}
+	// End Debug /////////////////////////////////////////////////////////////////////////////////////////////
+
+	glDisable2D();
+	// Last step - swap buffers
+	glutSwapBuffers();
+
+}
+
+
+
 // Main "Loop" function  (the loop actually comes from winMain)
 //bool Game::update() {
 bool Game::update() {
@@ -119,83 +161,32 @@ bool Game::update() {
 	// Timer - Get elapsed time since last update
 	Timer.Calculate_Ellapsed_Time();
 	frameElapsedTime = Timer.TotalTime();
-//	if(frameElapsedTime < (1.0 / 60.0))
-//		return true;
-
+	accumulator += frameElapsedTime;	// tracks physics engine timestep
+	lastFrameElapsedTime = frameElapsedTime;
 	//if(frameElapsedTime > 0.25)
 	//	frameElapsedTime = 0.25;
 
-	accumulator += frameElapsedTime;	// tracks physics engine timestep
 
-		// Update Box2d World
+	// Physics Update - Box2d
 //	bool didTimeStep = false;
-//	while( accumulator >= winParems.getTimeStep() ) {
+	double ts = winParems.getTimeStep();
+	while( accumulator >= ts ) {
+		++timeStepCount;
 //		didTimeStep = true;
-//		previousState = currentState;
 		winParems.step();
-//		t+= winParems.getTimeStep();
-//		accumulator -= winParems.getTimeStep();
-//	}
-
-
-	// to-do   All game functionality goes here!!
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);     // Clear The Screen And The Depth Buffer
-	glLoadIdentity();
-
-	glEnable2D();
-
-	drawBackground();
-
-	drawScoreboard();
-	drawMenu();
+		accumulator -= winParems.getTimeStep();
+	}
 
 	// Game Objects
 	go->updateDefenders();
 	updateAttackers();
 
-	// Fort
-	fort.draw(in.getMousePos());
 
 	// Input
 	processInput();
 
-
-
-
-
-	// Debug
-	std::stringstream ss;
-	ss << "Manager: Attackers=" << go->getAttackers().size() << " Defenders=" << go->getDefenders().size();
-	text.text(ss, 10, 450, winParems.depth());
-
-	
-	if(frameElapsedTime != 0.0) {
-		std::stringstream fps;
-		fps << "FPS = " << (1 / frameElapsedTime);				// Instant FPS
-
-		//if(didTimeStep) {
-		//	fps << "  TIME STEP!!";
-
-		//}
-//		for(int i=0; i<10; ++i) {
-
-			text.text(fps, 10, 10, winParems.depth()+10);
-//		}
-	//	debug(fps);
-
-		// DEBUG
-		std::stringstream ss;
-		ss << "MOUSE x=" << in.getMousePos().x() << " Y=" << in.getMousePos().y();
-		text.text(ss, in.getMousePos().x(), in.getMousePos().y(), winParems.depth());
-
-			
-
-	}
-
-	glDisable2D();
-
-	// Last step - swap buffers
-	glutSwapBuffers();
+	// Draw Functions
+	glutPostRedisplay();
 
 	// END ! Last! - This timer reset should be at the very end of update function
 	frameElapsedTime = 0.0;
@@ -208,9 +199,6 @@ bool Game::update() {
 // Draw Main Menu
 void Game::drawMenu() {
 	fortMenu->draw();
-
-
-
 }
 
 
@@ -300,8 +288,6 @@ void Game::drawScoreboard() {
 // draws the player placed objects that make up the fortress
 void Game::drawFort() {		
 
-
-
 }
 
 
@@ -333,90 +319,62 @@ void Game::updateAttackers() {
 	go->updateAttackers();
 }
 
-
-// Load Level Objects
-void Game::loadLevel(int level) {
-//	lvl = level;
-
-	// NEW BOX2d Method
-	// Define the dynamic body. We set its position and call the body factory.
-
-//	for(int i=0; i <= 2; ++i) {
-		
-//		makeAttacker();
-
-		//// USER DATA - Added to body
-		//GameObj *temp = new GameObj(&winParems);
-		//temp->setArmorMax(1);
-		//temp->setArmor(2);
-		//temp->setHP(100);
-		//temp->setHPMax(100);
-		//temp->setName("FODDER");
-		//temp->setType(GameObj::ATTACKER);
-		//temp->setDamage(10);
-		//temp->setTeam(true);
-
-	
-		//b2BodyDef bodyDef;
-		//bodyDef.type = b2_dynamicBody;
-		//bodyDef.position.Set(-400 + i*10, -winParems.height()/2 + winParems.floor() + 1);
-		//bodyDef.linearVelocity(Util::meter2Pixel(5));
-		//bodyDef.userData = temp;
-		//temp->body = winParems.getWorld()->CreateBody(&bodyDef);
-		//attackerObj.push_back(temp);
-
-		//// Define another box shape for our dynamic body.
-		//b2PolygonShape dynamicBox;
-		//dynamicBox.SetAsBox(temp->getTextWidth()/2, temp->getTextHeight()/2);
-		//// Define the dynamic body fixture.
-		//b2FixtureDef fixtureDef;
-		//fixtureDef.shape = &dynamicBox;
-		//// Set the box density to be non-zero, so it will be dynamic.
-		//fixtureDef.density = 1.0f;
-		//// Override the default friction.
-		//fixtureDef.friction = 0.00f;
-		//temp->body->SetLinearVelocity(b2Vec2(i*10+10, 0.0));
-		//// Add the shape to the body.
-		//temp->body->CreateFixture(&fixtureDef);
-
-//	}
-}
+//
+//// Load Level Objects
+//void Game::loadLevel(int level) {
+////	lvl = level;
+//
+//	// NEW BOX2d Method
+//	// Define the dynamic body. We set its position and call the body factory.
+//
+////	for(int i=0; i <= 2; ++i) {
+//		
+////		makeAttacker();
+//
+//		//// USER DATA - Added to body
+//		//GameObj *temp = new GameObj(&winParems);
+//		//temp->setArmorMax(1);
+//		//temp->setArmor(2);
+//		//temp->setHP(100);
+//		//temp->setHPMax(100);
+//		//temp->setName("FODDER");
+//		//temp->setType(GameObj::ATTACKER);
+//		//temp->setDamage(10);
+//		//temp->setTeam(true);
+//
+//	
+//		//b2BodyDef bodyDef;
+//		//bodyDef.type = b2_dynamicBody;
+//		//bodyDef.position.Set(-400 + i*10, -winParems.height()/2 + winParems.floor() + 1);
+//		//bodyDef.linearVelocity(Util::meter2Pixel(5));
+//		//bodyDef.userData = temp;
+//		//temp->body = winParems.getWorld()->CreateBody(&bodyDef);
+//		//attackerObj.push_back(temp);
+//
+//		//// Define another box shape for our dynamic body.
+//		//b2PolygonShape dynamicBox;
+//		//dynamicBox.SetAsBox(temp->getTextWidth()/2, temp->getTextHeight()/2);
+//		//// Define the dynamic body fixture.
+//		//b2FixtureDef fixtureDef;
+//		//fixtureDef.shape = &dynamicBox;
+//		//// Set the box density to be non-zero, so it will be dynamic.
+//		//fixtureDef.density = 1.0f;
+//		//// Override the default friction.
+//		//fixtureDef.friction = 0.00f;
+//		//temp->body->SetLinearVelocity(b2Vec2(i*10+10, 0.0));
+//		//// Add the shape to the body.
+//		//temp->body->CreateFixture(&fixtureDef);
+//
+////	}
+//}
 
 
 void Game::makeAttacker() {
-		t_lvlSpawn.Calculate_Ellapsed_Time();
-		if(t_lvlSpawn.TotalTime() >= CREATURE_SPAWNER_INTERVAL) {
-			go->makeArcher(-300, 0);
-			t_lvlSpawn.Reset(0.0);
-		}
-
-
-	//GameObj *temp = new GameObj(&winParems, -300, 0);
-	//temp->setArmorMax(1);
-	//temp->setArmor(2);
-	//temp->setHP(1);
-	//temp->setHPMax(1);
-	//temp->setDamage(5);
-	//temp->setName("test-atkr");
-	//temp->setType(GameObj::ATTACKER);
-	//temp->setTeam(true);
-	//
-	//b2BodyDef bodyDef;
-	//bodyDef.type = b2_dynamicBody;
-	//bodyDef.position.Set(-300, 0); // + winParems.floor());
-	//bodyDef.linearVelocity(Util::meter2Pixel(5));
-	//bodyDef.userData = temp;
-	//temp->body = winParems.getWorld()->CreateBody(&bodyDef);
-	//attackerObj.push_back(temp);
-
-	//b2PolygonShape dynamicBox;
-	//dynamicBox.SetAsBox(temp->getTextWidth()/2, temp->getTextHeight()/2);
-	//b2FixtureDef fixtureDef;
-	//fixtureDef.shape = &dynamicBox;
-	//fixtureDef.density = 1.0f;
-	//fixtureDef.friction = 0.00f;
-	//temp->body->SetLinearVelocity(b2Vec2(30, 0.0));
-	//temp->body->CreateFixture(&fixtureDef);
+	t_lvlSpawn.Calculate_Ellapsed_Time();
+	if(t_lvlSpawn.TotalTime() >= CREATURE_SPAWNER_INTERVAL) {
+		go->makeArcher(-300, 0);
+		t_lvlSpawn.Reset(0.0);
+	}
 }
 
 void Game::keyPressed(unsigned char key, int x, int y) {
@@ -437,8 +395,6 @@ void Game::keyPressed(unsigned char key, int x, int y) {
 //			makeAttacker();
 		} break;
 	}
-
-	
 }
 
 
