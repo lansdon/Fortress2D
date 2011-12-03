@@ -9,6 +9,14 @@
 //#include <gl\glu.h>			// Header File For The GLu32 Library
 
 
+//
+//struct buttonState {
+//	buttonState() { pressed = false; } // held = false; }
+//	bool pressed;
+////		bool held;
+//	int x, y;
+//};
+
 
 class WinParems
 {
@@ -29,8 +37,8 @@ public:
 	void setHeight(float height) { COORD_HEIGHT = height; }
 	void setDepth(float depth) { COORD_DEPTH = depth; }
 	void setMid(float mid) { MID = mid; }
-	void setHDC(HDC *hdc) { hDC = hdc; }
-	void setHWND(HWND *hwnd) { hWnd = hwnd; }
+	//void setHDC(HDC *hdc) { hDC = hdc; }
+	//void setHWND(HWND *hwnd) { hWnd = hwnd; }
 	b2World *getWorld() { return &world; }
 	void step() { world.Step(timeStep, velocityIterations, positionIterations); }
 //	Util::Color DEF_COLOR;
@@ -38,6 +46,7 @@ public:
 	double getTimeStep() { return timeStep; }
 
 	void setTextures(bool useTextures = true) { textures = useTextures; }
+
 	bool useTextures() { return textures; }
 
 private:
@@ -53,8 +62,8 @@ private:
 	bool textures;
 
 	// Windows Handlers
-	HDC			*hDC;		// Private GDI Device Context	
-	HWND		*hWnd;		// Holds Our Window Handle
+	//HDC			*hDC;		// Private GDI Device Context	
+	//HWND		*hWnd;		// Holds Our Window Handle
 
 	// Box2d stuff
 	float32 timeStep;

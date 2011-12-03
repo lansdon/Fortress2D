@@ -1,10 +1,13 @@
 #include "LevelLoader.h"
 
 
-LevelLoader::LevelLoader(void)
+LevelLoader::LevelLoader(void) : DEF_SPAWN_X(5), DEF_SPAWN_Y(40)
 {
 	currentID = 0;
 	DEF_DIRECTORY = "level/";
+
+//	DEF_SPAWN_X = 5;
+//	DEF_SPAWN_Y = 40;
 }
 
 
@@ -60,10 +63,10 @@ void LevelLoader::spawn(GameObjectManager &go) {			// spawn the next creature
 	int id = nextID();
 
 	switch(id) {
-		case 1: go.makeArcher(-375, -50); break;		// War Dog
-		case 2: go.makeArcher(-375, -50); break;		// Barbarian
-		case 3: go.makeArcher(-375, -50); break;		// Archer
-		case 4: go.makeArcher(-375, -50); break;		// Seige Engine
+		case 1: go.makeArcher(DEF_SPAWN_X, DEF_SPAWN_Y); break;		// War Dog
+		case 2: go.makeArcher(DEF_SPAWN_X, DEF_SPAWN_Y); break;		// Barbarian
+		case 3: go.makeArcher(DEF_SPAWN_X, DEF_SPAWN_Y); break;		// Archer
+		case 4: go.makeArcher(DEF_SPAWN_X, DEF_SPAWN_Y); break;		// Seige Engine
 		default: // do nothing
 			break;
 	}

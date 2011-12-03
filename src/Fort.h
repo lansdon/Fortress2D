@@ -70,15 +70,15 @@ private:
 	PLACEMENT_TYPE selectedType;
 
 	// Object Paremeters
-	FortParems *pNone;
-	FortParems *pWoodWall;
-	FortParems *pStoneWall;
-	FortParems *pMote;
-	FortParems *pTowerArcher;
-	FortParems *pTowerMage;
-	FortParems *pTowerOil;
-	FortParems *pCatapult;
-	FortParems *pFence;
+	//FortParems *pNone;
+	//FortParems *pWoodWall;
+	//FortParems *pStoneWall;
+	//FortParems *pMote;
+	//FortParems *pTowerArcher;
+	//FortParems *pTowerMage;
+	//FortParems *pTowerOil;
+	//FortParems *pCatapult;
+	//FortParems *pFence;
 
 	Performance_Counter Timer;	// timer object for restricting rapid placement of objects
 	double elapsedTime;

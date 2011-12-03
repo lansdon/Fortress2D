@@ -19,38 +19,37 @@
 Game game;
 
 
-GLfloat light_diffuse[] = {1.0, 0.0, 0.0, 1.0};  /* Red diffuse light. */
-GLfloat light_position[] = {1.0, 1.0, 1.0, 0.0};  /* Infinite light location. */
-GLfloat n[6][3] = {  /* Normals for the 6 faces of a cube. */
-  {-1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {1.0, 0.0, 0.0},
-  {0.0, -1.0, 0.0}, {0.0, 0.0, 1.0}, {0.0, 0.0, -1.0} };
-GLint faces[6][4] = {  /* Vertex indices for the 6 faces of a cube. */
-  {0, 1, 2, 3}, {3, 2, 6, 7}, {7, 6, 5, 4},
-  {4, 5, 1, 0}, {5, 6, 2, 1}, {7, 4, 0, 3} };
-GLfloat v[8][3];  /* Will be filled in with X,Y,Z vertexes. */
+//GLfloat light_diffuse[] = {1.0, 0.0, 0.0, 1.0};  /* Red diffuse light. */
+//GLfloat light_position[] = {1.0, 1.0, 1.0, 0.0};  /* Infinite light location. */
+//GLfloat n[6][3] = {  /* Normals for the 6 faces of a cube. */
+//  {-1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {1.0, 0.0, 0.0},
+//  {0.0, -1.0, 0.0}, {0.0, 0.0, 1.0}, {0.0, 0.0, -1.0} };
+//GLint faces[6][4] = {  /* Vertex indices for the 6 faces of a cube. */
+//  {0, 1, 2, 3}, {3, 2, 6, 7}, {7, 6, 5, 4},
+//  {4, 5, 1, 0}, {5, 6, 2, 1}, {7, 4, 0, 3} };
+//GLfloat v[8][3];  /* Will be filled in with X,Y,Z vertexes. */
 
 int w1;
 int h1;
 
+//void
+//drawBox(void)
+//{
+//  int i;
+//
+//  for (i = 0; i < 6; i++) {
+//    glBegin(GL_QUADS);
+//    glNormal3fv(&n[i][0]);
+//    glVertex3fv(&v[faces[i][0]][0]);
+//    glVertex3fv(&v[faces[i][1]][0]);
+//    glVertex3fv(&v[faces[i][2]][0]);
+//    glVertex3fv(&v[faces[i][3]][0]);
+//    glEnd();
+//  }
+//}
 
-void
-drawBox(void)
-{
-  int i;
 
-  for (i = 0; i < 6; i++) {
-    glBegin(GL_QUADS);
-    glNormal3fv(&n[i][0]);
-    glVertex3fv(&v[faces[i][0]][0]);
-    glVertex3fv(&v[faces[i][1]][0]);
-    glVertex3fv(&v[faces[i][2]][0]);
-    glVertex3fv(&v[faces[i][3]][0]);
-    glEnd();
-  }
-}
-
-
-void orthogonalStart (void) {
+void orthogonalStart () {
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
     glLoadIdentity();
@@ -60,39 +59,13 @@ void orthogonalStart (void) {
     glMatrixMode(GL_MODELVIEW);
 }
 
-void orthogonalEnd (void) {
+void orthogonalEnd () {
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();
     glMatrixMode(GL_MODELVIEW);
 }
 
-void
-display(void)
-{
-	// 2D test!
- ////   glClearColor (0.0,0.0,0.0,.5);
- ////   glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
- ////   glLoadIdentity();
-
- ////   orthogonalStart();
-
-	////glColor3f(1, .5, 1);
-
- ////   glBegin(GL_QUADS);
- ////   glVertex2f(125, 125);
- ////   glVertex2f(125, 375);
- ////   glVertex2f(375, 375);
- ////   glVertex2f(375, 125);
- ////   glEnd();
-
- ////   orthogonalEnd();
-
- ////   glutSwapBuffers();
-	
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  //drawBox();
-  //glutSwapBuffers();
-//	myTest.loop();
+void display() {
 	game.update();
 }
 
@@ -148,7 +121,7 @@ void init(void)
   //glEnable(GL_LIGHTING);
 
   /* Use depth buffering for hidden surface elimination. */
-  glEnable(GL_DEPTH_TEST);
+//  glEnable(GL_DEPTH_TEST);
 
   /* Setup the view of the cube. */
   glMatrixMode(GL_PROJECTION);
@@ -188,7 +161,7 @@ int main(int argc, char **argv)
 	glutPassiveMotionFunc(passiveMousePos);
 
 	glutReshapeFunc (reshape);
-//	init();
+	init();
 	glutMainLoop();
 	return 0;             /* ANSI C requires main to return int. */
 }

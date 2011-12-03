@@ -2,7 +2,7 @@
 
 const b2Vec2 WinParems::gravity = b2Vec2(0, -10);
 
-WinParems::WinParems(void)  : world(b2Vec2(0, -10))
+WinParems::WinParems()  : world(b2Vec2(0, -10))
 {
 
 	FLOOR = 10.0;			// The Y-AXIS of ground level
@@ -12,8 +12,8 @@ WinParems::WinParems(void)  : world(b2Vec2(0, -10))
 	MID = COORD_WIDTH/2.0;				// X-AXIS MIDPOINT where user cannot build past
 	
 	// Windows handler + Device Context
-	hDC = NULL;		// Private GDI Device Context	
-	hWnd = NULL;		// Holds Our Window Handle
+	//hDC = NULL;		// Private GDI Device Context	
+	//hWnd = NULL;		// Holds Our Window Handle
 
 //	DEF_COLOR.setColors(1, 1, 1, 1);
 
@@ -22,10 +22,13 @@ WinParems::WinParems(void)  : world(b2Vec2(0, -10))
 	velocityIterations = 8;
 	positionIterations = 3;
 
+	// Toggle to turn textures off
+	textures = true;
+
 }
 
 
-WinParems::~WinParems(void)
+WinParems::~WinParems()
 {
 }
 

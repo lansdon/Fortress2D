@@ -170,6 +170,7 @@ void GameObj::draw() {						// draw the object on screen
 		glColor3f(DEF_DRAW_COLOR.r, DEF_DRAW_COLOR.g, DEF_DRAW_COLOR.b);
 	else glColor3f(CONTACT_DRAW_COLOR.r, CONTACT_DRAW_COLOR.g, CONTACT_DRAW_COLOR.b);
 
+	b2Vec2 pos = body->GetPosition();
 	if(winParems->useTextures()) {
 		glEnable(GL_TEXTURE_2D); //Switch back to using colors instead of textures
 		glBindTexture(GL_TEXTURE_2D, textureID);
@@ -181,31 +182,27 @@ void GameObj::draw() {						// draw the object on screen
 	//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_DECAL );
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
    
-		glTranslatef(body->GetPosition().x, body->GetPosition().y, (*winParems).depth());       // Move to 0,0 in bottom left corner of coord system
+//		glTranslatef(body->GetPosition().x, body->GetPosition().y, (*winParems).depth());       // Move to 0,0 in bottom left corner of coord system
 		glBegin(GL_QUADS);                      // Draw A Quad
 			glTexCoord2f(0, 1);																			// Top Left
-			glVertex2d(-Util::meter2Pixel(textWidth)/2, Util::meter2Pixel(textHeight)/2);              // Top Left
+			glVertex2d(pos.x - Util::meter2Pixel(textWidth)/2, pos.y + Util::meter2Pixel(textHeight)/2);              // Top Left
 			glTexCoord2f(1, 1);																		// Top Right
-			glVertex2d(Util::meter2Pixel(textWidth)/2, Util::meter2Pixel(textHeight)/2);              // Top Right
+			glVertex2d(pos.x + Util::meter2Pixel(textWidth)/2, pos.y + Util::meter2Pixel(textHeight)/2);              // Top Right
 			glTexCoord2f(1,  0);																	// Bottom Right
-			glVertex2d(Util::meter2Pixel(textWidth)/2,  -Util::meter2Pixel(textHeight)/2);              // Bottom Right
+			glVertex2d(pos.x + Util::meter2Pixel(textWidth)/2, pos.y - Util::meter2Pixel(textHeight)/2);              // Bottom Right
 			glTexCoord2f(0, 0);																	// Bottom Left
-			glVertex2d(-Util::meter2Pixel(textWidth)/2,  -Util::meter2Pixel(textHeight)/2);      // Bottom Left
+			glVertex2d(pos.x - Util::meter2Pixel(textWidth)/2, pos.y - Util::meter2Pixel(textHeight)/2);      // Bottom Left
 		glEnd();                            // Done Drawing The Quad
 		glDisable(GL_TEXTURE_2D); //Switch back to using colors instead of textures
 
 	} else {		// NO TEXTURES
 
-		glTranslatef(body->GetPosition().x, body->GetPosition().y, (*winParems).depth());       // Move to 0,0 in bottom left corner of coord system
+//		glTranslatef(body->GetPosition().x, body->GetPosition().y, (*winParems).depth());       // Move to 0,0 in bottom left corner of coord system
 		glBegin(GL_QUADS);                      // Draw A Quad
-//			glTexCoord2f(0, 1);																			// Top Left
-			glVertex2d(-Util::meter2Pixel(textWidth)/2, Util::meter2Pixel(textHeight)/2);              // Top Left
-//			glTexCoord2f(1, 1);																		// Top Right
-			glVertex2d(Util::meter2Pixel(textWidth)/2, Util::meter2Pixel(textHeight)/2);              // Top Right
-//			glTexCoord2f(1,  0);																	// Bottom Right
-			glVertex2d(Util::meter2Pixel(textWidth)/2,  -Util::meter2Pixel(textHeight)/2);              // Bottom Right
-//			glTexCoord2f(0, 0);																	// Bottom Left
-			glVertex2d(-Util::meter2Pixel(textWidth)/2,  -Util::meter2Pixel(textHeight)/2);      // Bottom Left
+			glVertex2d(pos.x - Util::meter2Pixel(textWidth)/2, pos.y + Util::meter2Pixel(textHeight)/2);              // Top Left
+			glVertex2d(pos.x + Util::meter2Pixel(textWidth)/2, pos.y + Util::meter2Pixel(textHeight)/2);              // Top Right
+			glVertex2d(pos.x + Util::meter2Pixel(textWidth)/2, pos.y - Util::meter2Pixel(textHeight)/2);              // Bottom Right
+			glVertex2d(pos.x - Util::meter2Pixel(textWidth)/2, pos.y - Util::meter2Pixel(textHeight)/2);      // Bottom Left
 		glEnd();                            // Done Drawing The Quad
 
 

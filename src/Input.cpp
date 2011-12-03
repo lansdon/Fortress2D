@@ -7,7 +7,7 @@ Input::Input(WinParems *parems)
 //	text = new GLText(winParems);
 
 	vKeys.resize(256);
-	vMouseBtns.resize(2);
+	vMouseBtns.resize(3);		// 3 mouse buttons
 
 	//// Initialize keyboard and mouse button tracking vectors
 	//for(int i=0; i<256; ++i) {
@@ -142,49 +142,20 @@ bool Input::isKeyPressed(char *key) {			// returns true if key is pressed
 
 
 bool Input::isKeyPressed(unsigned int ascii) {			// returns true if key is pressed
-
-	if (vKeys[ascii].pressed && !vKeys[ascii].held) {               // L Key Being Pressed Not Held?
-		vKeys[ascii].held=TRUE;                // lp Becomes TRUE
-	}
-	if (!vKeys[ascii].pressed) {                 // Has L Key Been Released?
-		vKeys[ascii].held=FALSE;               // If So, lp Becomes FALSE
-	}
-
-	if(vKeys[ascii].pressed)
+	if(vKeys[ascii].state == GLUT_DOWN)
 		return true;
 	else return false;
-
-
 }
 
 bool Input::isBtnPressed(unsigned int btnNum) {			// returns true if mouse button # was pressed
-
-	if(btnNum > 1 || btnNum < 0)
-		return false;
-
-	if (vMouseBtns[btnNum].pressed && !vMouseBtns[btnNum].held) {               // L Key Being Pressed Not Held?
-		vMouseBtns[btnNum].held=TRUE;                // lp Becomes TRUE
-	}
-	if (!vMouseBtns[btnNum].pressed) {                 // Has L Key Been Released?
-		vMouseBtns[btnNum].held=FALSE;               // If So, lp Becomes FALSE
-	}
-
-	if(vMouseBtns[btnNum].pressed)
+	if(vMouseBtns[btnNum].state == GLUT_DOWN)
 		return true;
 	else return false;
-
-
 }
 
 
 
-Vector3 Input::getMousePos(bool ll_origin) { 
-	//Vector3 mouse = mouseCoord;
-	//if(ll_origin) {
-	//	mouse.set(mouseCoord.x() + winParems->width()/2, mouseCoord.y() + winParems->height()/2, 0);
-	//}
-//	updateMouse(); 
-
+Vector3 Input::getMousePos() { 
 	return mouseCoord; 
 }
 
@@ -192,13 +163,13 @@ Vector3 Input::getMousePos(bool ll_origin) {
 
 // NEW GLUT FUNCTIONS
 void Input::addKeyDown(unsigned char key, int x, int y) {
-	vKeys[key].pressed = TRUE;					// If So, Mark It As TRUE
+	vKeys[key].state = GLUT_DOWN;					// If So, Mark It As TRUE
 	vKeys[key].x = x;
 	vKeys[key].y = y;
 }
 
 void Input::addKeyUp( int key, int x, int y) {
-	vKeys[key].pressed = FALSE;					// If So, Mark It As TRUE
+	vKeys[key].state = GLUT_UP;					// If So, Mark It As TRUE
 	vKeys[key].x = x;
 	vKeys[key].y = y;
 
@@ -206,7 +177,7 @@ void Input::addKeyUp( int key, int x, int y) {
 
 // Do we need a seperate vector to hold these keys??
 void Input::addSpecialDown( int key, int x, int y) {
-	vKeys[key].pressed = TRUE;					// If So, Mark It As TRUE
+	vKeys[key].state = GLUT_DOWN;					// If So, Mark It As TRUE
 	vKeys[key].x = x;
 	vKeys[key].y = y;
 
@@ -214,7 +185,7 @@ void Input::addSpecialDown( int key, int x, int y) {
 
 
 void Input::addSpecialUp( int key, int x, int y) {
-	vKeys[key].pressed = TRUE;					// If So, Mark It As TRUE
+	vKeys[key].state = GLUT_UP;					// If So, Mark It As TRUE
 	vKeys[key].x = x;
 	vKeys[key].y = y;
 }
@@ -224,13 +195,13 @@ void Input::addMouseEvent(int button, int state, int x, int y) {
 	setMousePos(x, y);
 	if(vMouseBtns.size() < button+1) vMouseBtns.resize(button+1);
 
-	vMouseBtns[button].pressed = state;					// If So, Mark It As FALSE
+	vMouseBtns[button].state = state;					// If So, Mark It As FALSE
 	vMouseBtns[button].x = x;
 	vMouseBtns[button].y = y;
 }
 
 void Input::setMousePos(int x, int y) {
-	y = winParems->height()-y;
+	y = winParems->height()-y;			// reverse the y coord
 	mouseCoord.set(x, y, 0);
 
 // EVENT driven won't display on screen !!!

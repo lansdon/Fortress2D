@@ -76,14 +76,14 @@ class MyContactListener : public b2ContactListener {
 class Game
 {
 public:
-	Game(HDC *hDC = NULL, HWND *hWnd = NULL);
+	Game();
 
 	~Game(void);
 
 	bool update(); // Main "Loop" function  (the loop actually comes from winMain)
 	bool initGL();
-	void setHDC(HDC *hDC) { this->winParems.setHDC(hDC); }
-	void setGLObj(HDC *hDC, HWND *hWnd); // pass main windown handle and hardware device context
+	//void setHDC(HDC *hDC) { this->winParems.setHDC(hDC); }
+	//void setGLObj(HDC *hDC, HWND *hWnd); // pass main windown handle and hardware device context
 	int getScreenWidth() { return winParems.width(); }
 	int getScreenHeight() { return winParems.height(); }
 	int getScreenDepth() { return winParems.depth(); }
@@ -133,7 +133,7 @@ private:
 	int score;
 	int money;
 
-	// Functions //
+	// Draw Functions //
 	void drawMenu();			// draws the main menu
 	void drawBackground();		// draws the level background
 	void drawScoreboard();
@@ -148,10 +148,11 @@ private:
 
 	// User Input
 	void processInput();
-
+	void keyPressed(unsigned char key, int x, int y);
+	void Game::specialKeyPressed(int key, int x, int y);
 
 	// TEMP - Testing game objects - This will eventually be managed in containers
-	std::vector<GameObj*> attackerObj;
+//	std::vector<GameObj*> attackerObj;
 	void Game::makeAttacker();
 
 

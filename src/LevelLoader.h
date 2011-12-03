@@ -23,5 +23,8 @@ private:
 	int currentID;
 	int currentLevel;
 	std::string DEF_DIRECTORY;
+
+	const int DEF_SPAWN_X;
+	const int DEF_SPAWN_Y;
 };
 

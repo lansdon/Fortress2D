@@ -2,16 +2,14 @@
 
 //const b2Vec2 Game::gravity(0, -10);
 
-Game::Game(HDC *hDC, HWND *hWnd) {
+Game::Game() {
 	// Configure window parememter object (passed around to other classes)
 	winParems.setDepth(-725);
 	winParems.setHeight(600);
 	winParems.setWidth(800);
 	winParems.setFloor(20);
 	winParems.setMid(winParems.width()/2);
-	winParems.setHDC(hDC);
-	winParems.setHWND(hWnd);
-	winParems.setTextures(true);
+	winParems.setTextures(true);				// TOGGLE TEXTURES OFF / ON
 
 	DEF_BG.setColors(0, 0, 0, 0);				// Default background color = black
 	DEF_DRAW_COLOR.setColors(1, 1, 1, 1);		// def draw color = white
@@ -24,8 +22,8 @@ Game::Game(HDC *hDC, HWND *hWnd) {
 	t = 0.0;
 //	dt = 0.01;
 	accumulator = 0.0;
-	previousState;
-	currentState;
+	previousState = 0;
+	currentState = 0;
 
 	frameElapsedTime = 0.0;		// elapsed time between frames
 
@@ -34,10 +32,10 @@ Game::Game(HDC *hDC, HWND *hWnd) {
 
 	// BOX2d Initialization
 	winParems.getWorld()->SetContactListener(&contactListener);
-	groundBodyDef.position.Set(0.0f, winParems.floor()/2);
+	groundBodyDef.position.Set(winParems.mid(), winParems.floor()/2);
 //	groundBodyDef.position.Set(0.0f, -winParems.height()/2);
 	groundBody = winParems.getWorld()->CreateBody(&groundBodyDef);
-	groundBox.SetAsBox(winParems.width()/2, winParems.floor()/2);
+	groundBox.SetAsBox(winParems.width(), winParems.floor()/2);
 	groundBody->CreateFixture(&groundBox, 0.0f);
 
 	// Player Vars
@@ -63,9 +61,38 @@ Game::Game(HDC *hDC, HWND *hWnd) {
 	fort.start();
 }
 
-void Game::setGLObj(HDC *hDC, HWND *hWnd) { // pass main windown handle and hardware device context
-	winParems.setHDC(hDC); 
-	winParems.setHWND(hWnd); 
+//void Game::setGLObj(HDC *hDC, HWND *hWnd) { // pass main windown handle and hardware device context
+//	winParems.setHDC(hDC); 
+//	winParems.setHWND(hWnd); 
+//
+//	//// Pass windows paremeters to child objects
+//	in.setWinParems(&winParems);
+//	text.setWinParems(&winParems);
+//	fort.setWinParems(&winParems);
+//	fortMenu->setWinParems(&winParems);
+//	go->setWinParems(&winParems);
+//} 
+
+
+Game::~Game(void) {
+	glDisable2D();
+
+	// Cleanup bodies and game objects
+//	std::vector<GameObj*>::iterator it = attackerObj.begin();
+//	while(it != attackerObj.end()) {
+////		winParems.getWorld()->DestroyBody((*it)->body);
+//		delete (*it);
+//		++it;
+//	}
+//
+	winParems.getWorld()->DestroyBody(groundBody);
+
+	delete go;
+	delete fortMenu;
+}
+
+bool Game::initGL() {
+//	BuildFont();
 
 	//// Pass windows paremeters to child objects
 	in.setWinParems(&winParems);
@@ -73,29 +100,6 @@ void Game::setGLObj(HDC *hDC, HWND *hWnd) { // pass main windown handle and hard
 	fort.setWinParems(&winParems);
 	fortMenu->setWinParems(&winParems);
 	go->setWinParems(&winParems);
-} 
-
-
-Game::~Game(void) {
-	glDisable2D();
-
-	// Cleanup bodies and game objects
-	std::vector<GameObj*>::iterator it = attackerObj.begin();
-	while(it != attackerObj.end()) {
-//		winParems.getWorld()->DestroyBody((*it)->body);
-		delete (*it);
-		++it;
-	}
-
-	winParems.getWorld()->DestroyBody(groundBody);
-
-	delete fortMenu;
-}
-
-bool Game::initGL() {
-//	BuildFont();
-
-
 	return true;
 }
 
@@ -105,10 +109,10 @@ bool Game::update() {
 
 	// TEMP - Load an object for testing
 	// To-do Need to add level loading
-	//if(!lvl) {
-	//	lvl = 1;
-	//	level.loadLevel(lvl);
-	//}
+	if(!lvl) {
+		lvl = 1;
+		level.loadLevel(lvl);
+	}
 
 
 
@@ -128,7 +132,7 @@ bool Game::update() {
 //	while( accumulator >= winParems.getTimeStep() ) {
 //		didTimeStep = true;
 //		previousState = currentState;
-//		winParems.step();
+		winParems.step();
 //		t+= winParems.getTimeStep();
 //		accumulator -= winParems.getTimeStep();
 //	}
@@ -185,13 +189,13 @@ bool Game::update() {
 		text.text(ss, in.getMousePos().x(), in.getMousePos().y(), winParems.depth());
 
 			
-		glDisable2D();
-
-		// Last step - swap buffers
-		glutSwapBuffers();
-
 
 	}
+
+	glDisable2D();
+
+	// Last step - swap buffers
+	glutSwapBuffers();
 
 	// END ! Last! - This timer reset should be at the very end of update function
 	frameElapsedTime = 0.0;
@@ -415,6 +419,52 @@ void Game::makeAttacker() {
 	//temp->body->CreateFixture(&fixtureDef);
 }
 
+void Game::keyPressed(unsigned char key, int x, int y) {
+
+	// Get modifiers
+	int alt, ctrl, modifiers, shift;
+	modifiers = glutGetModifiers();
+	alt = modifiers & GLUT_ACTIVE_ALT;
+	ctrl = modifiers & GLUT_ACTIVE_CTRL;
+	shift = modifiers & GLUT_ACTIVE_SHIFT;
+
+	// PROCESS KEYBOARD INPUT
+	switch(key) {
+		case 'L':
+		case 'l': {
+			std::string msg("L IS PRESSED!!");
+			text.text(msg, 300.0, 200.0, winParems.depth());
+//			makeAttacker();
+		} break;
+	}
+
+	
+}
+
+
+
+void Game::specialKeyPressed(int key, int x, int y) {
+
+	// Get modifiers
+	int alt, ctrl, modifiers, shift;
+	modifiers = glutGetModifiers();
+	alt = modifiers & GLUT_ACTIVE_ALT;
+	ctrl = modifiers & GLUT_ACTIVE_CTRL;
+	shift = modifiers & GLUT_ACTIVE_SHIFT;
+
+	// PROCESS KEYBOARD INPUT
+	switch(key) {
+
+		case 'L':
+		case 'l': {
+			std::string msg("L IS PRESSED!!");
+			text.text(msg, 300.0, 200.0, winParems.depth());
+//			makeAttacker();
+		} break;
+	}
+}
+
+
 
 
 void Game::processInput() { 
@@ -429,21 +479,21 @@ void Game::processInput() {
 	}
 
 	// LEFT MOUSE BUTTON
-	if (in.isBtnPressed(0)) {
-		Vector3 ll_mouse = in.getMousePos(true);
-		Vector3 center_mouse = in.getMousePos(false);
+	if (in.isBtnPressed(GLUT_LEFT_BUTTON)) {
+		Vector3 mouse = in.getMousePos();
+//		Vector3 center_mouse = in.getMousePos();
 		// Timer - Get elapsed time since last update
 		leftBtnTimer.Calculate_Ellapsed_Time();
 		std::stringstream msg1;
 		msg1 << "Mousetimer=" << leftBtnTimer.TotalTime();
 		text.text(msg1, 300.0, 210.0, winParems.depth());
 		if(leftBtnTimer.TotalTime() >= LEFT_BUTTON_INTERVAL) {
-			if(fortMenu->activate(ll_mouse)) {
+			if(fortMenu->activate(mouse)) {
 				text.text(std::string("ACTIVATED A BUTTON!"), 300.0, 510.0, winParems.depth());
 				processFortMenuButton();
 			}
-			else if(fort.validPlacement(center_mouse.x())) {
-				fort.makeObj(ll_mouse.x(), *go);
+			else if(fort.validPlacement(mouse.x())) {
+				fort.makeObj(mouse.x(), *go);
 			}
 			leftBtnTimer.Reset(0.0);
 		}
@@ -451,8 +501,8 @@ void Game::processInput() {
 		text.text(msg, 275.0, 200.0, winParems.depth());
 	}
 
-	// LEFT MOUSE BUTTON
-	if (in.isBtnPressed(1)) {
+	// RIGHT MOUSE BUTTON
+	if (in.isBtnPressed(GLUT_RIGHT_BUTTON)) {
 		std::string msg("RIGHT MOUSE BUTTON IS PRESSED!!");
 		text.text(msg, 300.0, 200.0, winParems.depth());
 	}
