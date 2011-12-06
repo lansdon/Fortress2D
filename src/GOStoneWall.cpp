@@ -15,8 +15,11 @@ GOStoneWall::GOStoneWall(WinParems *parems, double x, double y) : GameObj(parems
 	friction = 1.0;
 	velocityMax = 0;
 
+	
 	textWidth = 3;	// TEMP? This might not be the right way to do this.  Texture Width (METERS)
 	textHeight = 10;	// TEMP? This might not be the right way to do this.  Texture Height (METERS)
+	
+	
 	elapsedTime = 0;
 	body = NULL;
 
@@ -31,6 +34,8 @@ GOStoneWall::GOStoneWall(WinParems *parems, double x, double y) : GameObj(parems
 	setTeam(false); // NPC team
 
 	textureID = TextureLoader::LoadGLTextures("stonewall.jpg");
+	
+	objID = WinParems::OBJ_T_STONEWALL;
 
 }
 

@@ -1,8 +1,8 @@
 #include "GameObjectManager.h"
 
 
-GameObjectManager::GameObjectManager(WinParems *parems) {
-
+GameObjectManager::GameObjectManager(WinParems *parems, SoundManager &soundManager) : sm(soundManager) {
+	winParems = parems;
 }
 
 
@@ -35,6 +35,7 @@ GameObjectManager::~GameObjectManager() {
 
 GameObj* GameObjectManager::makeArcher(double x, double y) {
 	GameObj *temp = new GOArcher(winParems, x, y);
+	temp->setSoundSourceID(sm.registerObject());				// Register new object with sound manager
 	addObject(temp);
 	return temp;
 }
@@ -175,7 +176,7 @@ void GameObjectManager::updateDefenders() {
 			winParems->getWorld()->DestroyBody((*it)->body);
 			it = defenders.erase(it);
 		} else {
-			(*it)->update();
+			(*it)->update(sm);
 			++it;
 		}
 	}
@@ -191,7 +192,7 @@ void GameObjectManager::updateAttackers() {
 			winParems->getWorld()->DestroyBody((*it)->body);
 			it = defenders.erase(it);
 		} else {
-			(*it)->update();
+			(*it)->update(sm);
 			++it;
 		}
 	}

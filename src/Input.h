@@ -34,8 +34,8 @@ public:
 	std::vector<buttonState> &getClicks() { return vMouseBtns; }		//vector containing button press information (index 0=btn pressed? index 1 = btn held?)
 	Vector3 getMousePos();
 //	void addEvent(UINT uMsgType, WPARAM wParam);
-	bool isKeyPressed(char *key);			// returns true if key is pressed
-	bool isKeyPressed(unsigned int ascii);			// returns true if key is pressed
+	bool isKeyPressed(unsigned char key);			// returns true if key is pressed
+//	bool isKeyPressed(unsigned int ascii);			// returns true if key is pressed
 //	bool isKeyHeld(char *key);			// returns true if key is pressed
 //	bool isKeyHeld(unsigned int ascii);			// returns true if key is pressed
 	bool isBtnPressed(unsigned int btnNum);			// returns true if mouse button # was pressed
@@ -44,7 +44,7 @@ public:
 
 	// NEW GLUT FUNCTIONS
 	void addKeyDown(unsigned char key, int x, int y);
-	void addKeyUp( int key, int x, int y);
+	void addKeyUp(unsigned char key, int x, int y);
 	void addSpecialDown( int key, int x, int y);
 	void addSpecialUp( int key, int x, int y);
 	void addMouseEvent(int button, int state, int x, int y);

@@ -56,7 +56,7 @@ Game::Game() {
 	fort.setWinParems(&winParems);
 
 	// Game Object Manager
-	go = new GameObjectManager(&winParems);
+	go = new GameObjectManager(&winParems, sm);
 
 	// Initialization of objects
 	fort.start();
@@ -93,7 +93,8 @@ Game::~Game(void) {
 }
 
 bool Game::initGL() {
-//	BuildFont();
+
+	sm.init();								// Sound Manager
 
 	//// Pass windows paremeters to child objects
 	in.setWinParems(&winParems);
@@ -123,7 +124,11 @@ void Game::draw() {
 	std::stringstream ss;
 	ss << "Manager: Attackers=" << go->getAttackers().size() << " Defenders=" << go->getDefenders().size();
 	text.text(ss, 10, 450, winParems.depth());
-	
+
+	std::stringstream ss2;
+	ss2 << "Sound Manager: Sources=" << sm.getSourceCount() << " Buffers=" << sm.getBufferCount();
+	text.text(ss2, 10, 425, winParems.depth());
+
 	if(lastFrameElapsedTime != 0.0) {
 		std::stringstream fps;
 		fps << "FPS = " << (1 / lastFrameElapsedTime);				// Instant FPS
@@ -153,6 +158,7 @@ bool Game::update() {
 	if(!lvl) {
 		lvl = 1;
 		level.loadLevel(lvl);
+		sm.loadSounds(level.getSpawnListTypes());
 	}
 
 	// Timer - Get elapsed time since last update
@@ -352,10 +358,11 @@ void Game::processInput() {
 	// Add Keyboard input HERE!
 
 	// L //
-	if (in.isKeyPressed('L')) {
+	if (in.isKeyPressed('L') || in.isKeyPressed('l')) {
 		std::string msg("L IS PRESSED!!");
 		text.text(msg, 300.0, 200.0, winParems.depth());
 		makeAttacker();
+		sm.playtest();										// Testing Sound!
 	}
 
 	// LEFT MOUSE BUTTON

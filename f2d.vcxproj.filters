@@ -19,6 +19,9 @@
     <Filter Include="Source Files\GO">
       <UniqueIdentifier>{a5dec9fb-bb82-491a-aad8-567143621971}</UniqueIdentifier>
     </Filter>
+    <Filter Include="OpenALFramework">
+      <UniqueIdentifier>{2fbd5923-99d1-406f-8de7-e1b00d69f92b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\GLText.cpp">
@@ -108,6 +111,21 @@
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SoundManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="openal\include\framework\Win32\aldlist.cpp">
+      <Filter>OpenALFramework</Filter>
+    </ClCompile>
+    <ClCompile Include="openal\include\framework\Win32\CWaves.cpp">
+      <Filter>OpenALFramework</Filter>
+    </ClCompile>
+    <ClCompile Include="openal\include\framework\Win32\Framework.cpp">
+      <Filter>OpenALFramework</Filter>
+    </ClCompile>
+    <ClCompile Include="openal\include\framework\Win32\LoadOAL.cpp">
+      <Filter>OpenALFramework</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\GLText.h">
@@ -193,6 +211,21 @@
     </ClInclude>
     <ClInclude Include="src\GameObjectFactory.h">
       <Filter>Header Files\GO</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="openal\include\framework\Win32\aldlist.h">
+      <Filter>OpenALFramework</Filter>
+    </ClInclude>
+    <ClInclude Include="openal\include\framework\Win32\CWaves.h">
+      <Filter>OpenALFramework</Filter>
+    </ClInclude>
+    <ClInclude Include="openal\include\framework\Win32\Framework.h">
+      <Filter>OpenALFramework</Filter>
+    </ClInclude>
+    <ClInclude Include="openal\include\framework\Win32\LoadOAL.h">
+      <Filter>OpenALFramework</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

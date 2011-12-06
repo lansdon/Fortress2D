@@ -6,6 +6,14 @@ GameObj::GameObj(WinParems *parems, double x, double y) {
 	this->winParems = parems;
 	text.setWinParems(parems);
 
+	// Sound Effect Timers
+	TIMER_SOUND_MOVE = 2.0; // ms
+	TIMER_SOUND_MELEE = 1.0; // ms
+	TIMER_SOUND_RANGED = 1.0; // ms
+	TIMER_SOUND_DAMAGED = 1.0; // ms
+	TIMER_SOUND_DEATH = 2.0; // ms
+	TIMER_SOUND_IDLE = 5.0; // ms
+
 	//posX = posY = 0;
 	velocityMax = 0;		// pixels per second
 	//angle = 0;		// 0 = right   180 = left   90 = up
@@ -33,6 +41,9 @@ GameObj::GameObj(WinParems *parems, double x, double y) {
 
 	// Load texture
 	textureID = TextureLoader::LoadGLTextures("test.png");
+
+	// Sound ID
+	soundSourceID = 0;
 }
 
 
@@ -45,11 +56,26 @@ GameObj::~GameObj(void)
 
 
 
-void GameObj::move() {
+void GameObj::move(SoundManager &sm) {
 	if(body) {
 		b2Vec2 vel = body->GetLinearVelocity();
 		vel.x = b2Min( vel.x + 0.1f,  velocityMax );
 		body->SetLinearVelocity( vel );
+
+		t_move.Calculate_Ellapsed_Time();
+		if(t_move.TotalTime() >= TIMER_SOUND_MOVE) {
+			SoundManager::Sounds soundID;
+			switch(objID) {
+				case WinParems::OBJ_T_ARCHER: soundID = sm.SND_ARCHER_MOVE; break;
+				case WinParems::OBJ_T_STONEWALL: soundID = sm.SND_STONEWALL_MOVE; break;
+	//			case WinParems.OBJ_T_DOG: soundID = sm.SND_DOG_MELEE; break;
+	//			case WinParems.OBJ_T_SPEARMAN: soundID = sm.SND_SPEARMAN_MELEE; break;
+	//			case WinParems.OBJ_T_ARCHER: soundID = sm.SND_ARCHER_MELEE; break;
+				default: soundID = sm.SND_DOG_MOVE; break;
+			}
+			sm.playSound(soundSourceID, soundID, body->GetPosition());
+			t_move.Reset(0.0);
+		}
 	}
 
 }
@@ -86,43 +112,93 @@ void GameObj::removeEnemy(GameObj *enemy, bool ranged) {
 }
 
 
-void GameObj::attack(GameObj *enemy) {
+void GameObj::attack(GameObj *enemy, SoundManager &sm) {
 	if(enemy->isAlive()) {
-		enemy->damage(getDamage());
+
+		// SFX
+		t_melee.Calculate_Ellapsed_Time();
+		if(t_melee.TotalTime() >= TIMER_SOUND_MELEE) {
+			SoundManager::Sounds soundID;
+			switch(objID) {
+				case WinParems::OBJ_T_ARCHER: soundID = sm.SND_ARCHER_MELEE; break;
+				case WinParems::OBJ_T_STONEWALL: soundID = sm.SND_STONEWALL_MELEE; break;
+	//			case WinParems.OBJ_T_DOG: soundID = sm.SND_DOG_MELEE; break;
+	//			case WinParems.OBJ_T_SPEARMAN: soundID = sm.SND_SPEARMAN_MELEE; break;
+	//			case WinParems.OBJ_T_ARCHER: soundID = sm.SND_ARCHER_MELEE; break;
+				default: soundID = sm.SND_ARCHER_DAMAGED; break;
+			}
+			sm.playSound(soundSourceID, soundID, body->GetPosition());
+			t_melee.Reset(0.0);
+		}
+
+		// DAMAGE ENEMY
+		enemy->damage(getDamage(), sm);
+
 	}
 }
 
 
-void GameObj::death() { 
-
-
+void GameObj::death(SoundManager &sm) { 
+	// SFX
+	t_death.Calculate_Ellapsed_Time();
+	if(t_death.TotalTime() >= TIMER_SOUND_DEATH) {
+		SoundManager::Sounds soundID;
+		switch(objID) {
+			case WinParems::OBJ_T_ARCHER: soundID = sm.SND_ARCHER_DEATH; break;
+			case WinParems::OBJ_T_STONEWALL: soundID = sm.SND_STONEWALL_DEATH; break;
+	//			case WinParems.OBJ_T_DOG: soundID = sm.SND_DOG_MELEE; break;
+	//			case WinParems.OBJ_T_SPEARMAN: soundID = sm.SND_SPEARMAN_MELEE; break;
+	//			case WinParems.OBJ_T_ARCHER: soundID = sm.SND_ARCHER_MELEE; break;
+			default: soundID = sm.SND_ARCHER_DAMAGED; break;
+		}
+		sm.playSound(soundSourceID, soundID, body->GetPosition());
+		t_death.Reset(0.0);
+	}
 }
 
 
-void GameObj::damage(int amount) {
+void GameObj::damage(int amount, SoundManager &sm) {
+	// Process incoming damage
 	if(getArmor() > amount)
 		return;				// armor negates all damage
 	else amount -= getArmor();
 	setHP(getHP() - amount);
 
+	// SFX
+	t_damaged.Calculate_Ellapsed_Time();
+	if(t_damaged.TotalTime() >= TIMER_SOUND_DAMAGED) {
+		SoundManager::Sounds soundID;
+		switch(objID) {
+			case WinParems::OBJ_T_ARCHER: soundID = sm.SND_ARCHER_DAMAGED; break;
+			case WinParems::OBJ_T_STONEWALL: soundID = sm.SND_STONEWALL_DAMAGED; break;
+	//			case WinParems.OBJ_T_DOG: soundID = sm.SND_DOG_MELEE; break;
+	//			case WinParems.OBJ_T_SPEARMAN: soundID = sm.SND_SPEARMAN_MELEE; break;
+	//			case WinParems.OBJ_T_ARCHER: soundID = sm.SND_ARCHER_MELEE; break;
+			default: soundID = sm.SND_ARCHER_DAMAGED; break;
+		}
+		sm.playSound(soundSourceID, soundID, body->GetPosition());
+		t_damaged.Reset(0.0);
+	}
+
+	// Death sequence
 	if(getHP() < 0) {
-		death();
+		death(sm);
 	}
 }
 
-void GameObj::update(double elapsedTime) {
-	this->elapsedTime = elapsedTime;
+void GameObj::update(SoundManager &sm) {
+//	this->elapsedTime = elapsedTime;
 	// TO DO - Add all update functionality such as collision, movement, attacking, dying.
 
 	if(isAlive()) {
-		move();
+		move(sm);
 //		draw();
 
 		for(std::list<GameObj*>::iterator it = enemies.begin(); it != enemies.end(); ++it) {
 			if(!(*it)->isAlive()) {
 				it = enemies.erase(it);           // Change elemnts to be removed to NULL
 			} else {
-				attack((*it));
+				attack((*it), sm);
 			}
 		}
 //		cleanEnemiesList();

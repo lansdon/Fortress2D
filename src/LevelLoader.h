@@ -18,6 +18,10 @@ public:
 	int getCurrentLevel() { return currentLevel; }
 	void spawn(GameObjectManager &go);			// spawn the next creature
 
+	std::vector<bool> LevelLoader::getSpawnListTypes();
+
+
+
 private:
 	std::vector<unsigned int> spawnList;		// Chronological list of objects to spawn.
 	int currentID;

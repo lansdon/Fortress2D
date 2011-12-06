@@ -16,8 +16,11 @@ GOArcher::GOArcher(WinParems *parems, double x, double y) : GameObj(parems, x, y
 	friction = 0.03;
 	velocityMax = 5;
 
-	textWidth = Util::pixel2Meter(36);	// TEMP? This might not be the right way to do this.  Texture Width (METERS)
-	textHeight =  Util::pixel2Meter(144);	// TEMP? This might not be the right way to do this.  Texture Height (METERS)
+	//textWidth = Util::pixel2Meter(36);	// TEMP? This might not be the right way to do this.  Texture Width (METERS)
+	//textHeight =  Util::pixel2Meter(144);	// TEMP? This might not be the right way to do this.  Texture Height (METERS)
+	textWidth = .5;	// TEMP? This might not be the right way to do this.  Texture Width (METERS)
+	textHeight =  2.5;	// TEMP? This might not be the right way to do this.  Texture Height (METERS)
+
 	elapsedTime = 0;
 	body = NULL;
 
@@ -32,6 +35,8 @@ GOArcher::GOArcher(WinParems *parems, double x, double y) : GameObj(parems, x, y
 	setTeam(true); // NPC team
 
 	textureID = TextureLoader::LoadGLTextures("archer.jpg");
+
+	objID = WinParems::OBJ_T_ARCHER;
 
 }
 

@@ -50,13 +50,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(MSBuildProjectDirectory);</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(MSBuildProjectDirectory)/openal/include;$(MSBuildProjectDirectory)\soil\src\original;$(MSBuildProjectDirectory)/src;openal/include/framework/Win32;$(MSBuildProjectDirectory)/Box2d;$(MSBuildProjectDirectory);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
-      <AdditionalDependencies>OpenGL32.lib;GLu32.lib;bin\Debug\Box2D.lib;soil\lib\SOIL.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>OpenGL32.lib;GLu32.lib;bin\Debug\Box2D.lib;soil\lib\SOIL.lib;winmm.lib;openal\libs\Win32\OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -68,7 +68,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(MSBuildProjectDirectory);</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(MSBuildProjectDirectory)/openal/include;$(MSBuildProjectDirectory);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -76,9 +76,15 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <EntryPointSymbol>mainCRTStartup</EntryPointSymbol>
+      <AdditionalDependencies>OpenGL32.lib;GLu32.lib;bin\Debug\Box2D.lib;soil\lib\SOIL.lib;winmm.lib;openal\libs\Win64\OpenAL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="openal\include\framework\Win32\aldlist.cpp" />
+    <ClCompile Include="openal\include\framework\Win32\CWaves.cpp" />
+    <ClCompile Include="openal\include\framework\Win32\Framework.cpp" />
+    <ClCompile Include="openal\include\framework\Win32\LoadOAL.cpp" />
+    <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="src\Fort.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\GameObj.cpp" />
@@ -110,6 +116,11 @@
     <ClCompile Include="src\WinParems.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="openal\include\framework\Win32\aldlist.h" />
+    <ClInclude Include="openal\include\framework\Win32\CWaves.h" />
+    <ClInclude Include="openal\include\framework\Win32\Framework.h" />
+    <ClInclude Include="openal\include\framework\Win32\LoadOAL.h" />
+    <ClInclude Include="SoundManager.h" />
     <ClInclude Include="src\Fort.h" />
     <ClInclude Include="src\Game.h" />
     <ClInclude Include="src\GameObj.h" />

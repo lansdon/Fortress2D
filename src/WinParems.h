@@ -25,6 +25,28 @@ public:
 	~WinParems(void);
 	//WinParems(WinParems &parems);		// copy constructor
 
+
+	enum OBJECT_TYPE {
+		OBJ_T_NONE,
+		//DEFENDERS
+		OBJ_T_MOTE, 
+		OBJ_T_FENCE, 
+		OBJ_T_WOODWALL, 
+		OBJ_T_STONEWALL, 
+		OBJ_T_ARCHER_TOWER, 
+		OBJ_T_MAGE_TOWER, 
+		OBJ_T_OIL_TOWER, 
+		OBJ_T_CATAPAULT,
+		// ATTACKERS
+		OBJ_T_DOG, 
+		OBJ_T_HORDE, 
+		OBJ_T_SPEARMAN, 
+		OBJ_T_ARCHER, 
+		OBJ_T_MAGE, 
+		OBJ_T_SEIGE_ENGINE
+	};
+	static const int TOTAL_OBJ_TYPES = 14;
+
 	float depth() { return COORD_DEPTH; }
 	float height() { return COORD_HEIGHT; }
 	float width() { return 800.0; }

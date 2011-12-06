@@ -37,6 +37,7 @@
 #include "GameObjectManager.h"
 #include "LevelLoader.h"
 #include <map>
+#include "SoundManager.h"
 
 
 class MyContactListener : public b2ContactListener {
@@ -158,6 +159,7 @@ private:
 
 	WinParems winParems;
 	GameObjectManager* go;
+	SoundManager sm;
 	LevelLoader level;
 
 	// Fort

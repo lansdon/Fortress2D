@@ -25,6 +25,8 @@ GOArcherTower::GOArcherTower(WinParems *parems, double x, double y) : GameObj(pa
 	setupB2D(x, y);
 
 	setTeam(false); // NPC team
+
+	objID = WinParems::OBJ_T_ARCHER_TOWER;
 }
 
 

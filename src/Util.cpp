@@ -1,7 +1,7 @@
 #include "Util.h"
 
 const double Util::PI = 3.141592653589793238;
-const double Util::METER_PER_PIXEL = 16;						// meters per pixel  (100m / 800px) 
+const double Util::METER_PER_PIXEL = 8;						// meters per pixel  (100m / 800px) 
 
 Util::Util(void)
 {

@@ -136,16 +136,18 @@ void Input::updateKeys() {
 
 
 
-bool Input::isKeyPressed(char *key) {			// returns true if key is pressed
-	return isKeyPressed((unsigned int)key);
-}
-
-
-bool Input::isKeyPressed(unsigned int ascii) {			// returns true if key is pressed
-	if(vKeys[ascii].state == GLUT_DOWN)
+bool Input::isKeyPressed(unsigned char key) {			// returns true if key is pressed
+	if(vKeys[key].state == GLUT_DOWN)
 		return true;
 	else return false;
 }
+
+
+//bool Input::isKeyPressed(unsigned int ascii) {			// returns true if key is pressed
+//	if(vKeys[ascii].state == GLUT_DOWN)
+//		return true;
+//	else return false;
+//}
 
 bool Input::isBtnPressed(unsigned int btnNum) {			// returns true if mouse button # was pressed
 	if(vMouseBtns[btnNum].state == GLUT_DOWN)
@@ -168,7 +170,7 @@ void Input::addKeyDown(unsigned char key, int x, int y) {
 	vKeys[key].y = y;
 }
 
-void Input::addKeyUp( int key, int x, int y) {
+void Input::addKeyUp( unsigned char key, int x, int y) {
 	vKeys[key].state = GLUT_UP;					// If So, Mark It As TRUE
 	vKeys[key].x = x;
 	vKeys[key].y = y;

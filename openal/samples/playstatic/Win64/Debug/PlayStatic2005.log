@@ -1,0 +1,42 @@
+﻿Build started 12/4/2011 12:31:47 AM.
+     1>Project "C:\Users\Lansdon\Documents\Fortress2D\openal\samples\playstatic\Win64\PlayStatic2005.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "Debug\PlayStatic.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /I..\..\Framework\Win32 /I..\..\..\include /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _CRT_SECURE_NO_DEPRECATE /D _VC80_UPGRADE=0x0710 /D _MBCS /Gm /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc100.pdb" /Gd /TP /analyze- /errorReport:prompt ..\Source\PlayStatic.cpp ..\..\Framework\Win32\aldlist.cpp ..\..\Framework\Win32\CWaves.cpp ..\..\Framework\Win32\Framework.cpp ..\..\Framework\Win32\LoadOAL.cpp
+         LoadOAL.cpp
+         Framework.cpp
+         CWaves.cpp
+         aldlist.cpp
+         PlayStatic.cpp
+         Generating Code...
+       ManifestResourceCompile:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo"Debug\PlayStatic.exe.embed.manifest.res" Debug\PlayStatic_manifest.rc 
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppBuild.targets(990,5): warning MSB8012: TargetPath(C:\Users\Lansdon\Documents\Fortress2D\openal\samples\playstatic\Win64\Debug\PlayStatic.exe) does not match the Linker's OutputFile property value (C:\Users\Lansdon\Documents\Fortress2D\openal\samples\playstatic\Win64\Debug\PlayStaticWin32.exe). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Link.OutputFile).
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppBuild.targets(992,5): warning MSB8012: TargetName(PlayStatic) does not match the Linker's OutputFile property value (PlayStaticWin32). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Link.OutputFile).
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"Debug\PlayStaticWin32.exe" /INCREMENTAL /NOLOGO winmm.lib ..\..\..\libs\win32\OpenAL32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\PlayStatic.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"Debug\Playstatic2003.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"Debug\PlayStatic.lib" /MACHINE:X86 Debug\PlayStatic.exe.embed.manifest.res
+         Debug\PlayStatic.obj
+         Debug\aldlist.obj
+         Debug\CWaves.obj
+         Debug\Framework.obj
+         Debug\LoadOAL.obj
+       Manifest:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /out:"Debug\PlayStatic.exe.embed.manifest" /manifest Debug\PlayStatic.exe.intermediate.manifest
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\rc.exe /nologo /fo"Debug\PlayStatic.exe.embed.manifest.res" Debug\PlayStatic_manifest.rc 
+       LinkEmbedManifest:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"Debug\PlayStaticWin32.exe" /INCREMENTAL /NOLOGO winmm.lib ..\..\..\libs\win32\OpenAL32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Debug\PlayStatic.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"Debug\Playstatic2003.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"Debug\PlayStatic.lib" /MACHINE:X86 Debug\PlayStatic.exe.embed.manifest.res
+         Debug\PlayStatic.obj
+         Debug\aldlist.obj
+         Debug\CWaves.obj
+         Debug\Framework.obj
+         Debug\LoadOAL.obj
+         PlayStatic2005.vcxproj -> C:\Users\Lansdon\Documents\Fortress2D\openal\samples\playstatic\Win64\Debug\PlayStatic.exe
+       FinalizeBuildStatus:
+         Deleting file "Debug\PlayStatic.unsuccessfulbuild".
+         Touching "Debug\PlayStatic.lastbuildstate".
+     1>Done Building Project "C:\Users\Lansdon\Documents\Fortress2D\openal\samples\playstatic\Win64\PlayStatic2005.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:04.50

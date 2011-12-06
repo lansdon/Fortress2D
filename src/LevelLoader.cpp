@@ -17,6 +17,7 @@ LevelLoader::~LevelLoader(void)
 
 
 void LevelLoader::loadLevel(int level) {
+
 	bool begin = false;
 	std::stringstream fName;
 	fName << DEF_DIRECTORY << "level" << level << ".dat";
@@ -74,3 +75,29 @@ void LevelLoader::spawn(GameObjectManager &go) {			// spawn the next creature
 
 
 
+// Numbers used in leve.dat files   (need to convert level files into WinParems::OBJECT_TYPE
+//0=NONE
+//1=WARDOG
+//2=SPEARMAN
+//3=ARCHER
+//4=SEIGE ENGINE
+
+
+std::vector<bool> LevelLoader::getSpawnListTypes() {
+
+	std::vector<bool> objVec;
+	objVec.resize(WinParems::TOTAL_OBJ_TYPES);
+
+	std::vector<unsigned int>::iterator it = spawnList.begin();
+	while(it != spawnList.end()) {
+		switch(*it) {
+			case 1: objVec[WinParems::OBJ_T_DOG] = true; break;
+			case 2: objVec[WinParems::OBJ_T_SPEARMAN] = true; break;
+			case 3: objVec[WinParems::OBJ_T_ARCHER] = true; break;
+			case 4: objVec[WinParems::OBJ_T_SEIGE_ENGINE] = true; break;
+		}
+		++it;
+	}
+	return objVec;
+
+}

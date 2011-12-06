@@ -15,7 +15,7 @@
 #include "GOStoneWall.h"
 //#include "GOWarDog.h"
 //#include "GOWoodWall.h"
-
+#include "SoundManager.h"
 
 /*
 	The purpose of the object manager is to maintain all game objects that are ever created.
@@ -39,14 +39,12 @@ struct GameObjParems {
 	double texHeight;
 	double density;
 	double friction;
-	
-
 };
 
 class GameObjectManager
 {
 public:
-	GameObjectManager(WinParems *parems);
+	GameObjectManager(WinParems *parems, SoundManager &soundManager);
 	~GameObjectManager();
 	GameObj* makeWarDog(double x, double y);
 	GameObj* makeBarbarian(double x, double y);
@@ -86,5 +84,8 @@ private:
 	void resetAttackers();
 
 	WinParems *winParems;
+
+	SoundManager &sm;
+
 };
 

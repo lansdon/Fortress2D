@@ -17,13 +17,13 @@
 #include "Util.h"
 #include "GLText.h"
 #include "WinParems.h"
-#include <Box2D\Box2D.h>
+#include <Box2D.h>
 #include <vector>
 #include <list>
 #include "TextureLoader.h"
-
-
-
+#include "openal\include\al.h"
+#include "SoundManager.h"
+#include "Performance_Counter.h"
 
 
 class GameObj
@@ -32,6 +32,14 @@ public:
 	GameObj(WinParems *parems, double x, double y);
 	~GameObj(void);
 	
+	// Timer intervals inbetween playing repeated sfx
+	float TIMER_SOUND_MOVE;
+	float TIMER_SOUND_MELEE;
+	float TIMER_SOUND_RANGED;
+	float TIMER_SOUND_DAMAGED;
+	float TIMER_SOUND_DEATH;
+	float TIMER_SOUND_IDLE;
+
 	enum OBJECT_TYPE { ATTACKER, DEFENDER, BULLET, STATIC, NONE};		// General object types
 //	enum OBJECT_SUB_TYPE { MONSTER, WALL, 
 
@@ -73,11 +81,11 @@ public:
 //	void setGLObj(HDC *hDC, HWND *hWnd) { winParems.setHDC(hDC); winParems.setHWND(hWnd); } // pass main windown handle and hardware device context
 
 	// update functions
-	void update(double elapsedTime = 0);					// Main update function
-	void move();						// automatic move function (using vector quantities)
-	void attack(GameObj *enemy);						// automatic attack function
-	void death();						// death sequnce
-	void damage(int amount);			// damage taken function
+	void update(SoundManager &sm);					// Main update function
+	void move(SoundManager &sm);						// automatic move function (using vector quantities)
+	void attack(GameObj *enemy, SoundManager &sm);						// automatic attack function
+	void death(SoundManager &sm);						// death sequnce
+	void damage(int amount, SoundManager &sm);			// damage taken function
 
 	// Box2d
 	b2Body *body;
@@ -87,6 +95,9 @@ public:
 	void removeEnemy(GameObj *enemy, bool ranged = false);
 	bool cleanEnemiesList();
 	b2Vec2 getPos() { return body->GetPosition(); }
+
+	// Sound
+	void setSoundSourceID(unsigned int id) { soundSourceID = id; }
 
 protected:
 	std::string name;	// in game name of object
@@ -106,7 +117,15 @@ protected:
 	float density;
 	float friction;
 
-	double elapsedTime;
+	// TIMERS
+	double elapsedTime;			// REMOVE?
+	Performance_Counter t_move;	// timer for move sfx intervals
+	Performance_Counter t_melee;	// timer for move sfx intervals
+	Performance_Counter t_ranged;	// timer for move sfx intervals
+	Performance_Counter t_damaged;	// timer for move sfx intervals
+	Performance_Counter t_death;	// timer for move sfx intervals
+	Performance_Counter t_idle;	// timer for move sfx intervals
+
 
 	void recalculate();
 
@@ -130,7 +149,11 @@ protected:
 	GLuint textureID;
 
 
-	// todo - // Soundbank
+	// Sound Source ID
+	WinParems::OBJECT_TYPE objID;				// Specific object type ID
+	unsigned int soundSourceID;
+
+
 
 	// todo - Weapon
 
