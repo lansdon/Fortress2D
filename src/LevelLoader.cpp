@@ -88,6 +88,7 @@ std::vector<bool> LevelLoader::getSpawnListTypes() {
 	std::vector<bool> objVec;
 	objVec.resize(WinParems::TOTAL_OBJ_TYPES);
 
+	// Search for types of attackers being loaded this level
 	std::vector<unsigned int>::iterator it = spawnList.begin();
 	while(it != spawnList.end()) {
 		switch(*it) {
@@ -98,6 +99,18 @@ std::vector<bool> LevelLoader::getSpawnListTypes() {
 		}
 		++it;
 	}
+	
+
+	// AUTOMATICALLY LOAD DEFENDER OBJECTS
+	objVec[WinParems::OBJ_T_ARCHER_TOWER] = true;
+	objVec[WinParems::OBJ_T_CATAPAULT] = true;
+	objVec[WinParems::OBJ_T_FENCE] = true;
+	objVec[WinParems::OBJ_T_MAGE_TOWER] = true;
+	objVec[WinParems::OBJ_T_MOTE] = true;
+	objVec[WinParems::OBJ_T_OIL_TOWER] = true;
+	objVec[WinParems::OBJ_T_STONEWALL] = true;
+	objVec[WinParems::OBJ_T_WOODWALL] = true;
+	
 	return objVec;
 
 }

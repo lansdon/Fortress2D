@@ -33,6 +33,8 @@ Game::Game() {
 
 	// BOX2d Initialization
 	winParems.getWorld()->SetContactListener(&contactListener);
+
+	// STATIC GROUND LEVEL
 	groundBodyDef.position.Set(winParems.mid(), winParems.floor()/2);
 //	groundBodyDef.position.Set(0.0f, -winParems.height()/2);
 	groundBody = winParems.getWorld()->CreateBody(&groundBodyDef);
@@ -43,7 +45,9 @@ Game::Game() {
 	score = 0;
 	money = 0;
 
-	glEnable2D();
+	glEnable2D();			// REMOVE?
+
+	activeLauncher = NULL;
 
 	SCOREBOARD_HEIGHT = (winParems.height()/14);
 	
@@ -118,7 +122,7 @@ void Game::draw() {
 	drawScoreboard();
 	drawMenu();
 	fort.draw(in.getMousePos());
-	go->drawAll();
+	go->drawAll(b2Vec2(in.getMousePos().x(), in.getMousePos().y()));
 
 	// Debug /////////////////////////////////////////////////////////////////////////////////////////////
 	std::stringstream ss;
@@ -374,10 +378,26 @@ void Game::processInput() {
 		std::stringstream msg1;
 		msg1 << "Mousetimer=" << leftBtnTimer.TotalTime();
 		text.text(msg1, 300.0, 210.0, winParems.depth());
+		
+		// CHECK LEFT-BUTTON TIMER
 		if(leftBtnTimer.TotalTime() >= LEFT_BUTTON_INTERVAL) {
-			if(fortMenu->activate(mouse)) {
+			// First check the active launcher
+			if(activeLauncher != NULL) {
+				doLaunch();
+			}
+			
+
+
+			// FORT MENU BUTTONS
+			else if(fortMenu->activate(mouse)) {
 				text.text(std::string("ACTIVATED A BUTTON!"), 300.0, 510.0, winParems.depth());
 				processFortMenuButton();
+			}
+			
+			// LAUNCHER OBJECTS
+			else if(activateGO(mouse)) {
+
+
 			}
 			else if(fort.validPlacement(mouse.x())) {
 				fort.makeObj(mouse.x(), *go);
@@ -478,3 +498,45 @@ std::string Game::getFortButtonLabel(int row, int col) {
 	}
 	return label;
 }
+
+
+
+bool Game::activateGO(Vector3 mouse) {
+	b2Vec2 mouse2;
+	mouse2.Set(mouse.x(), mouse.y());
+	std::list<GameObj*> defenders = go->getDefenders();
+	std::list<GameObj*>::iterator it = defenders.begin();
+	
+	if(activeLauncher != NULL) {
+		activeLauncher->isActivated(true);				// RESET
+		activeLauncher = NULL;							// Clear pointer
+	}
+
+	// searching for mouse clicks on a launcher object.
+	while(it != defenders.end()) {
+		if(it._Ptr->_Myval->activate(mouse2) ) {
+			activeLauncher = static_cast<Launcher*>(it._Ptr->_Myval);
+			return true;								// FOUND ONE!
+		}
+		++it;
+	}
+
+	return false;										// DIDN'T FIND ONE
+}
+
+
+
+void Game::doLaunch() {
+
+	GameObj* temp = go->makeArrow(activeLauncher->body->GetPosition().x, activeLauncher->body->GetPosition().y);
+	temp->setVecAngle(activeLauncher->getLaunchAngle());
+//	temp->setVelocity(launchVelocity);
+	temp->body->SetLinearVelocity(b2Vec2(activeLauncher->getLaunchVelocity() * std::cos(Util::deg2Rad(activeLauncher->getLaunchAngle())), activeLauncher->getLaunchVelocity() * std::sin(Util::deg2Rad(activeLauncher->getLaunchAngle()))));
+	temp->setTeam(activeLauncher->isNPC());
+	//	b2Fixture *fixture = temp->body->GetFixtureList();
+
+
+
+
+}
+

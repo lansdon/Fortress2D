@@ -80,11 +80,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AmmoTypes.cpp" />
+    <ClCompile Include="GOAArrow.cpp" />
+    <ClCompile Include="Launcher.cpp" />
     <ClCompile Include="openal\include\framework\Win32\aldlist.cpp" />
     <ClCompile Include="openal\include\framework\Win32\CWaves.cpp" />
     <ClCompile Include="openal\include\framework\Win32\Framework.cpp" />
     <ClCompile Include="openal\include\framework\Win32\LoadOAL.cpp" />
-    <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="src\Fort.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\GameObj.cpp" />
@@ -110,17 +112,20 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\MyContactListener.cpp" />
     <ClCompile Include="src\Performance_Counter.cpp" />
+    <ClCompile Include="src\SoundManager.cpp" />
     <ClCompile Include="src\TextureLoader.cpp" />
     <ClCompile Include="src\Util.cpp" />
     <ClCompile Include="src\Vector3.cpp" />
     <ClCompile Include="src\WinParems.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AmmoTypes.h" />
+    <ClInclude Include="GOAArrow.h" />
+    <ClInclude Include="Launcher.h" />
     <ClInclude Include="openal\include\framework\Win32\aldlist.h" />
     <ClInclude Include="openal\include\framework\Win32\CWaves.h" />
     <ClInclude Include="openal\include\framework\Win32\Framework.h" />
     <ClInclude Include="openal\include\framework\Win32\LoadOAL.h" />
-    <ClInclude Include="SoundManager.h" />
     <ClInclude Include="src\Fort.h" />
     <ClInclude Include="src\Game.h" />
     <ClInclude Include="src\GameObj.h" />
@@ -145,6 +150,7 @@
     <ClInclude Include="src\LevelLoader.h" />
     <ClInclude Include="src\MyContactListener.h" />
     <ClInclude Include="src\Performance_Counter.h" />
+    <ClInclude Include="src\SoundManager.h" />
     <ClInclude Include="src\TextureLoader.h" />
     <ClInclude Include="src\Util.h" />
     <ClInclude Include="src\Vector3.h" />

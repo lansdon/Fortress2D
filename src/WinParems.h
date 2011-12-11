@@ -43,7 +43,10 @@ public:
 		OBJ_T_SPEARMAN, 
 		OBJ_T_ARCHER, 
 		OBJ_T_MAGE, 
-		OBJ_T_SEIGE_ENGINE
+		OBJ_T_SEIGE_ENGINE,
+		// AMMO
+		OBJ_T_ARROW,
+		OBJ_T_CANNONBALL
 	};
 	static const int TOTAL_OBJ_TYPES = 14;
 

@@ -11,33 +11,39 @@
 
 #pragma once
 
-#include <sstream>
-#include<string>
+
+// Open GL Stuffs
 #include <windows.h>		// Header File For Windows
 #include <math.h>			// Header File For Windows Math Library
 #include <stdio.h>			// Header File For Standard Input/Output
 #include <stdarg.h>			// Header File For Variable Argument Routines
 #include <gl\gl.h>			// Header File For The OpenGL32 Library
 #include <gl\glu.h>			// Header File For The GLu32 Library
-//#include <gl\glaux.h>		// Header File For The Glaux Library
-//#include <stdlib.h>
 #include <gl\freeglut.h>
+
+// STL etc
+#include <sstream>
+#include<string>
 #include <iomanip>
-#include "Performance_Counter.h"	// Timer for calculating frame intervals (milliseconds)
 #include <vector>
+#include <map>
+
+// Box 2d
+#include <Box2D\Box2D.h>
+
+// My stuffs
+#include "Performance_Counter.h"	// Timer for calculating frame intervals (milliseconds)
 #include "GameObj.h"
 #include "GLText.h"
 #include "WinParems.h"
 #include "Input.h"
-#include <vector>
 #include "Fort.h"
-#include <Box2D\Box2D.h>
 #include "GUIButtonMenu.h"
 //#include "MyContactListener.h"
 #include "GameObjectManager.h"
 #include "LevelLoader.h"
-#include <map>
 #include "SoundManager.h"
+#include "Launcher.h"
 
 
 class MyContactListener : public b2ContactListener {
@@ -153,7 +159,6 @@ private:
 	void Game::specialKeyPressed(int key, int x, int y);
 
 	// TEMP - Testing game objects - This will eventually be managed in containers
-//	std::vector<GameObj*> attackerObj;
 	void Game::makeAttacker();
 
 
@@ -169,6 +174,11 @@ private:
 	void processFortMenuButton();
 	void setupFortMenu();
 	std::string getFortButtonLabel(int row, int col);
+
+	// Game Objects
+	Launcher *activeLauncher;						// Currently Selected Launcher Object
+	bool Game::activateGO(Vector3 mouse);			// Searches for a Launcher being activated
+	void Game::doLaunch();					// Launch an object from the currently selected launch object
 
 
 };

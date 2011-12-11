@@ -34,7 +34,7 @@ GameObjectManager::~GameObjectManager() {
 //}
 
 GameObj* GameObjectManager::makeArcher(double x, double y) {
-	GameObj *temp = new GOArcher(winParems, x, y);
+	GOArcher *temp = new GOArcher(winParems, x, y);
 	temp->setSoundSourceID(sm.registerObject());				// Register new object with sound manager
 	addObject(temp);
 	return temp;
@@ -70,11 +70,11 @@ GameObj* GameObjectManager::makeStoneWall(double x, double y) {
 	return temp;
 }
 
-//GameObj* GameObjectManager::makeArcherTower(double x, double y) {
-//	GameObj *temp = new GOArcherTower(winParems, x, y);
-//	addObject(temp);
-//	return temp;
-//}
+GameObj* GameObjectManager::makeArcherTower(double x, double y) {
+	GameObj *temp = new GOArcherTower(winParems, x, y);
+	addObject(temp);
+	return temp;
+}
 //
 //GameObj* GameObjectManager::makeMageTower(double x, double y) {
 //	GameObj *temp = new GOMageTower(winParems, x, y);
@@ -93,6 +93,15 @@ GameObj* GameObjectManager::makeStoneWall(double x, double y) {
 //	addObject(temp);
 //	return temp;
 //}
+
+GameObj* GameObjectManager::makeArrow(double x, double y) {
+	GameObj *temp = new GOAArrow(winParems, x, y);
+	addObject(temp);
+	return temp;
+}
+
+
+
 
 
 // Remove Object from master list and destory references to that object
@@ -200,16 +209,16 @@ void GameObjectManager::updateAttackers() {
 
 
 // This function updates the attacking mobs / movement / collision / attacks
-void GameObjectManager::drawAll() {
+void GameObjectManager::drawAll(b2Vec2 mouse) {
 
 	std::list<GameObj*>::iterator it = attackers.begin();
 	while(it != attackers.end()) {
-		(*it)->draw();
+		(*it)->draw(mouse);
 		++it;
 	}
 	it = defenders.begin();
 	while(it != defenders.end()) {
-		(*it)->draw();
+		(*it)->draw(mouse);
 		++it;
 	}
 }

@@ -4,8 +4,7 @@
 	This is the base class for all game objects
 
 */
-#include <sstream>
-#include<string>
+// Open GL
 #include <windows.h>		// Header File For Windows
 #include <math.h>			// Header File For Windows Math Library
 #include <stdio.h>			// Header File For Standard Input/Output
@@ -13,17 +12,34 @@
 #include <gl\gl.h>			// Header File For The OpenGL32 Library
 #include <gl\glu.h>			// Header File For The GLu32 Library
 
-#include <string>
+// Open AL
+#include "openal\include\al.h"
+
+// STL
+#include <sstream>
+#include<string>
+#include <vector>
+#include <list>
+
+// Box 2d
+#include <Box2D.h>
+
+// My Stuff
 #include "Util.h"
 #include "GLText.h"
 #include "WinParems.h"
-#include <Box2D.h>
-#include <vector>
-#include <list>
 #include "TextureLoader.h"
-#include "openal\include\al.h"
 #include "SoundManager.h"
 #include "Performance_Counter.h"
+//#include "GameObjectManager.h"
+
+//
+//struct GOSettings {
+//
+//
+//
+//}
+//
 
 
 class GameObj
@@ -41,7 +57,11 @@ public:
 	float TIMER_SOUND_IDLE;
 
 	enum OBJECT_TYPE { ATTACKER, DEFENDER, BULLET, STATIC, NONE};		// General object types
-//	enum OBJECT_SUB_TYPE { MONSTER, WALL, 
+	const int16 COLLISION_GROUP_GROUND;
+	const int16 COLLISION_GROUP_NPC_BULLET;
+	const int16 COLLISION_GROUP_NPC_ATTACKER;
+	const int16 COLLISION_GROUP_PC_BULLET;
+	const int16 COLLISION_GROUP_PC_DEFENDER;
 
 	// Accessor functions
 	void setName(std::string str) { name = str; }
@@ -50,8 +70,8 @@ public:
 //	void setPosY(float y) { posY = y; }
 //	float getPosX() { return posX; }
 //	float getPosY() { return posY; }
-	//void setVecAngle(float theta) { angle = theta; recalculate(); }   // set vector angle of movement (degrees)
-	//float getVecAngle() { return angle; };
+	void setVecAngle(float theta) { angle = theta; } //recalculate(); }   // set vector angle of movement (degrees)
+	float getVecAngle() { return angle; };
 	void setVelocity(float meterPerSec) { velocityMax = meterPerSec;}   // meters per second
 	float getVelocity() { return velocityMax; };
 	void setHP(int num) { hpCur = num; }
@@ -75,10 +95,10 @@ public:
 	void setRangeDamage(int damage) { damage_range = damage; }
 	int getRangeDamage() { return damage_range; }
 	bool isAlive();
-	void draw();						// draw the object on screen
-
-//	void setCoordDepth(int *z) { COORD_DEPTH = z; }
-//	void setGLObj(HDC *hDC, HWND *hWnd) { winParems.setHDC(hDC); winParems.setHWND(hWnd); } // pass main windown handle and hardware device context
+	virtual bool activate(b2Vec2 mouse) =0;	// dummy stub - override for launcher objects.
+	virtual bool isActivated(bool reset) =0;	// dummy stub - override for launcher objects.
+	virtual void draw(b2Vec2 mouse);						// draw the object on screen
+//	virtual void launch(void* go) { }			//stub 
 
 	// update functions
 	void update(SoundManager &sm);					// Main update function
@@ -103,7 +123,7 @@ protected:
 	std::string name;	// in game name of object
 //	float posX, posY;
 	float velocityMax;		// pixels per second
-//	float angle;		// 0 = right   180 = left   90 = up
+	float angle;		// 0 = right  90 = up 180 = left   
 //	float velX;
 //	float velY;
 	int hpCur;			// current hitpoints
@@ -141,6 +161,9 @@ protected:
 	void setupB2D(double x, double y);
 	bool npcTeam;
 	int contacts;					// Number of contacts
+	b2Filter getFixtureCollisionFilter();
+
+
 
 	std::list<GameObj*> enemies;				// Track enemies we're in contact with;
 
@@ -156,7 +179,7 @@ protected:
 
 
 	// todo - Weapon
-
-
+	std::vector<unsigned int> ammo;
+//	void *weapon;
 };
 

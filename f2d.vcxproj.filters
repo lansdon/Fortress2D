@@ -22,6 +22,12 @@
     <Filter Include="OpenALFramework">
       <UniqueIdentifier>{2fbd5923-99d1-406f-8de7-e1b00d69f92b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Ammo">
+      <UniqueIdentifier>{59719df5-b3ac-446c-9a49-647dfbdcb2f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Ammo">
+      <UniqueIdentifier>{409943cb-1418-4c0c-8a3a-025a1bf39262}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\GLText.cpp">
@@ -111,9 +117,6 @@
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SoundManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="openal\include\framework\Win32\aldlist.cpp">
       <Filter>OpenALFramework</Filter>
     </ClCompile>
@@ -125,6 +128,18 @@
     </ClCompile>
     <ClCompile Include="openal\include\framework\Win32\LoadOAL.cpp">
       <Filter>OpenALFramework</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SoundManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Launcher.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AmmoTypes.cpp">
+      <Filter>Source Files\Ammo</Filter>
+    </ClCompile>
+    <ClCompile Include="GOAArrow.cpp">
+      <Filter>Source Files\Ammo</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -212,9 +227,6 @@
     <ClInclude Include="src\GameObjectFactory.h">
       <Filter>Header Files\GO</Filter>
     </ClInclude>
-    <ClInclude Include="SoundManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="openal\include\framework\Win32\aldlist.h">
       <Filter>OpenALFramework</Filter>
     </ClInclude>
@@ -226,6 +238,18 @@
     </ClInclude>
     <ClInclude Include="openal\include\framework\Win32\LoadOAL.h">
       <Filter>OpenALFramework</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SoundManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Launcher.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AmmoTypes.h">
+      <Filter>Header Files\Ammo</Filter>
+    </ClInclude>
+    <ClInclude Include="GOAArrow.h">
+      <Filter>Header Files\Ammo</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

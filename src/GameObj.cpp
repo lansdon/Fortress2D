@@ -1,10 +1,19 @@
 #include "GameObj.h"
 
 
-GameObj::GameObj(WinParems *parems, double x, double y) {
+GameObj::GameObj(WinParems *parems, double x, double y) :
+	COLLISION_GROUP_GROUND(0x0002),
+	COLLISION_GROUP_NPC_BULLET(0x0004), 
+	COLLISION_GROUP_NPC_ATTACKER(0x0008),
+	COLLISION_GROUP_PC_BULLET(0x0016),
+	COLLISION_GROUP_PC_DEFENDER(0x0032)
+
+{
 
 	this->winParems = parems;
 	text.setWinParems(parems);
+
+
 
 	// Sound Effect Timers
 	TIMER_SOUND_MOVE = 2.0; // ms
@@ -19,8 +28,8 @@ GameObj::GameObj(WinParems *parems, double x, double y) {
 	//angle = 0;		// 0 = right   180 = left   90 = up
 	//velX = (velocity * std::cos(Util::deg2Rad(angle))) * elapsedTime;
 	//velY = (velocity * std::sin(Util::deg2Rad(angle))) * elapsedTime;
-	hpCur = 0;			// current hitpoints
-	hpMax = 0;			// max hitpoints
+	hpCur = 10;			// current hitpoints
+	hpMax = 10;			// max hitpoints
 	arCur = 0;			// current armor
 	arMax = 0;			// Max Armor
 	damage_basic = 0;	// basic damage (melee)
@@ -238,7 +247,7 @@ bool GameObj::cleanEnemiesList() {
 }
 
 
-void GameObj::draw() {						// draw the object on screen
+void GameObj::draw(b2Vec2 mouse) {						// draw the object on screen
 		// TEMP - draw function for testing
 	glLoadIdentity();
 
@@ -341,8 +350,43 @@ void GameObj::setupB2D(double x, double y) {
 	fixtureDef.shape = &dynamicBox;			// Define the dynamic body fixture.
 	fixtureDef.density = density;			// Set the box density to be non-zero, so it will be dynamic.	
 	fixtureDef.friction = friction;			// Override the default friction.
+	fixtureDef.filter = getFixtureCollisionFilter();
+//	fixtureDef.filter.maskBits = getFixtureCollissionFilter().maskBits;
+
+
 	body->SetLinearVelocity(b2Vec2(velocityMax, 0.0));
 	body->CreateFixture(&fixtureDef);		// Add the shape to the body.
 
 }
 
+
+// Build collision filters based on object types and team
+b2Filter GameObj::getFixtureCollisionFilter() {
+	b2Filter filter;
+
+	// ATTACKERS
+	if(this->isNPC()) {
+		if(getType() == BULLET) {
+			filter.categoryBits = COLLISION_GROUP_NPC_BULLET;		// NPC BULLET GROUP
+			//filter.maskBits = COLLISION_GROUP_NPC_BULLET;		// NPC bullet doesn't collide with other bullets
+			//filter.maskBits = COLLISION_GROUP_NPC_ATTACKER;		// NPC bullets don't collide with npc attackers
+		} else {
+			filter.categoryBits = COLLISION_GROUP_NPC_ATTACKER;		// NPC ATTACKER GROUP
+			//filter.maskBits = COLLISION_GROUP_NPC_ATTACKER;		// NPC attackers don't collide with other attackers  // this may change!
+			//filter.maskBits = COLLISION_GROUP_NPC_BULLET;		// NPC attackers don't collide with other attacker bullet  // this may change!
+		}
+	
+	// DEFENDERS	
+	} else {
+		if(getType() == BULLET) {
+			filter.categoryBits = COLLISION_GROUP_PC_BULLET;		// PC BULLET GROUP
+			//filter.maskBits = COLLISION_GROUP_PC_BULLET;		// PC bullets don't collide with npc attackers
+			filter.maskBits = COLLISION_GROUP_NPC_ATTACKER + COLLISION_GROUP_GROUND;		// PC bullets don't collide with npc attackers
+		} else {
+			filter.categoryBits = COLLISION_GROUP_PC_DEFENDER;		// PC ATTACKER GROUP
+			//filter.maskBits = COLLISION_GROUP_PC_BULLET;		// PC defenders don't collide with defender bullets  // this may change!
+		}
+	}
+	
+	return filter;
+}
