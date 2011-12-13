@@ -1,11 +1,11 @@
 #include "Launcher.h"
 
 
-Launcher::Launcher(WinParems *parems, int x, int y) : GameObj(parems, x, y)
+Launcher::Launcher(Settings *settings, int x, int y) : GameObj(settings, x, y)
 {
 
-	MIN_VEL = 0.5;			// Lower bounds of launch velocity meters/sec
-	MAX_VEL = 10;			// Upper bounds of launch velocity meters/sec
+	MIN_VEL = 100;			// Lower bounds of launch velocity meters/sec
+	MAX_VEL = 500;			// Upper bounds of launch velocity meters/sec
 	LEFT_ORIENTATION = true; // true = facing left    false = facing right
 	MIN_ANGLE = -45.0;			// MIN angle allowed relative to direction facing (0 = horizontal plane. POS = up, neg = down.
 	MAX_ANGLE = 85.0;			// degrees
@@ -59,7 +59,7 @@ void Launcher::draw(b2Vec2 mouse) {						// draw the object on screen
 	else glColor3f(CONTACT_DRAW_COLOR.r, CONTACT_DRAW_COLOR.g, CONTACT_DRAW_COLOR.b);
 
 	b2Vec2 pos = body->GetPosition();
-	if(winParems->useTextures()) {
+	if(settings->useTextures()) {
 		glEnable(GL_TEXTURE_2D); //Switch back to using colors instead of textures
 		glBindTexture(GL_TEXTURE_2D, textureID);
 		glColor3f(1, 1, 1);
@@ -70,7 +70,7 @@ void Launcher::draw(b2Vec2 mouse) {						// draw the object on screen
 	//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_DECAL );
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
    
-//		glTranslatef(body->GetPosition().x, body->GetPosition().y, (*winParems).depth());       // Move to 0,0 in bottom left corner of coord system
+//		glTranslatef(body->GetPosition().x, body->GetPosition().y, (*settings).depth());       // Move to 0,0 in bottom left corner of coord system
 		glBegin(GL_QUADS);                      // Draw A Quad
 			glTexCoord2f(0, 1);																			// Top Left
 			glVertex2d(pos.x - Util::meter2Pixel(textWidth)/2, pos.y + Util::meter2Pixel(textHeight)/2);              // Top Left
@@ -85,7 +85,7 @@ void Launcher::draw(b2Vec2 mouse) {						// draw the object on screen
 
 	} else {		// NO TEXTURES
 
-//		glTranslatef(body->GetPosition().x, body->GetPosition().y, (*winParems).depth());       // Move to 0,0 in bottom left corner of coord system
+//		glTranslatef(body->GetPosition().x, body->GetPosition().y, (*settings).depth());       // Move to 0,0 in bottom left corner of coord system
 		glBegin(GL_QUADS);                      // Draw A Quad
 			glVertex2d(pos.x - Util::meter2Pixel(textWidth)/2, pos.y + Util::meter2Pixel(textHeight)/2);              // Top Left
 			glVertex2d(pos.x + Util::meter2Pixel(textWidth)/2, pos.y + Util::meter2Pixel(textHeight)/2);              // Top Right
@@ -114,13 +114,13 @@ void Launcher::draw(b2Vec2 mouse) {						// draw the object on screen
 	}
 
 
-//	text.text(name, posX - (name.length()/2), textHeight, winParems.depth());
+//	text.text(name, posX - (name.length()/2), textHeight, settings.depth());
 	std::stringstream ss;
-	ss << name << " " << "x=" << body->GetPosition().x << " y=" << body->GetPosition().y;
+	ss << name << " " << "x=" << body->GetPosition().x << " y=" << body->GetPosition().y << " Team: " << isNPC();
 	std::stringstream ss2;
 	ss2 << "hp=" << getHP() << " enemies=" << enemies.size();
-	text.text(ss, body->GetPosition().x, body->GetPosition().y+textHeight*4, winParems->depth());
-	text.text(ss2, body->GetPosition().x, body->GetPosition().y+textHeight*2.5, winParems->depth());
+	text.text(ss, body->GetPosition().x, body->GetPosition().y+ Util::meter2Pixel(textHeight)+20, settings->depth());
+	text.text(ss2, body->GetPosition().x, body->GetPosition().y+Util::meter2Pixel(textHeight)+10, settings->depth());
 }
 
 

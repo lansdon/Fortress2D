@@ -4,7 +4,7 @@ class GOCatapult :
 	public GameObj
 {
 public:
-	GOCatapult(WinParems *parems, double x, double y);
+	GOCatapult(Settings *settings, double x, double y);
 	~GOCatapult();
 };
 

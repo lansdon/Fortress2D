@@ -1,7 +1,7 @@
 #include "GOOilTower.h"
 
 
-GOOilTower::GOOilTower(WinParems *parems, double x, double y) : GameObj(parems, x, y)
+GOOilTower::GOOilTower(Settings *settings, double x, double y) : GameObj(settings, x, y)
 {
 	hpCur = 50;			// current hitpoints
 	hpMax = 50;			// max hitpoints
@@ -9,7 +9,7 @@ GOOilTower::GOOilTower(WinParems *parems, double x, double y) : GameObj(parems, 
 	arMax = 2;			// Max Armor
 	damage_basic = 30;	// basic damage (melee)
 	damage_range = 0;	// ranged damage
-	setVelocity(0);		// max velocity (m/s)
+//	setVelocity(0);		// max velocity (m/s)
 
 	textWidth = 3;	// TEMP? This might not be the right way to do this.  Texture Width (METERS)
 	textHeight = 5;	// TEMP? This might not be the right way to do this.  Texture Height (METERS)

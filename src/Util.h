@@ -9,7 +9,7 @@
 #include <string>
 #include <sstream>
 #include "Vector3.h"
-#include "WinParems.h"
+#include "settings.h"
 
 
 class Util
@@ -24,10 +24,10 @@ public:
 	static double Util::deg2Rad (double Angle);
 	static double meter2Pixel(double meters);
 	static double pixel2Meter(double pixel);
-	static Vector3 Util::convertCenter2LowerLeft(Vector3 coords, WinParems *parems);
-	static double Util::convertCenter2LowerLeftX(double x, WinParems *parems);
-	static double Util::convertCenter2LowerLeftY(double y, WinParems *parems);
-
+	static Vector3 Util::convertCenter2LowerLeft(Vector3 coords, Settings *settings);
+	static double Util::convertCenter2LowerLeftX(double x, Settings *settings);
+	static double Util::convertCenter2LowerLeftY(double y, Settings *settings);
+	static double Util::normAngle(double angle);
 	
 	static struct Color {
 		Color() {

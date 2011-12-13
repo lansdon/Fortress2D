@@ -10,7 +10,7 @@
 #include <gl\glu.h>			// Header File For The GLu32 Library
 #include "GLText.h"
 #include <sstream>
-#include "WinParems.h"
+#include "settings.h"
 #include "Util.h"
 #include "Vector3.h"
 #include <Box2D\Box2D.h>
@@ -20,7 +20,7 @@
 class Fort
 {
 public:
-	Fort(WinParems *parems=NULL);
+	Fort(Settings *settings=NULL);
 	~Fort(void);
 
 	struct FortParems {
@@ -38,7 +38,7 @@ public:
 
 
 	static enum PLACEMENT_TYPE { NONE, WALL_WOOD, WALL_STONE, MOTE, TOWER_ARCHER, TOWER_MAGE, TOWER_OIL, CATAPULT, FENCE};
-	void setWinParems(WinParems *parems) { winParems = parems; text.setWinParems(parems); }
+	void setSettings(Settings *settings) { this->settings = settings; text.setSettings(settings); }
 	void draw(Vector3 mouse);
 	void drawPlacementGuide(Vector3 &mouse);
 	unsigned int getSectorWidth() { return SECTOR_WIDTH; }
@@ -59,13 +59,13 @@ private:
 	unsigned int getPlacementCol(double mouseX);
 	unsigned int getPlacementX(double mouseX);
 
-	std::vector<GameObj*> obj;		// Vector of fortress objects (walls, towers, etc)
+//	std::vector<GameObj*> obj;		// Vector of fortress objects (walls, towers, etc)
 
-	WinParems *winParems;
+	Settings *settings;
 
 	GLText text;
-	bool addObj(GameObj *newObj);
-
+//	bool addObj(GameObj *newObj);
+//
 	FortParems *getObjParems(enum PLACEMENT_TYPE type);
 	PLACEMENT_TYPE selectedType;
 

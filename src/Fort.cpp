@@ -1,9 +1,9 @@
 #include "Fort.h"
 
 
-Fort::Fort(WinParems *parems) {
-	winParems = parems;
-	text.setWinParems(parems);
+Fort::Fort(Settings *settings) {
+	this->settings = settings;
+	text.setSettings(settings);
 	SECTOR_WIDTH = 0;				// meters
 	SECTOR_TOTAL = 0;
 
@@ -29,7 +29,7 @@ Fort::Fort(WinParems *parems) {
 
 void Fort::start() { // do we need to initialize this object post-constructor?
 	SECTOR_WIDTH = Util::meter2Pixel(5);				// meters
-	SECTOR_TOTAL = (winParems->width() - winParems->mid()) / SECTOR_WIDTH;
+	SECTOR_TOTAL = (settings->width() - settings->mid()) / SECTOR_WIDTH;
 	activeSectors.resize(SECTOR_TOTAL);
 }
 
@@ -48,10 +48,10 @@ Fort::~Fort(void) {
 
 
 
-bool Fort::addObj(GameObj *newObj) {
-	this->obj.push_back(newObj);
-	return true;
-}
+//bool Fort::addObj(GameObj *newObj) {
+//	this->obj.push_back(newObj);
+//	return true;
+//}
 
 
 
@@ -72,16 +72,16 @@ void Fort::draw(Vector3 mouse) {
 
 	std::stringstream ss;
 	ss <<  "fortmouse=(" << mouse.x() << "," << mouse.y() << ") selected:" << selectedType;
-	text.text(ss, 200, 0, winParems->depth());
+	text.text(ss, 200, 0, settings->depth());
 
 }
 
 // Get the column # of valid placement loctions (Mid Point = column 0... Right most screen is last col)
 unsigned int Fort::getPlacementCol(double mouseX) {
 	
-	if(mouseX < winParems->mid()) return 0; // Invalid location
+	if(mouseX < settings->mid()) return 0; // Invalid location
 
-	unsigned int col = (mouseX - winParems->mid()) / SECTOR_WIDTH; // find the column number starting at MID point
+	unsigned int col = (mouseX - settings->mid()) / SECTOR_WIDTH; // find the column number starting at MID point
 	if(col > SECTOR_TOTAL)
 		return SECTOR_TOTAL;
 	else return col;
@@ -90,35 +90,35 @@ unsigned int Fort::getPlacementCol(double mouseX) {
 
 // returns left most x coordinate where placement object should start
 unsigned int Fort::getPlacementX(double mouseX) {
-	return (winParems->mid() + (getPlacementCol(mouseX) * SECTOR_WIDTH));		// left side of the column
+	return (settings->mid() + (getPlacementCol(mouseX) * SECTOR_WIDTH));		// left side of the column
 }
 
 
 void Fort::drawPlacementGuide(Vector3 &mouse) {
-//	if((mouse.x() < (*winParems).mid()) || (mouse.x() > (*winParems).width())) // Only draw placement guide in legal bounds
+//	if((mouse.x() < (*settings).mid()) || (mouse.x() > (*settings).width())) // Only draw placement guide in legal bounds
 //		return;
 
 //	unsigned int col = getPlacementCol(mouse.x()); // find the column number starting at MID point
-//	unsigned int xBegin = (*winParems).mid() + (col*SECTOR_WIDTH);		// left side of the column
+//	unsigned int xBegin = (*settings).mid() + (col*SECTOR_WIDTH);		// left side of the column
 	unsigned int xBegin = getPlacementX(mouse.x());		// left side of the column
 
 	glLoadIdentity();
 	glColor3f(1, 1, 1);
-//	glTranslatef(xBegin, (*winParems).floor() - (*winParems).height()/2, (*winParems).depth());       // Move to 0,0 in bottom left corner of coord system
+//	glTranslatef(xBegin, (*settings).floor() - (*settings).height()/2, (*settings).depth());       // Move to 0,0 in bottom left corner of coord system
 	glBegin(GL_QUADS);                      // Draw A Quad
-		glVertex2d(xBegin-0.5, winParems->floor() + 50);              // Top Left
-		glVertex2d(xBegin + 0.5, winParems->floor() + 50);              // Top Right
-		glVertex2d(xBegin + 0.5, winParems->floor());              // Bottom Right
-		glVertex2d(xBegin-0.5, winParems->floor());              // Bottom Left
+		glVertex2d(xBegin-0.5, settings->floor() + 50);              // Top Left
+		glVertex2d(xBegin + 0.5, settings->floor() + 50);              // Top Right
+		glVertex2d(xBegin + 0.5, settings->floor());              // Bottom Right
+		glVertex2d(xBegin-0.5, settings->floor());              // Bottom Left
 	glEnd();                            // Done Drawing The Quad
 
 	glLoadIdentity();
-//	glTranslatef(xBegin + SECTOR_WIDTH, (*winParems).floor() - (*winParems).height()/2, (*winParems).depth());       // Move to 0,0 in bottom left corner of coord system
+//	glTranslatef(xBegin + SECTOR_WIDTH, (*settings).floor() - (*settings).height()/2, (*settings).depth());       // Move to 0,0 in bottom left corner of coord system
 	glBegin(GL_QUADS);                      // Draw A Quad
-		glVertex2d(xBegin + SECTOR_WIDTH - 0.5, winParems->floor() + 50);              // Top Left
-		glVertex2d(xBegin + SECTOR_WIDTH + 0.5, winParems->floor() + 50);              // Top Right
-		glVertex2d(xBegin + SECTOR_WIDTH + 0.5,  winParems->floor());              // Bottom Right
-		glVertex2d(xBegin + SECTOR_WIDTH - 0.5, winParems->floor());              // Bottom Left
+		glVertex2d(xBegin + SECTOR_WIDTH - 0.5, settings->floor() + 50);              // Top Left
+		glVertex2d(xBegin + SECTOR_WIDTH + 0.5, settings->floor() + 50);              // Top Right
+		glVertex2d(xBegin + SECTOR_WIDTH + 0.5,  settings->floor());              // Bottom Right
+		glVertex2d(xBegin + SECTOR_WIDTH - 0.5, settings->floor());              // Bottom Left
 	glEnd();                            // Done Drawing The Quad
 
 
@@ -142,12 +142,12 @@ bool Fort::makeObj(float posX, GameObjectManager &go) {
 	switch(selectedType) {
 		case WALL_WOOD: {	go.makeStoneWall(getPlacementX(posX), 200);	} break;
 		case WALL_STONE: { go.makeStoneWall(getPlacementX(posX),200);	} break;
-		case MOTE: { go.makeStoneWall(getPlacementX(posX), winParems->floor());	} break;
+		case MOTE: { go.makeStoneWall(getPlacementX(posX), settings->floor());	} break;
 		case TOWER_ARCHER: { go.makeArcherTower(getPlacementX(posX), 200);	} break;
-		case TOWER_MAGE: { go.makeStoneWall(getPlacementX(posX), winParems->floor());	} break;
-		case TOWER_OIL: { go.makeStoneWall(getPlacementX(posX), winParems->floor());	} break;
-		case CATAPULT: { go.makeStoneWall(getPlacementX(posX), winParems->floor());	} break;
-		case FENCE: { go.makeStoneWall(getPlacementX(posX), winParems->floor());	} break;
+		case TOWER_MAGE: { go.makeStoneWall(getPlacementX(posX), settings->floor());	} break;
+		case TOWER_OIL: { go.makeStoneWall(getPlacementX(posX), settings->floor());	} break;
+		case CATAPULT: { go.makeStoneWall(getPlacementX(posX), settings->floor());	} break;
+		case FENCE: { go.makeStoneWall(getPlacementX(posX), settings->floor());	} break;
 	}
 
 
@@ -162,7 +162,7 @@ bool Fort::makeObj(float posX, GameObjectManager &go) {
 
 
 bool Fort::validPlacement(float posX) {
-	if( (posX < winParems->mid()) || (posX > winParems->width()) )		// Not on defender half of the screen
+	if( (posX < settings->mid()) || (posX > settings->width()) )		// Not on defender half of the screen
 		return false;
 
 //	if(!getPlacementCol(posX)) return false;	// Invalid For location

@@ -4,7 +4,7 @@ class GOFence :
 	public GameObj
 {
 public:
-	GOFence(WinParems *parems, double x, double y);
+	GOFence(Settings *settings, double x, double y);
 	~GOFence(void);
 };
 

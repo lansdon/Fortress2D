@@ -1,8 +1,8 @@
-#include "WinParems.h"
+#include "settings.h"
 
-const b2Vec2 WinParems::gravity = b2Vec2(0, -10);
+const b2Vec2 Settings::gravity = b2Vec2(0, -10);
 
-WinParems::WinParems()  : world(b2Vec2(0, -10))
+Settings::Settings()  : world(b2Vec2(0, -10))
 {
 
 	FLOOR = 10.0;			// The Y-AXIS of ground level
@@ -28,14 +28,14 @@ WinParems::WinParems()  : world(b2Vec2(0, -10))
 }
 
 
-WinParems::~WinParems()
+Settings::~Settings()
 {
 }
 
 
-//WinParems::WinParems(WinParems &parems) {		// copy constructor
-//	this->COORD_DEPTH = parems.COORD_DEPTH;
-//	this->COORD_HEIGHT = parems.COORD_HEIGHT;
+//Settings::Settings(Settings &settings) {		// copy constructor
+//	this->COORD_DEPTH = settings.COORD_DEPTH;
+//	this->COORD_HEIGHT = settings.COORD_HEIGHT;
 //
 //
 //}

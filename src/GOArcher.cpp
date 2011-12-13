@@ -2,9 +2,9 @@
 
 
 
-GOArcher::GOArcher(WinParems *parems, double x, double y) : GameObj(parems, x, y)
+GOArcher::GOArcher(Settings *settings, double x, double y) : GameObj(settings, x, y)
 {
-
+	name = "Archer";
 	hpCur = 30;			// current hitpoints
 	hpMax = 30;			// max hitpoints
 	arCur = 2;			// current armor
@@ -36,7 +36,7 @@ GOArcher::GOArcher(WinParems *parems, double x, double y) : GameObj(parems, x, y
 
 	textureID = TextureLoader::LoadGLTextures("archer.jpg");
 
-	objID = WinParems::OBJ_T_ARCHER;
+	objID = Settings::OBJ_T_ARCHER;
 
 }
 

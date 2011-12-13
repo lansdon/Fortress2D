@@ -1,9 +1,9 @@
 #include "GLText.h"
 
 
-GLText::GLText(WinParems *parems, int size, std::string fontName)
+GLText::GLText(Settings *settings, int size, std::string fontName)
 {
-	winParems = parems;
+	this->settings = settings;
 	this->fontName = fontName;
 	this->fontSize = size;
 	fontBuilt = false;
@@ -43,9 +43,9 @@ GLvoid GLText::BuildFont(int size, std::string fontName) { 						// Build Our Bi
 //						fontName.c_str());					// Font Name
 ////						"Courier New");					// Font Name
 //
-//	oldfont = (HFONT)SelectObject((*winParems).hdc(), font);           // Selects The Font We Want
-//	wglUseFontBitmaps((*winParems).hdc(), 32, 96, base);				// Builds 96 Characters Starting At Character 32
-//	SelectObject((*winParems).hdc(), oldfont);							// Selects The Font We Want
+//	oldfont = (HFONT)SelectObject((*settings).hdc(), font);           // Selects The Font We Want
+//	wglUseFontBitmaps((*settings).hdc(), 32, 96, base);				// Builds 96 Characters Starting At Character 32
+//	SelectObject((*settings).hdc(), oldfont);							// Selects The Font We Want
 //	DeleteObject(font);									// Delete The Font
 //	fontBuilt = true;
 }
@@ -64,7 +64,7 @@ void GLText::text(std::stringstream &ss, double x, double y, double z, int size)
 void GLText::text(std::string &str, double x, double y, double z, int size) {
 	//BuildFont();
 	//glLoadIdentity();                       // Reset The View
-	//glTranslatef((GLfloat)(*winParems).width()/-2, (GLfloat)(*winParems).height()/-2, z + 1);       // Move to 0,0 in bottom left corner of coord system
+	//glTranslatef((GLfloat)(*settings).width()/-2, (GLfloat)(*settings).height()/-2, z + 1);       // Move to 0,0 in bottom left corner of coord system
 	//glRasterPos2f(x, y);
 	//glPushAttrib(GL_LIST_BIT);							// Pushes The Display List Bits
 	//glListBase(base - 32);								// Sets The Base Character to 32
@@ -74,7 +74,7 @@ void GLText::text(std::string &str, double x, double y, double z, int size) {
 
 	glLoadIdentity();                       // Reset The View
 //	glTranslatef((GLfloat)0, (GLfloat)0, z + 1);       // Move to 0,0 in bottom left corner of coord system
-//	glTranslatef((GLfloat)(*winParems).width()/-2, (GLfloat)(*winParems).height()/-2, z + 1);       // Move to 0,0 in bottom left corner of coord system
+//	glTranslatef((GLfloat)(*settings).width()/-2, (GLfloat)(*settings).height()/-2, z + 1);       // Move to 0,0 in bottom left corner of coord system
 	glRasterPos2f(x, y);
 
 	glutBitmapString(GLUT_BITMAP_HELVETICA_12, (unsigned char*)(str.c_str()));

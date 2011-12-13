@@ -1,7 +1,7 @@
 #include "GOSeigeEngine.h"
 
 
-GOSeigeEngine::GOSeigeEngine(WinParems *parems, double x, double y) : GameObj(parems, x, y)
+GOSeigeEngine::GOSeigeEngine(Settings *settings, double x, double y) : GameObj(settings, x, y)
 {
 
 	
@@ -11,7 +11,7 @@ GOSeigeEngine::GOSeigeEngine(WinParems *parems, double x, double y) : GameObj(pa
 	arMax = 5;			// Max Armor
 	damage_basic = 0;	// basic damage (melee)
 	damage_range = 20;	// ranged damage
-	setVelocity(0.5);		// max velocity (m/s)
+	setVelocityMax(1);		// max velocity (m/s)
 
 	textWidth = 10;	// TEMP? This might not be the right way to do this.  Texture Width (METERS)
 	textHeight = 7;	// TEMP? This might not be the right way to do this.  Texture Height (METERS)

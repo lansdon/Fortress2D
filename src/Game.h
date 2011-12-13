@@ -35,7 +35,7 @@
 #include "Performance_Counter.h"	// Timer for calculating frame intervals (milliseconds)
 #include "GameObj.h"
 #include "GLText.h"
-#include "WinParems.h"
+#include "settings.h"
 #include "Input.h"
 #include "Fort.h"
 #include "GUIButtonMenu.h"
@@ -91,9 +91,9 @@ public:
 
 	bool update(); // Main "Loop" function  (the loop actually comes from winMain)
 	void Game::draw();
-	int getScreenWidth() { return winParems.width(); }
-	int getScreenHeight() { return winParems.height(); }
-	int getScreenDepth() { return winParems.depth(); }
+	int getScreenWidth() { return settings.width(); }
+	int getScreenHeight() { return settings.height(); }
+	int getScreenDepth() { return settings.depth(); }
 
 	// Input
 	Input in;
@@ -162,7 +162,7 @@ private:
 	void Game::makeAttacker();
 
 
-	WinParems winParems;
+	Settings settings;
 	GameObjectManager* go;
 	SoundManager sm;
 	LevelLoader level;

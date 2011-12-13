@@ -32,15 +32,24 @@ double Util::pixel2Meter(double pixel) {
 }
 
 // Convert coordinates to lower left corner coordinates
-Vector3 Util::convertCenter2LowerLeft(Vector3 coords, WinParems *parems) {
-	coords.set(convertCenter2LowerLeftX(coords.x(), parems), convertCenter2LowerLeftY(coords.y(), parems), coords.z());
+Vector3 Util::convertCenter2LowerLeft(Vector3 coords, Settings *settings) {
+	coords.set(convertCenter2LowerLeftX(coords.x(), settings), convertCenter2LowerLeftY(coords.y(), settings), coords.z());
 	return coords;
 }
 // Convert coordinates to lower left corner coordinates
-double Util::convertCenter2LowerLeftX(double x, WinParems *parems) {
-	return x + parems->width()/2;
+double Util::convertCenter2LowerLeftX(double x, Settings *settings) {
+	return x + settings->width()/2;
 }
 // Convert coordinates to lower left corner coordinates
-double Util::convertCenter2LowerLeftY(double y, WinParems *parems) {
-	return y + parems->height()/2;
+double Util::convertCenter2LowerLeftY(double y, Settings *settings) {
+	return y + settings->height()/2;
 }
+
+double Util::normAngle(double angle) {
+	if(angle < 0) {
+		angle += 360;
+	} 
+	return angle;
+}
+
+

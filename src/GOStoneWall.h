@@ -4,7 +4,7 @@ class GOStoneWall :
 	public GameObj
 {
 public:
-	GOStoneWall(WinParems *parems, double x, double y);
+	GOStoneWall(Settings *settings, double x, double y);
 	~GOStoneWall(void);
 	bool activate(b2Vec2 mouse) { return false; }	// dummy stub - override for launcher objects.
 	bool isActivated(bool reset) { return false; }	// dummy stub - override for launcher objects.

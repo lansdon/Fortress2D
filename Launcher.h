@@ -1,6 +1,6 @@
 #pragma once
 #include "gameobj.h"
-#include "WinParems.h"
+#include "settings.h"
 #include "AmmoTypes.h"
 
 #include <vector>
@@ -19,7 +19,7 @@ class Launcher :
 {
 
 public:
-	Launcher(WinParems *parems, int x, int y);
+	Launcher(Settings *settings, int x, int y);
 	~Launcher(void);
 	AmmoTypes &getAmmoTypes() { return ammo; }
 

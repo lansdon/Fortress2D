@@ -2,13 +2,13 @@
 #include <string>
 #include "Util.h"
 #include "Vector3.h"
-#include "WinParems.h"
+#include "settings.h"
 #include "GLText.h"
 
 class GUIButton
 {
 public:
-	GUIButton(WinParems *parems = NULL);
+	GUIButton(Settings *settings = NULL);
 	~GUIButton(void);
 	void setWidth(float w) { width = w; }
 	void setHeight(float h) { height = h; }
@@ -25,7 +25,7 @@ public:
 	float getBorder() { return border; }
 	//Util::Color getBGColor() { return clr_bg; }
 	//Util::Color getFontColor() { return clr_font; }
-	void setWinParems(WinParems *parems) {winParems = parems; text.setWinParems(parems); }
+	void setSettings(Settings *settings) {this->settings = settings; text.setSettings(settings); }
 
 	bool setActive(bool bActive) { activated = bActive; return activated;}
 	virtual void draw();
@@ -47,7 +47,7 @@ private:
 	Util::Color clr_bg, clr_font, clr_border, clr_bg_h, clr_font_h;
 	bool activated;
 	
-	WinParems *winParems;
+	Settings *settings;
 
 	GLText text;
 

@@ -116,7 +116,7 @@
     <ClCompile Include="src\TextureLoader.cpp" />
     <ClCompile Include="src\Util.cpp" />
     <ClCompile Include="src\Vector3.cpp" />
-    <ClCompile Include="src\WinParems.cpp" />
+    <ClCompile Include="src\Settings.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AmmoTypes.h" />
@@ -154,7 +154,7 @@
     <ClInclude Include="src\TextureLoader.h" />
     <ClInclude Include="src\Util.h" />
     <ClInclude Include="src\Vector3.h" />
-    <ClInclude Include="src\WinParems.h" />
+    <ClInclude Include="src\Settings.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

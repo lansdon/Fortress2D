@@ -1,7 +1,7 @@
 #include "GOWoodWall.h"
 
 
-GOWoodWall::GOWoodWall(WinParems *parems, double x, double y) : GameObj(parems, x, y)
+GOWoodWall::GOWoodWall(Settings *settings, double x, double y) : GameObj(settings, x, y)
 {
 				
 	hpCur = 10;			// current hitpoints
@@ -10,7 +10,7 @@ GOWoodWall::GOWoodWall(WinParems *parems, double x, double y) : GameObj(parems, 
 	arMax = 100;			// Max Armor
 	damage_basic = 0;	// basic damage (melee)
 	damage_range = 0;	// ranged damage
-	setVelocity(0);		// max velocity (m/s)
+//	setVelocity(0);		// max velocity (m/s)
 
 	textWidth = 5;	// TEMP? This might not be the right way to do this.  Texture Width (METERS)
 	textHeight = 0.25;	// TEMP? This might not be the right way to do this.  Texture Height (METERS)

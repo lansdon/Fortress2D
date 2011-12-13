@@ -4,7 +4,7 @@ class GOOilTower :
 	public GameObj
 {
 public:
-	GOOilTower(WinParems *parems, double x, double y);
+	GOOilTower(Settings *settings, double x, double y);
 	~GOOilTower();
 };
 

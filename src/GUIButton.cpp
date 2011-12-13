@@ -1,9 +1,9 @@
 #include "GUIButton.h"
 
 
-GUIButton::GUIButton(WinParems *parems)
+GUIButton::GUIButton(Settings *settings)
 {
-	setWinParems(parems);
+	setSettings(settings);
 	width = 50;
 	height = 20;
 	posX = 0;
@@ -30,7 +30,7 @@ void GUIButton::draw() {
 	// Outside box  (border)
 	glLoadIdentity();
 	glColor3f(clr_border.r, clr_border.g, clr_border.b);
-//	glTranslatef((GLfloat)posX-(winParems->width()/2), (GLfloat)posY - winParems->height()/2, (GLfloat)winParems->depth());       // Top left corner button
+//	glTranslatef((GLfloat)posX-(settings->width()/2), (GLfloat)posY - settings->height()/2, (GLfloat)settings->depth());       // Top left corner button
 	glBegin(GL_QUADS);                      // Draw A Quad
 		glVertex2d(posX, posY);              // Top Left
 		glVertex2d(posX+width, posY);              // Top Right
@@ -40,8 +40,8 @@ void GUIButton::draw() {
 	// Inside box  (background)
 	glLoadIdentity();
 	glColor3f(getColorBG().r, getColorBG().g, getColorBG().b);
-//	glTranslatef((GLfloat)(getPosX()-(winParems->width()/2))+getBorder(), (GLfloat)(getPosY()) - winParems->height()/2 -getBorder(), (GLfloat)winParems->depth());       // Top left corner button
-//	glTranslatef((GLfloat)(posX-winParems->width()/2)+border, (GLfloat)posY - (winParems->height()/2)-border, (GLfloat)winParems->depth());       // Top left corner button
+//	glTranslatef((GLfloat)(getPosX()-(settings->width()/2))+getBorder(), (GLfloat)(getPosY()) - settings->height()/2 -getBorder(), (GLfloat)settings->depth());       // Top left corner button
+//	glTranslatef((GLfloat)(posX-settings->width()/2)+border, (GLfloat)posY - (settings->height()/2)-border, (GLfloat)settings->depth());       // Top left corner button
 	glBegin(GL_QUADS);										// Draw A Quad
 		glVertex2d(posX+getBorder(), posY-getBorder());									// Top Left
 		glVertex2d(posX+width-border, posY-getBorder());					// Top Right
@@ -53,12 +53,12 @@ void GUIButton::draw() {
 	glColor3f(getColorFont().r, getColorFont().g, getColorFont().b);
 	int labelWidth = glutBitmapLength(font, (unsigned char*)label.c_str());
 	int labelHeight = glutBitmapHeight(font);
-	text.text(label, posX + (width/2)-(labelWidth/2), posY-height/2-labelHeight/2, winParems->depth());
+	text.text(label, posX + (width/2)-(labelWidth/2), posY-height/2-labelHeight/2, settings->depth());
 
 	// TEMP TESTING
 	//for(int adj = 0; adj < 20; ++adj) {
 
-	//	text.text(label, posX+(adj*4), posY-(adj*4), winParems->depth()+1);
+	//	text.text(label, posX+(adj*4), posY-(adj*4), settings->depth()+1);
 	//}
 
 }

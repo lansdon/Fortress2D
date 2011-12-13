@@ -1,7 +1,7 @@
 #include "GOFence.h"
 
 
-GOFence::GOFence(WinParems *parems, double x, double y) : GameObj(parems, x, y)
+GOFence::GOFence(Settings *settings, double x, double y) : GameObj(settings, x, y)
 {
 		
 	hpCur = 20;			// current hitpoints
@@ -10,7 +10,7 @@ GOFence::GOFence(WinParems *parems, double x, double y) : GameObj(parems, x, y)
 	arMax = 1;			// Max Armor
 	damage_basic = 0;	// basic damage (melee)
 	damage_range = 0;	// ranged damage
-	setVelocity(0);		// max velocity (m/s)
+//	setVelocity(0);		// max velocity (m/s)
 
 	textWidth = 1;	// TEMP? This might not be the right way to do this.  Texture Width (METERS)
 	textHeight = 2;	// TEMP? This might not be the right way to do this.  Texture Height (METERS)

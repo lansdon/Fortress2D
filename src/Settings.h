@@ -18,14 +18,15 @@
 //};
 
 
-class WinParems
+class Settings
 {
 public:
-	WinParems(void);
-	~WinParems(void);
-	//WinParems(WinParems &parems);		// copy constructor
+	Settings(void);
+	~Settings(void);
+	//Settings(Settings &settings);		// copy constructor
 
 
+	static const int TOTAL_OBJ_TYPES = 17;		// UPDATE THIS NUMBER WHEN ADDING OBJECT_TYPES below!!! 
 	enum OBJECT_TYPE {
 		OBJ_T_NONE,
 		//DEFENDERS
@@ -48,7 +49,6 @@ public:
 		OBJ_T_ARROW,
 		OBJ_T_CANNONBALL
 	};
-	static const int TOTAL_OBJ_TYPES = 14;
 
 	float depth() { return COORD_DEPTH; }
 	float height() { return COORD_HEIGHT; }
@@ -71,8 +71,9 @@ public:
 	double getTimeStep() { return timeStep; }
 
 	void setTextures(bool useTextures = true) { textures = useTextures; }
-
 	bool useTextures() { return textures; }
+	void setSound(bool bOn = true) { soundOn = bOn; }
+	bool useSound() { return soundOn; }
 
 private:
 
@@ -84,7 +85,8 @@ private:
 	
 	
 	// Settings
-	bool textures;
+	bool textures;				// toggle textures on/off
+	bool soundOn;				// toggle sound on/off
 
 	// Windows Handlers
 	//HDC			*hDC;		// Private GDI Device Context	

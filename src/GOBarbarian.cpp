@@ -1,7 +1,7 @@
 #include "GOBarbarian.h"
 
 
-GOBarbarian::GOBarbarian(WinParems *parems, double x, double y) : GameObj(parems, x, y)
+GOBarbarian::GOBarbarian(Settings *settings, double x, double y) : GameObj(settings, x, y)
 {
 
 	hpCur = 30;			// current hitpoints
@@ -10,7 +10,7 @@ GOBarbarian::GOBarbarian(WinParems *parems, double x, double y) : GameObj(parems
 	arMax = 3;			// Max Armor
 	damage_basic = 5;	// basic damage (melee)
 	damage_range = 0;	// ranged damage
-	setVelocity(2);		// max velocity (m/s)
+	setVelocityMax(2);		// max velocity (m/s)
 
 	textWidth = .5;	// TEMP? This might not be the right way to do this.  Texture Width (METERS)
 	textHeight = 3;	// TEMP? This might not be the right way to do this.  Texture Height (METERS)

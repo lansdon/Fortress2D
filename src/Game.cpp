@@ -4,12 +4,14 @@
 
 Game::Game() {
 	// Configure window parememter object (passed around to other classes)
-	winParems.setDepth(-725);
-	winParems.setHeight(600);
-	winParems.setWidth(800);
-	winParems.setFloor(20);
-	winParems.setMid(winParems.width()/2);
-	winParems.setTextures(true);				// TOGGLE TEXTURES OFF / ON
+	settings.setDepth(-725);
+	settings.setHeight(600);
+	settings.setWidth(800);
+	settings.setFloor(20);
+	settings.setMid(settings.width()/2);
+	settings.setTextures(true);				// TOGGLE TEXTURES OFF / ON
+	settings.setSound(false);					// SOUND ON / OFF
+	sm.setSoundEngineStatus(settings.useSound());		// pass sound status to sound engine.
 
 	DEF_BG.setColors(0, 0, 0, 0);				// Default background color = black
 	DEF_DRAW_COLOR.setColors(1, 1, 1, 1);		// def draw color = white
@@ -20,62 +22,54 @@ Game::Game() {
 	
 	// Timers
 	timeStepCount=0;
-//	t = 0.0;
-//	dt = 0.01;
 	accumulator = 0.0;
-//	previousState = 0;
-//	currentState = 0;
-
 	frameElapsedTime = 0.0;		// elapsed time between frames
 
 	LEFT_BUTTON_INTERVAL = .5;		// seconds between mouse clicks
 	CREATURE_SPAWNER_INTERVAL = 6.0;	// Seconds between creature spawns
 
 	// BOX2d Initialization
-	winParems.getWorld()->SetContactListener(&contactListener);
+	settings.getWorld()->SetContactListener(&contactListener);
 
 	// STATIC GROUND LEVEL
-	groundBodyDef.position.Set(winParems.mid(), winParems.floor()/2);
-//	groundBodyDef.position.Set(0.0f, -winParems.height()/2);
-	groundBody = winParems.getWorld()->CreateBody(&groundBodyDef);
-	groundBox.SetAsBox(winParems.width(), winParems.floor()/2);
+	groundBodyDef.position.Set(settings.mid(), settings.floor()/2);
+	groundBody = settings.getWorld()->CreateBody(&groundBodyDef);
+	groundBox.SetAsBox(settings.width(), settings.floor()/2);
 	groundBody->CreateFixture(&groundBox, 0.0f);
 
 	// Player Vars
 	score = 0;
 	money = 0;
 
-	glEnable2D();			// REMOVE?
-
 	activeLauncher = NULL;
 
-	SCOREBOARD_HEIGHT = (winParems.height()/14);
+	SCOREBOARD_HEIGHT = (settings.height()/14);
 	
 	// Fort Menu Setup
 	setupFortMenu();
 
 	// Pass windows paremeters to child objects
-	in.setWinParems(&winParems);
-	text.setWinParems(&winParems);
-	fort.setWinParems(&winParems);
+	in.setSettings(&settings);
+	text.setSettings(&settings);
+	fort.setSettings(&settings);
 
 	// Game Object Manager
-	go = new GameObjectManager(&winParems, sm);
+	go = new GameObjectManager(&settings, sm);
 
 	// Initialization of objects
 	fort.start();
 }
 
 //void Game::setGLObj(HDC *hDC, HWND *hWnd) { // pass main windown handle and hardware device context
-//	winParems.setHDC(hDC); 
-//	winParems.setHWND(hWnd); 
+//	settings.setHDC(hDC); 
+//	settings.setHWND(hWnd); 
 //
 //	//// Pass windows paremeters to child objects
-//	in.setWinParems(&winParems);
-//	text.setWinParems(&winParems);
-//	fort.setWinParems(&winParems);
-//	fortMenu->setWinParems(&winParems);
-//	go->setWinParems(&winParems);
+//	in.setSettings(&settings);
+//	text.setSettings(&settings);
+//	fort.setSettings(&settings);
+//	fortMenu->setSettings(&settings);
+//	go->setSettings(&settings);
 //} 
 
 
@@ -85,12 +79,12 @@ Game::~Game(void) {
 	// Cleanup bodies and game objects
 //	std::vector<GameObj*>::iterator it = attackerObj.begin();
 //	while(it != attackerObj.end()) {
-////		winParems.getWorld()->DestroyBody((*it)->body);
+////		settings.getWorld()->DestroyBody((*it)->body);
 //		delete (*it);
 //		++it;
 //	}
 //
-	winParems.getWorld()->DestroyBody(groundBody);
+	settings.getWorld()->DestroyBody(groundBody);
 
 	delete go;
 	delete fortMenu;
@@ -101,11 +95,11 @@ bool Game::initGL() {
 	sm.init();								// Sound Manager
 
 	//// Pass windows paremeters to child objects
-	in.setWinParems(&winParems);
-	text.setWinParems(&winParems);
-	fort.setWinParems(&winParems);
-	fortMenu->setWinParems(&winParems);
-	go->setWinParems(&winParems);
+	in.setSettings(&settings);
+	text.setSettings(&settings);
+	fort.setSettings(&settings);
+	fortMenu->setSettings(&settings);
+	go->setSettings(&settings);
 	return true;
 }
 
@@ -127,22 +121,22 @@ void Game::draw() {
 	// Debug /////////////////////////////////////////////////////////////////////////////////////////////
 	std::stringstream ss;
 	ss << "Manager: Attackers=" << go->getAttackers().size() << " Defenders=" << go->getDefenders().size();
-	text.text(ss, 10, 450, winParems.depth());
+	text.text(ss, 10, 450, settings.depth());
 
 	std::stringstream ss2;
 	ss2 << "Sound Manager: Sources=" << sm.getSourceCount() << " Buffers=" << sm.getBufferCount();
-	text.text(ss2, 10, 425, winParems.depth());
+	text.text(ss2, 10, 425, settings.depth());
 
 	if(lastFrameElapsedTime != 0.0) {
 		std::stringstream fps;
 		fps << "FPS = " << (1 / lastFrameElapsedTime);				// Instant FPS
 		fps << "step:" << timeStepCount;
-		text.text(fps, 10, 5, winParems.depth()+10);
+		text.text(fps, 10, 5, settings.depth()+10);
 
 		// DEBUG
 		std::stringstream ss;
 		ss << "MOUSE x=" << in.getMousePos().x() << " Y=" << in.getMousePos().y();
-		text.text(ss, in.getMousePos().x(), in.getMousePos().y(), winParems.depth());			
+		text.text(ss, in.getMousePos().x(), in.getMousePos().y(), settings.depth());			
 	}
 	// End Debug /////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -163,6 +157,7 @@ bool Game::update() {
 		lvl = 1;
 		level.loadLevel(lvl);
 		sm.loadSounds(level.getSpawnListTypes());
+		return true;
 	}
 
 	// Timer - Get elapsed time since last update
@@ -174,11 +169,11 @@ bool Game::update() {
 	//	frameElapsedTime = 0.25;
 
 	// Physics Update - Box2d
-	double ts = winParems.getTimeStep();
+	double ts = settings.getTimeStep();
 	while( accumulator >= ts ) {
 		++timeStepCount;
-		winParems.step();
-		accumulator -= winParems.getTimeStep();
+		settings.step();
+		accumulator -= settings.getTimeStep();
 	}
 
 	// Game Objects
@@ -213,20 +208,20 @@ void Game::drawBackground() {
 	glColor3f(DEF_DRAW_COLOR.r, DEF_DRAW_COLOR.g, DEF_DRAW_COLOR.b);
 	
 	// Draw ground plane
-//	glTranslatef((GLfloat)0, (GLfloat)0, (GLfloat)winParems.depth());       // Move to 0,0 in bottom left corner of coord system
+//	glTranslatef((GLfloat)0, (GLfloat)0, (GLfloat)settings.depth());       // Move to 0,0 in bottom left corner of coord system
 	glBegin(GL_QUADS);                      // Draw A Quad
-		glVertex2f(0, winParems.floor());              // Top Left
-		glVertex2f(winParems.width(), winParems.floor());              // Top Right
-		glVertex2f(winParems.width(), winParems.floor()-1);              // Bottom Right
-		glVertex2f(0, winParems.floor()-1);              // Bottom Left
+		glVertex2f(0, settings.floor());              // Top Left
+		glVertex2f(settings.width(), settings.floor());              // Top Right
+		glVertex2f(settings.width(), settings.floor()-1);              // Bottom Right
+		glVertex2f(0, settings.floor()-1);              // Bottom Left
 	glEnd();                            // Done Drawing The Quad
 
 	// Mid Point
 	glBegin(GL_QUADS);                      // Draw A Quad
-		glVertex2d(winParems.mid(), winParems.floor());              // Top Left
-		glVertex2d(winParems.mid()+1, winParems.floor());              // Top Right
-		glVertex2d(winParems.mid()+1, winParems.floor()-5);              // Bottom Right
-		glVertex2d(winParems.mid(), winParems.floor()-5);              // Bottom Left
+		glVertex2d(settings.mid(), settings.floor());              // Top Left
+		glVertex2d(settings.mid()+1, settings.floor());              // Top Right
+		glVertex2d(settings.mid()+1, settings.floor()-5);              // Bottom Right
+		glVertex2d(settings.mid(), settings.floor()-5);              // Bottom Left
 	glEnd();                            // Done Drawing The Quad
 
 }
@@ -239,23 +234,23 @@ void Game::drawScoreboard() {
 	
 	// top line
 	glBegin(GL_QUADS);                      // Draw A Quad
-		glVertex2d(0, winParems.height());              // Top Left
-		glVertex2d(winParems.width(), winParems.height());              // Top Right
-		glVertex2d(winParems.width(), winParems.height()-1);              // Bottom Right
-		glVertex2d(0, winParems.height()-1);              // Bottom Left
+		glVertex2d(0, settings.height());              // Top Left
+		glVertex2d(settings.width(), settings.height());              // Top Right
+		glVertex2d(settings.width(), settings.height()-1);              // Bottom Right
+		glVertex2d(0, settings.height()-1);              // Bottom Left
 	glEnd();                            // Done Drawing The Quad
 
 	// bottom line
 	glBegin(GL_QUADS);                      // Draw A Quad
-		glVertex2d(0, winParems.height()-SCOREBOARD_HEIGHT);              // Top Left
-		glVertex2d(winParems.width(), winParems.height()-SCOREBOARD_HEIGHT);              // Top Right
-		glVertex2d(winParems.width(), winParems.height()-SCOREBOARD_HEIGHT-1);              // Bottom Right
-		glVertex2d(0, winParems.height()-SCOREBOARD_HEIGHT-1);              // Bottom Left
+		glVertex2d(0, settings.height()-SCOREBOARD_HEIGHT);              // Top Left
+		glVertex2d(settings.width(), settings.height()-SCOREBOARD_HEIGHT);              // Top Right
+		glVertex2d(settings.width(), settings.height()-SCOREBOARD_HEIGHT-1);              // Bottom Right
+		glVertex2d(0, settings.height()-SCOREBOARD_HEIGHT-1);              // Bottom Left
 	glEnd();                            // Done Drawing The Quad
 
   // Display score:
 	float sPosX = 30;
-	float sPosY = winParems.height() - SCOREBOARD_HEIGHT/2;
+	float sPosY = settings.height() - SCOREBOARD_HEIGHT/2;
 	std::stringstream s1, s2, s3, s4;
 	//r2 << std::fixed << std::setprecision(2); 
 	//r3 << std::fixed << std::setprecision(2); 
@@ -264,10 +259,10 @@ void Game::drawScoreboard() {
 	s2 << "Cash: " << money;
 	s3 << "Level: " << lvl << std::endl;
 	s4 << "Timer: " << lvl_time_remaining;
-	text.text(s1, sPosX, sPosY, winParems.depth());
-	text.text(s2, sPosX + (1*(winParems.width()/4)), sPosY, winParems.depth());
-	text.text(s3, sPosX + (2*(winParems.width()/4)), sPosY, winParems.depth());
-	text.text(s4, sPosX + (3*(winParems.width()/4)), sPosY, winParems.depth());
+	text.text(s1, sPosX, sPosY, settings.depth());
+	text.text(s2, sPosX + (1*(settings.width()/4)), sPosY, settings.depth());
+	text.text(s3, sPosX + (2*(settings.width()/4)), sPosY, settings.depth());
+	text.text(s4, sPosX + (3*(settings.width()/4)), sPosY, settings.depth());
 }
 
 
@@ -281,9 +276,9 @@ void Game::glEnable2D() {
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
     glLoadIdentity();
-    gluOrtho2D(0, winParems.width(), 0, winParems.height());
+    gluOrtho2D(0, settings.width(), 0, settings.height());
 //    glScalef(1, -1, 1);
-//    glTranslatef(0, -winParems.height(), 0);
+//    glTranslatef(0, -settings.height(), 0);
     glMatrixMode(GL_MODELVIEW);
 }
 
@@ -327,7 +322,7 @@ void Game::keyPressed(unsigned char key, int x, int y) {
 		case 'L':
 		case 'l': {
 			std::string msg("L IS PRESSED!!");
-			text.text(msg, 300.0, 200.0, winParems.depth());
+			text.text(msg, 300.0, 200.0, settings.depth());
 //			makeAttacker();
 		} break;
 	}
@@ -348,7 +343,7 @@ void Game::specialKeyPressed(int key, int x, int y) {
 		case 'L':
 		case 'l': {
 			std::string msg("L IS PRESSED!!");
-			text.text(msg, 300.0, 200.0, winParems.depth());
+			text.text(msg, 300.0, 200.0, settings.depth());
 //			makeAttacker();
 		} break;
 	}
@@ -364,9 +359,9 @@ void Game::processInput() {
 	// L //
 	if (in.isKeyPressed('L') || in.isKeyPressed('l')) {
 		std::string msg("L IS PRESSED!!");
-		text.text(msg, 300.0, 200.0, winParems.depth());
-		makeAttacker();
-		sm.playtest();										// Testing Sound!
+		text.text(msg, 300.0, 200.0, settings.depth());
+//		makeAttacker();
+//		sm.playtest();										// Testing Sound!
 	}
 
 	// LEFT MOUSE BUTTON
@@ -377,7 +372,7 @@ void Game::processInput() {
 		leftBtnTimer.Calculate_Ellapsed_Time();
 		std::stringstream msg1;
 		msg1 << "Mousetimer=" << leftBtnTimer.TotalTime();
-		text.text(msg1, 300.0, 210.0, winParems.depth());
+		text.text(msg1, 300.0, 210.0, settings.depth());
 		
 		// CHECK LEFT-BUTTON TIMER
 		if(leftBtnTimer.TotalTime() >= LEFT_BUTTON_INTERVAL) {
@@ -390,7 +385,7 @@ void Game::processInput() {
 
 			// FORT MENU BUTTONS
 			else if(fortMenu->activate(mouse)) {
-				text.text(std::string("ACTIVATED A BUTTON!"), 300.0, 510.0, winParems.depth());
+				text.text(std::string("ACTIVATED A BUTTON!"), 300.0, 510.0, settings.depth());
 				processFortMenuButton();
 			}
 			
@@ -405,13 +400,13 @@ void Game::processInput() {
 			leftBtnTimer.Reset(0.0);
 		}
 		std::string msg("Left mouse button IS HELD!!");
-		text.text(msg, 275.0, 200.0, winParems.depth());
+		text.text(msg, 275.0, 200.0, settings.depth());
 	}
 
 	// RIGHT MOUSE BUTTON
 	if (in.isBtnPressed(GLUT_RIGHT_BUTTON)) {
 		std::string msg("RIGHT MOUSE BUTTON IS PRESSED!!");
-		text.text(msg, 300.0, 200.0, winParems.depth());
+		text.text(msg, 300.0, 200.0, settings.depth());
 	}
 
 }
@@ -455,10 +450,10 @@ void Game::processFortMenuButton() {
 void Game::setupFortMenu() {
 	std::string label;
 
-	fortMenu = new GUIButtonMenu(&winParems);
+	fortMenu = new GUIButtonMenu(&settings);
 	fortMenu->setHeight(60);
-	fortMenu->setWidth(winParems.width());
-	fortMenu->setPos(0,  winParems.height()-SCOREBOARD_HEIGHT);
+	fortMenu->setWidth(settings.width());
+	fortMenu->setPos(0,  settings.height()-SCOREBOARD_HEIGHT);
 	fortMenu->setDimensions(2, 4);
 
 	// Buttons
@@ -528,15 +523,26 @@ bool Game::activateGO(Vector3 mouse) {
 
 void Game::doLaunch() {
 
-	GameObj* temp = go->makeArrow(activeLauncher->body->GetPosition().x, activeLauncher->body->GetPosition().y);
-	temp->setVecAngle(activeLauncher->getLaunchAngle());
-//	temp->setVelocity(launchVelocity);
-	temp->body->SetLinearVelocity(b2Vec2(activeLauncher->getLaunchVelocity() * std::cos(Util::deg2Rad(activeLauncher->getLaunchAngle())), activeLauncher->getLaunchVelocity() * std::sin(Util::deg2Rad(activeLauncher->getLaunchAngle()))));
+	GameObj* temp = go->makeArrow(activeLauncher->body->GetPosition().x, activeLauncher->body->GetPosition().y, activeLauncher->isNPC());
+	temp->setInitVecAngle(activeLauncher->getLaunchAngle());
+	temp->setCurrentVecAngle(activeLauncher->getLaunchAngle());
+	temp->setVelocityMax(0);
+	temp->setInitLinearVelocity(b2Vec2(activeLauncher->getLaunchVelocity() * std::cos(Util::deg2Rad(activeLauncher->getLaunchAngle())),    // Vel X
+		activeLauncher->getLaunchVelocity() * std::sin(Util::deg2Rad(activeLauncher->getLaunchAngle()))));		// Vel Y);
+	temp->body->SetTransform(temp->body->GetPosition(), Util::deg2Rad(activeLauncher->getLaunchAngle()));
+	temp->body->SetLinearVelocity(
+		b2Vec2(activeLauncher->getLaunchVelocity() * std::cos(Util::deg2Rad(activeLauncher->getLaunchAngle())),    // Vel X
+		activeLauncher->getLaunchVelocity() * std::sin(Util::deg2Rad(activeLauncher->getLaunchAngle())))			// Vel Y
+//		activeLauncher->body->GetPosition()																			// Location
+		);
+	temp->body->ApplyAngularImpulse(1);
 	temp->setTeam(activeLauncher->isNPC());
+	temp->body->GetFixtureList()->SetFilterData(temp->getFixtureCollisionFilter());
+
+
 	//	b2Fixture *fixture = temp->body->GetFixtureList();
-
-
-
+	activeLauncher->setActivated(false);
+	activeLauncher = NULL;
 
 }
 

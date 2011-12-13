@@ -1,10 +1,10 @@
 #include "Input.h"
 
 
-Input::Input(WinParems *parems)
+Input::Input(Settings *settings)
 {
-	winParems = parems;
-//	text = new GLText(winParems);
+	this->settings = settings;
+//	text = new GLText(settings);
 
 	vKeys.resize(256);
 	vMouseBtns.resize(3);		// 3 mouse buttons
@@ -42,7 +42,7 @@ void Input::update() {
 	// DEBUG
 	std::stringstream ss;
 	ss << "MOUSE x=" << mouseCoord.x() << " Y=" << mouseCoord.y();
-	text.text(ss, 400, 300, (*winParems).depth());
+	text.text(ss, 400, 300, (*settings).depth());
 
 }
 
@@ -53,17 +53,17 @@ void Input::updateMouse() {
 	
 //	POINT mouse;                        // Stores The X And Y Coords For The Current Mouse Position
 //	GetCursorPos(&mouse);                   // Gets The Current Cursor Coordinates (Mouse Coordinates)
-////	ScreenToClient((*winParems).hwnd(), &mouse);
+////	ScreenToClient((*settings).hwnd(), &mouse);
 //	
 //	// TEMP GLUTFIX NEEDED!
 //	mouse.x = 50; 
 //	mouse.y = 50;
-//	mouseCoord.set(mouse.x - ((*winParems).width()/2), ((*winParems).height()-mouse.y) - ((*winParems).height()/2), 0);  // reverse y coord to zero on bottom 
+//	mouseCoord.set(mouse.x - ((*settings).width()/2), ((*settings).height()-mouse.y) - ((*settings).height()/2), 0);  // reverse y coord to zero on bottom 
 
 	//DEBUG
 	std::stringstream ss;
 	ss << "premouse x=" << mouseCoord.x() << " y=" << mouseCoord.y();
-	text.text(ss, 650, 0, (*winParems).depth());
+	text.text(ss, 650, 0, (*settings).depth());
 }
 //
 //Vector3 Input::getOGLPos(int x, int y)
@@ -87,7 +87,7 @@ void Input::updateMouse() {
 //	//DEBUG
 //	std::stringstream ss;
 //	ss << "viewport x=" << viewport[0] << " y=" << viewport[1] << " width=" << viewport[2] << " height=" << viewport[3];
-//	text.text(ss, 400, 275, (*winParems).depth());
+//	text.text(ss, 400, 275, (*settings).depth());
 //
 //    return Vector3(posX, posY, posZ);
 //}
@@ -203,12 +203,12 @@ void Input::addMouseEvent(int button, int state, int x, int y) {
 }
 
 void Input::setMousePos(int x, int y) {
-	y = winParems->height()-y;			// reverse the y coord
+	y = settings->height()-y;			// reverse the y coord
 	mouseCoord.set(x, y, 0);
 
 // EVENT driven won't display on screen !!!
 	//std::stringstream ss;
 	//ss << "mouse=(" << x << "," << y << ")";
-	//text.text(ss.str(), x, y, winParems->depth());
-	//text.text(ss.str(), 300, 300, winParems->depth());
+	//text.text(ss.str(), x, y, settings->depth());
+	//text.text(ss.str(), 300, 300, settings->depth());
 }

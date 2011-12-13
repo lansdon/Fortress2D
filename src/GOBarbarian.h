@@ -4,7 +4,7 @@ class GOBarbarian :
 	public GameObj
 {
 public:
-	GOBarbarian(WinParems *parems, double x, double y);
+	GOBarbarian(Settings *settings, double x, double y);
 	~GOBarbarian();
 };
 

@@ -6,7 +6,7 @@
 #include <stdarg.h>			// Header File For Variable Argument Routines
 #include <gl\gl.h>			// Header File For The OpenGL32 Library
 #include <gl\glu.h>			// Header File For The GLu32 Library
-#include "WinParems.h"
+#include "settings.h"
 #include "Vector3.h"
 #include "GLText.h"
 #include <sstream>
@@ -17,7 +17,7 @@
 class Input
 {
 public:
-	Input(WinParems *parems = NULL);
+	Input(Settings *settings = NULL);
 	~Input();
 
 	struct buttonState {
@@ -28,7 +28,7 @@ public:
 	};
 
 
-	void setWinParems(WinParems *parems) { winParems = parems; text.setWinParems(parems); }
+	void setSettings(Settings *settings) { this->settings = settings; text.setSettings(settings); }
 	void update();						// General update routine every frame
 	std::vector<buttonState> &getKeys() { return vKeys; }		//vector containing key press information (index 0=key pressed? index 1 = key held?)
 	std::vector<buttonState> &getClicks() { return vMouseBtns; }		//vector containing button press information (index 0=btn pressed? index 1 = btn held?)
@@ -53,7 +53,7 @@ public:
 	void setMousePos(int x, int y);
 
 
-	WinParems *winParems;
+	Settings *settings;
 	GLText text;
 
 

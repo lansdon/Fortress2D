@@ -1,7 +1,7 @@
 #include "GOArcherTower.h"
 
 
-GOArcherTower::GOArcherTower(WinParems *parems, double x, double y) : Launcher(parems, x, y)
+GOArcherTower::GOArcherTower(Settings *settings, double x, double y) : Launcher(settings, x, y)
 {
 	hpCur = 80;			// current hitpoints
 	hpMax = 80;			// max hitpoints
@@ -9,16 +9,16 @@ GOArcherTower::GOArcherTower(WinParems *parems, double x, double y) : Launcher(p
 	arMax = 5;			// Max Armor
 	damage_basic = 0;	// basic damage (melee)
 	damage_range = 0;	// ranged damage
-	setVelocity(0);		// max velocity (m/s)
+	setVelocityMax(0);		// max velocity (m/s)
+	setCurrentLinearVelocity(b2Vec2(0,0));
 
 	textWidth = 3;	// TEMP? This might not be the right way to do this.  Texture Width (METERS)
 	textHeight = 5;	// TEMP? This might not be the right way to do this.  Texture Height (METERS)
 	elapsedTime = 0;
 	body = NULL;
 
-	density = 1.0;
-	friction = 1.03;
-	velocityMax = 0;
+	density = 10.0;
+	friction = 5.03;
 
 	DEF_DRAW_COLOR.setColors(1, 1, 1, 1);
 	CONTACT_DRAW_COLOR.setColors(1, 0, 0, 1);
@@ -26,11 +26,11 @@ GOArcherTower::GOArcherTower(WinParems *parems, double x, double y) : Launcher(p
 	contacts = 0;
 
 	objType = OBJECT_TYPE::DEFENDER;
-	objID = WinParems::OBJ_T_ARCHER_TOWER;
+	objID = Settings::OBJ_T_ARCHER_TOWER;
 
+	setTeam(false); // NPC team - DO THIS BEFORE B2D SETUP!
 	setupB2D(x, y);
 
-	setTeam(false); // NPC team
 
 	textureID = TextureLoader::LoadGLTextures("archer.jpg");
 
@@ -90,7 +90,7 @@ void GOArcherTower::setActivated(bool bActive) {
 //	else glColor3f(CONTACT_DRAW_COLOR.r, CONTACT_DRAW_COLOR.g, CONTACT_DRAW_COLOR.b);
 //
 //	b2Vec2 pos = body->GetPosition();
-//	if(winParems->useTextures()) {
+//	if(settings->useTextures()) {
 //		glEnable(GL_TEXTURE_2D); //Switch back to using colors instead of textures
 //		glBindTexture(GL_TEXTURE_2D, textureID);
 //		glColor3f(1, 1, 1);
@@ -101,7 +101,7 @@ void GOArcherTower::setActivated(bool bActive) {
 //	//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_DECAL );
 //		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
 //   
-////		glTranslatef(body->GetPosition().x, body->GetPosition().y, (*winParems).depth());       // Move to 0,0 in bottom left corner of coord system
+////		glTranslatef(body->GetPosition().x, body->GetPosition().y, (*settings).depth());       // Move to 0,0 in bottom left corner of coord system
 //		glBegin(GL_QUADS);                      // Draw A Quad
 //			glTexCoord2f(0, 1);																			// Top Left
 //			glVertex2d(pos.x - Util::meter2Pixel(textWidth)/2, pos.y + Util::meter2Pixel(textHeight)/2);              // Top Left
@@ -116,7 +116,7 @@ void GOArcherTower::setActivated(bool bActive) {
 //
 //	} else {		// NO TEXTURES
 //
-////		glTranslatef(body->GetPosition().x, body->GetPosition().y, (*winParems).depth());       // Move to 0,0 in bottom left corner of coord system
+////		glTranslatef(body->GetPosition().x, body->GetPosition().y, (*settings).depth());       // Move to 0,0 in bottom left corner of coord system
 //		glBegin(GL_QUADS);                      // Draw A Quad
 //			glVertex2d(pos.x - Util::meter2Pixel(textWidth)/2, pos.y + Util::meter2Pixel(textHeight)/2);              // Top Left
 //			glVertex2d(pos.x + Util::meter2Pixel(textWidth)/2, pos.y + Util::meter2Pixel(textHeight)/2);              // Top Right
@@ -140,12 +140,12 @@ void GOArcherTower::setActivated(bool bActive) {
 //	}
 //
 //
-////	text.text(name, posX - (name.length()/2), textHeight, winParems.depth());
+////	text.text(name, posX - (name.length()/2), textHeight, settings.depth());
 //	std::stringstream ss;
 //	ss << name << " " << "x=" << body->GetPosition().x << " y=" << body->GetPosition().y;
 //	std::stringstream ss2;
 //	ss2 << "hp=" << getHP() << " enemies=" << enemies.size();
-//	text.text(ss, body->GetPosition().x, body->GetPosition().y+textHeight*4, winParems->depth());
-//	text.text(ss2, body->GetPosition().x, body->GetPosition().y+textHeight*2.5, winParems->depth());
+//	text.text(ss, body->GetPosition().x, body->GetPosition().y+textHeight*4, settings->depth());
+//	text.text(ss2, body->GetPosition().x, body->GetPosition().y+textHeight*2.5, settings->depth());
 //}
 //

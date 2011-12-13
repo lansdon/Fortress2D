@@ -4,7 +4,7 @@ class GOSeigeEngine :
 	public GameObj
 {
 public:
-	GOSeigeEngine(WinParems *parems, double x, double y);
+	GOSeigeEngine(Settings *settings, double x, double y);
 	~GOSeigeEngine();
 };
 

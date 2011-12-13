@@ -27,7 +27,7 @@
 // My Stuff
 #include "Util.h"
 #include "GLText.h"
-#include "WinParems.h"
+#include "settings.h"
 #include "TextureLoader.h"
 #include "SoundManager.h"
 #include "Performance_Counter.h"
@@ -45,7 +45,7 @@
 class GameObj
 {
 public:
-	GameObj(WinParems *parems, double x, double y);
+	GameObj(Settings *settings, double x, double y);
 	~GameObj(void);
 	
 	// Timer intervals inbetween playing repeated sfx
@@ -57,11 +57,11 @@ public:
 	float TIMER_SOUND_IDLE;
 
 	enum OBJECT_TYPE { ATTACKER, DEFENDER, BULLET, STATIC, NONE};		// General object types
-	const int16 COLLISION_GROUP_GROUND;
-	const int16 COLLISION_GROUP_NPC_BULLET;
-	const int16 COLLISION_GROUP_NPC_ATTACKER;
-	const int16 COLLISION_GROUP_PC_BULLET;
-	const int16 COLLISION_GROUP_PC_DEFENDER;
+	const uint16 COLLISION_GROUP_GROUND;
+	const uint16 COLLISION_GROUP_NPC_BULLET;
+	const uint16 COLLISION_GROUP_NPC_ATTACKER;
+	const uint16 COLLISION_GROUP_PC_BULLET;
+	const uint16 COLLISION_GROUP_PC_DEFENDER;
 
 	// Accessor functions
 	void setName(std::string str) { name = str; }
@@ -70,10 +70,16 @@ public:
 //	void setPosY(float y) { posY = y; }
 //	float getPosX() { return posX; }
 //	float getPosY() { return posY; }
-	void setVecAngle(float theta) { angle = theta; } //recalculate(); }   // set vector angle of movement (degrees)
-	float getVecAngle() { return angle; };
-	void setVelocity(float meterPerSec) { velocityMax = meterPerSec;}   // meters per second
-	float getVelocity() { return velocityMax; };
+	void setInitLinearVelocity(b2Vec2 vel) { initLinearVelocity = vel; }
+	b2Vec2 getInitLinearVelocity() { return initLinearVelocity; }
+	void setCurrentLinearVelocity(b2Vec2 vel) { linearVelocity = vel; }
+	b2Vec2 getCurrentLinearVelocity() { return linearVelocity; }
+	void setInitVecAngle(float theta) { initAngle = Util::normAngle(theta); } //recalculate(); }   // set vector angle of movement (degrees)
+	float getInitVecAngle() { return initAngle; };
+	void setCurrentVecAngle(float theta) { angle = Util::normAngle(theta);  } //recalculate(); }   // set vector angle of movement (degrees)
+	float getCurrentVecAngle() { return angle; };
+	void setVelocityMax(float meterPerSec) { velocityMax = meterPerSec;}   // meters per second
+	float getVelocityMax() { return velocityMax; };
 	void setHP(int num) { hpCur = num; }
 	int getHP() { return hpCur; }
 	void setHPMax(int num) { hpMax = num; }
@@ -86,9 +92,11 @@ public:
 	float getTextWidth() { return textWidth; }
 	void setTextHeight(float height) { textHeight = height; }
 	float getTextHeight() { return textHeight; }
-	OBJECT_TYPE getType() { return objType; }
-	void setType(OBJECT_TYPE type) { objType = type; }
-	void setTeam(bool bNPC = true) { npcTeam = bNPC; }
+	OBJECT_TYPE getType() { return objType; }					// Generic object type
+	void setType(OBJECT_TYPE type) { objType = type; }			// Generic object type
+	Settings::OBJECT_TYPE getTypeID() { return objID; }					// specific object type
+	void setTypeID(Settings::OBJECT_TYPE typeID) { objID = typeID; }			// Specific object type
+	void setTeam(bool bNPC = true) { npcTeam = bNPC; }			
 	bool isNPC() { return npcTeam; }
 	void setDamage(int damage) { damage_basic = damage; }
 	int getDamage() { return damage_basic; }
@@ -101,11 +109,18 @@ public:
 //	virtual void launch(void* go) { }			//stub 
 
 	// update functions
-	void update(SoundManager &sm);					// Main update function
-	void move(SoundManager &sm);						// automatic move function (using vector quantities)
-	void attack(GameObj *enemy, SoundManager &sm);						// automatic attack function
-	void death(SoundManager &sm);						// death sequnce
-	void damage(int amount, SoundManager &sm);			// damage taken function
+	virtual void attack(GameObj *enemy, SoundManager &sm);						// automatic attack function
+	virtual void death(SoundManager &sm);						// death sequnce
+	virtual void damage(int amount, SoundManager &sm);			// damage taken function
+	virtual void move(SoundManager &sm);						// automatic move function (using vector quantities)
+	virtual void update(SoundManager &sm);					// Main update function
+	// Virtual Specialization Calls for derived class specific behavior
+	// return TRUE to override default routine
+	virtual bool attackSpecial(GameObj *enemy, SoundManager &sm) { return false; };						// automatic attack function
+	virtual bool deathSpecial(SoundManager &sm) { return false; };						// death sequnce
+	virtual bool damageSpecial(int amount, SoundManager &sm) { return false; };			// damage taken function
+	virtual bool moveSpecial(SoundManager &sm) { return false; };						// automatic move function (using vector quantities)
+	virtual bool updateSpecial(SoundManager &sm) { return false; };					// Main update function
 
 	// Box2d
 	b2Body *body;
@@ -115,6 +130,7 @@ public:
 	void removeEnemy(GameObj *enemy, bool ranged = false);
 	bool cleanEnemiesList();
 	b2Vec2 getPos() { return body->GetPosition(); }
+	b2Filter getFixtureCollisionFilter();
 
 	// Sound
 	void setSoundSourceID(unsigned int id) { soundSourceID = id; }
@@ -122,7 +138,10 @@ public:
 protected:
 	std::string name;	// in game name of object
 //	float posX, posY;
-	float velocityMax;		// pixels per second
+	b2Vec2	linearVelocity;	// Initial Velocity (meters per sec)
+	b2Vec2	initLinearVelocity;	// Initial Velocity (meters per sec)
+	float velocityMax;		// meters per second
+	float initAngle;		// 0 = right  90 = up 180 = left   
 	float angle;		// 0 = right  90 = up 180 = left   
 //	float velX;
 //	float velY;
@@ -149,7 +168,7 @@ protected:
 
 	void recalculate();
 
-	WinParems *winParems;			// Contains window x, y, z and handles
+	Settings *settings;			// Contains window x, y, z and handles
 
 	GLText text;
 
@@ -161,7 +180,6 @@ protected:
 	void setupB2D(double x, double y);
 	bool npcTeam;
 	int contacts;					// Number of contacts
-	b2Filter getFixtureCollisionFilter();
 
 
 
@@ -173,7 +191,7 @@ protected:
 
 
 	// Sound Source ID
-	WinParems::OBJECT_TYPE objID;				// Specific object type ID
+	Settings::OBJECT_TYPE objID;				// Specific object type ID
 	unsigned int soundSourceID;
 
 

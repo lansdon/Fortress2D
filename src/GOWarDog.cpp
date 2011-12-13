@@ -1,12 +1,12 @@
 #include "GOWarDog.h"
 
 
-GOWarDog::GOWarDog(WinParems *parems, double x, double y) : GameObj(parems, x, y)
+GOWarDog::GOWarDog(Settings *settings, double x, double y) : GameObj(settings, x, y)
 {
 
 
-	this->winParems = parems;
-	text.setWinParems(parems);
+	this->settings = settings;
+	text.setSettings(settings);
 
 	//posX = posY = 0;
 	//velocity = 50;		// pixels per second
@@ -20,7 +20,7 @@ GOWarDog::GOWarDog(WinParems *parems, double x, double y) : GameObj(parems, x, y
 	arMax = 1;			// Max Armor
 	damage_basic = 2;	// basic damage (melee)
 	damage_range = 0;	// ranged damage
-	setVelocity(3);		// max velocity (m/s)
+	setVelocityMax(3);		// max velocity (m/s)
 
 	textWidth = 2;	// TEMP? This might not be the right way to do this.  Texture Width (METERS)
 	textHeight = .5;	// TEMP? This might not be the right way to do this.  Texture Height (METERS)

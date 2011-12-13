@@ -21,7 +21,7 @@
 #include "GOAArrow.h"
 
 
-#include "WinParems.h"
+#include "settings.h"
 #include "SoundManager.h"
 
 /*
@@ -51,7 +51,7 @@ struct GameObjParems {
 class GameObjectManager
 {
 public:
-	GameObjectManager(WinParems *parems, SoundManager &soundManager);
+	GameObjectManager(Settings *settings, SoundManager &soundManager);
 	~GameObjectManager();
 	GameObj* makeWarDog(double x, double y);
 	GameObj* makeBarbarian(double x, double y);
@@ -67,9 +67,9 @@ public:
 	//GameObj* makeCatapult(double x, double y);
 
 	// AMMO
-	GameObj* makeArrow(double x, double y);
+	GameObj* makeArrow(double x, double y, bool bNPCTeam);
 
-	void destroyObject(GameObj *obj2Kill);
+	std::list<GameObj*>::iterator destroyObject(GameObj *obj2Kill);
 
 	void updateDefenders();
 	void updateAttackers();
@@ -78,7 +78,7 @@ public:
 	std::list<GameObj*> &getAttackers() { return attackers; }
 	std::list<GameObj*> &getDefenders() { return defenders; }
 
-	void setWinParems(WinParems *parems) { winParems = parems; }
+	void setSettings(Settings *settings) { this->settings = settings; }
 
 private:
 
@@ -93,7 +93,7 @@ private:
 
 	void resetAttackers();
 
-	WinParems *winParems;
+	Settings *settings;
 
 	SoundManager &sm;
 

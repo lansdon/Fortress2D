@@ -4,7 +4,7 @@ class GOMote :
 	public GameObj
 {
 public:
-	GOMote(WinParems *parems, double x, double y);
+	GOMote(Settings *settings, double x, double y);
 	~GOMote();
 };
 

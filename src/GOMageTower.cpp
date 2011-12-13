@@ -1,7 +1,7 @@
 #include "GOMageTower.h"
 
 
-GOMageTower::GOMageTower(WinParems *parems, double x, double y) : GameObj(parems, x, y)
+GOMageTower::GOMageTower(Settings *settings, double x, double y) : GameObj(settings, x, y)
 {
 	hpCur = 60;			// current hitpoints
 	hpMax = 60;			// max hitpoints
@@ -9,7 +9,7 @@ GOMageTower::GOMageTower(WinParems *parems, double x, double y) : GameObj(parems
 	arMax = 3;			// Max Armor
 	damage_basic = 10;	// basic damage (melee)
 	damage_range = 35;	// ranged damage
-	setVelocity(0);		// max velocity (m/s)
+//	setVelocity(0);		// max velocity (m/s)
 
 	textWidth = 3;	// TEMP? This might not be the right way to do this.  Texture Width (METERS)
 	textHeight = 5;	// TEMP? This might not be the right way to do this.  Texture Height (METERS)

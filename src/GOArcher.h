@@ -5,7 +5,7 @@ class GOArcher :
 	public GameObj
 {
 public:
-	GOArcher(WinParems *parems, double x, double y);
+	GOArcher(Settings *settings, double x, double y);
 	~GOArcher(void);
 
 	bool activate(b2Vec2 mouse) { return false; }	// dummy stub - override for launcher objects.

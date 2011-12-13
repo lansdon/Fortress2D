@@ -1,7 +1,7 @@
 #include "GOStoneWall.h"
 
 
-GOStoneWall::GOStoneWall(WinParems *parems, double x, double y) : GameObj(parems, x, y)
+GOStoneWall::GOStoneWall(Settings *settings, double x, double y) : GameObj(settings, x, y)
 {
 
 	hpCur = 500;			// current hitpoints
@@ -29,13 +29,13 @@ GOStoneWall::GOStoneWall(WinParems *parems, double x, double y) : GameObj(parems
 	contacts = 0;
 
 	objType = OBJECT_TYPE::DEFENDER;
+	objID = Settings::OBJ_T_STONEWALL;
 	setupB2D(x, y);
 
 	setTeam(false); // NPC team
 
 	textureID = TextureLoader::LoadGLTextures("stonewall.jpg");
 	
-	objID = WinParems::OBJ_T_STONEWALL;
 
 }
 

@@ -1,9 +1,9 @@
 #include "GUIButtonMenu.h"
 
 
-GUIButtonMenu::GUIButtonMenu(WinParems *parems) : GUIButton(parems)
+GUIButtonMenu::GUIButtonMenu(Settings *settings) : GUIButton(settings)
 {
-	winParems = parems;
+	this->settings = settings;
 	rows = cols = 1;
 	
 	setDimensions(rows, cols);
@@ -14,14 +14,14 @@ GUIButtonMenu::~GUIButtonMenu(void)
 {
 }
 
-void GUIButtonMenu::setWinParems(WinParems *parems) {
-	winParems = parems;
+void GUIButtonMenu::setSettings(Settings *settings) {
+	this->settings = settings;
 	setDimensions(rows, cols);
 }
 
 
 GUIButton &GUIButtonMenu::newButton(std::string label, int targRow, int targCol) {
-	GUIButton temp(winParems);
+	GUIButton temp(settings);
 	buttons[targRow][targCol] = temp;
 	return buttons[targRow][targCol];
 }
@@ -38,7 +38,7 @@ void GUIButtonMenu::setDimensions(int newRows, int newCols) {
 			buttons[i][j].setPos(getPosX()+(btnWidth*j), getPosY()-(btnHeight*i));
 			buttons[i][j].setHeight(btnHeight);
 			buttons[i][j].setWidth(btnWidth);
-			buttons[i][j].setWinParems(winParems);
+			buttons[i][j].setSettings(settings);
 		}
 	}
 }
@@ -53,7 +53,7 @@ void GUIButtonMenu::draw() {
 	// Outside box  (border)
 	glLoadIdentity();
 	glColor3f(getColorBorder().r, getColorBorder().g, getColorBorder().b);
-//	glTranslatef((GLfloat)getPosX()-(winParems->width()/2), (GLfloat)getPosY() - winParems->height()/2, (GLfloat)winParems->depth());       // Top left corner button
+//	glTranslatef((GLfloat)getPosX()-(settings->width()/2), (GLfloat)getPosY() - settings->height()/2, (GLfloat)settings->depth());       // Top left corner button
 	glBegin(GL_QUADS);                      // Draw A Quad
 		glVertex2d(getPosX(), getPosY());              // Top Left
 		glVertex2d(getWidth(), getPosY());              // Top Right
@@ -63,7 +63,7 @@ void GUIButtonMenu::draw() {
 	// Inside box  (background)
 	glLoadIdentity();
 	glColor3f(getColorBG().r, getColorBG().g, getColorBG().b);
-//	glTranslatef((GLfloat)(getPosX()-(winParems->width()/2))+getBorder(), (GLfloat)(getPosY()) - winParems->height()/2 -getBorder(), (GLfloat)winParems->depth());       // Top left corner button
+//	glTranslatef((GLfloat)(getPosX()-(settings->width()/2))+getBorder(), (GLfloat)(getPosY()) - settings->height()/2 -getBorder(), (GLfloat)settings->depth());       // Top left corner button
 	glBegin(GL_QUADS);										// Draw A Quad
 		glVertex2d(getPosX() + getBorder(), getPosY() - getBorder());									// Top Left
 		glVertex2d(getPosX() + getWidth() - getBorder(), getPosY() - getBorder());					// Top Right

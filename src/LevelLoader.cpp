@@ -75,7 +75,7 @@ void LevelLoader::spawn(GameObjectManager &go) {			// spawn the next creature
 
 
 
-// Numbers used in leve.dat files   (need to convert level files into WinParems::OBJECT_TYPE
+// Numbers used in leve.dat files   (need to convert level files into Settings::OBJECT_TYPE
 //0=NONE
 //1=WARDOG
 //2=SPEARMAN
@@ -86,31 +86,35 @@ void LevelLoader::spawn(GameObjectManager &go) {			// spawn the next creature
 std::vector<bool> LevelLoader::getSpawnListTypes() {
 
 	std::vector<bool> objVec;
-	objVec.resize(WinParems::TOTAL_OBJ_TYPES);
+	objVec.resize(Settings::TOTAL_OBJ_TYPES + 1);
 
 	// Search for types of attackers being loaded this level
 	std::vector<unsigned int>::iterator it = spawnList.begin();
 	while(it != spawnList.end()) {
 		switch(*it) {
-			case 1: objVec[WinParems::OBJ_T_DOG] = true; break;
-			case 2: objVec[WinParems::OBJ_T_SPEARMAN] = true; break;
-			case 3: objVec[WinParems::OBJ_T_ARCHER] = true; break;
-			case 4: objVec[WinParems::OBJ_T_SEIGE_ENGINE] = true; break;
+			case 1: objVec[Settings::OBJ_T_DOG] = true; break;
+			case 2: objVec[Settings::OBJ_T_SPEARMAN] = true; break;
+			case 3: objVec[Settings::OBJ_T_ARCHER] = true; break;
+			case 4: objVec[Settings::OBJ_T_SEIGE_ENGINE] = true; break;
 		}
 		++it;
 	}
 	
 
 	// AUTOMATICALLY LOAD DEFENDER OBJECTS
-	objVec[WinParems::OBJ_T_ARCHER_TOWER] = true;
-	objVec[WinParems::OBJ_T_CATAPAULT] = true;
-	objVec[WinParems::OBJ_T_FENCE] = true;
-	objVec[WinParems::OBJ_T_MAGE_TOWER] = true;
-	objVec[WinParems::OBJ_T_MOTE] = true;
-	objVec[WinParems::OBJ_T_OIL_TOWER] = true;
-	objVec[WinParems::OBJ_T_STONEWALL] = true;
-	objVec[WinParems::OBJ_T_WOODWALL] = true;
-	
+	objVec[Settings::OBJ_T_ARCHER_TOWER] = true;
+	objVec[Settings::OBJ_T_CATAPAULT] = true;
+	objVec[Settings::OBJ_T_FENCE] = true;
+	objVec[Settings::OBJ_T_MAGE_TOWER] = true;
+	objVec[Settings::OBJ_T_MOTE] = true;
+	objVec[Settings::OBJ_T_OIL_TOWER] = true;
+	objVec[Settings::OBJ_T_STONEWALL] = true;
+	objVec[Settings::OBJ_T_WOODWALL] = true;
+
+	// AUTOMATICALLY LOAD AMMO
+	objVec[Settings::OBJ_T_ARROW] = true;
+	objVec[Settings::OBJ_T_CANNONBALL] = true;
+
 	return objVec;
 
 }
