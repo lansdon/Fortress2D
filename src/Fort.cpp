@@ -140,7 +140,7 @@ bool Fort::makeObj(float posX, GameObjectManager &go) {
 		return false;
 
 	switch(selectedType) {
-		case WALL_WOOD: {	go.makeStoneWall(getPlacementX(posX), 200);	} break;
+		case WALL_WOOD: {	go.makeWoodWall(getPlacementX(posX), 200);	} break;
 		case WALL_STONE: { go.makeStoneWall(getPlacementX(posX),200);	} break;
 		case MOTE: { go.makeStoneWall(getPlacementX(posX), settings->floor());	} break;
 		case TOWER_ARCHER: { go.makeArcherTower(getPlacementX(posX), 200);	} break;

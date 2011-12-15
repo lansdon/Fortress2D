@@ -32,6 +32,7 @@ GameObjectManager::~GameObjectManager() {
 
 GameObj* GameObjectManager::makeArcher(double x, double y) {
 	GOArcher *temp = new GOArcher(settings, x, y);
+//	GOArcher *temp = new GameObject(settings, x, y);
 	temp->setSoundSourceID(sm.registerObject());				// Register new object with sound manager
 	addObject(temp);
 	return temp;
@@ -55,12 +56,12 @@ GameObj* GameObjectManager::makeArcher(double x, double y) {
 //	return temp;
 //}
 //
-//GameObj* GameObjectManager::makeWoodWall(double x, double y) {
-//	GameObj *temp = new GOWoodWall(settings, x, y);
-//	addObject(temp);
-//	return temp;
-//}
-//
+GameObj* GameObjectManager::makeWoodWall(double x, double y) {
+	GameObj *temp = new GOWoodWall(settings, x, y);
+	addObject(temp);
+	return temp;
+}
+
 GameObj* GameObjectManager::makeStoneWall(double x, double y) {
 	GameObj *temp = new GOStoneWall(settings, x, y);
 	temp->setSoundSourceID(sm.registerObject());				// Register new object with sound manager
@@ -95,7 +96,7 @@ GameObj* GameObjectManager::makeArcherTower(double x, double y) {
 
 GameObj* GameObjectManager::makeArrow(double x, double y, bool bNPCTeam) {
 	GameObj *temp = new GOAArrow(settings, x, y);
-	temp->setTeam(bNPCTeam);
+	temp->goSettings.setTeam(bNPCTeam);
 	temp->body->SetFixedRotation(false);
 	addObject(temp);
 	return temp;
@@ -120,7 +121,7 @@ std::list<GameObj*>::iterator GameObjectManager::destroyObject(GameObj *obj2Kill
 	std::list<GameObj*>::iterator it_friends_current, it_friends_end, it_enemies_current, it_enemies_end;		// Iterators for each list (npc and pc)
 
 	// Setup iterators depending on which team the object belongs to.
-	if(obj2Kill->isNPC()) {									
+	if(obj2Kill->goSettings.isNPC()) {									
 		it_friends_current = attackers.begin();
 		it_friends_end = attackers.end();
 		it_enemies_current = defenders.begin();
@@ -148,7 +149,7 @@ std::list<GameObj*>::iterator GameObjectManager::destroyObject(GameObj *obj2Kill
 		// Remove object from master list
 		if((*it_friends_current) == obj2Kill) {
 			found = true;
-			if(obj2Kill->isNPC()) {
+			if(obj2Kill->goSettings.isNPC()) {
 				delete (*it_friends_current);
 				it_friends_current = attackers.erase(it_friends_current);
 			} else {

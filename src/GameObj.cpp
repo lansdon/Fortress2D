@@ -1,12 +1,12 @@
 #include "GameObj.h"
 
 
-GameObj::GameObj(Settings *settings, double x, double y) :
-	COLLISION_GROUP_GROUND(1),
-	COLLISION_GROUP_NPC_BULLET(2), 
-	COLLISION_GROUP_NPC_ATTACKER(4),
-	COLLISION_GROUP_PC_BULLET(16),
-	COLLISION_GROUP_PC_DEFENDER(32)
+GameObj::GameObj(Settings *settings, double x, double y) // :
+	//COLLISION_GROUP_GROUND(1),
+	//COLLISION_GROUP_NPC_BULLET(2), 
+	//COLLISION_GROUP_NPC_ATTACKER(4),
+	//COLLISION_GROUP_PC_BULLET(16),
+	//COLLISION_GROUP_PC_DEFENDER(32)
 
 {
 
@@ -14,37 +14,11 @@ GameObj::GameObj(Settings *settings, double x, double y) :
 	text.setSettings(settings);
 
 
-
-	// Sound Effect Timers
-	TIMER_SOUND_MOVE = 2.0; // ms
-	TIMER_SOUND_MELEE = 1.0; // ms
-	TIMER_SOUND_RANGED = 1.0; // ms
-	TIMER_SOUND_DAMAGED = 1.0; // ms
-	TIMER_SOUND_DEATH = 2.0; // ms
-	TIMER_SOUND_IDLE = 5.0; // ms
-
-	//posX = posY = 0;
-	velocityMax = 0;		// pixels per second
-	//angle = 0;		// 0 = right   180 = left   90 = up
-	hpCur = 10;			// current hitpoints
-	hpMax = 10;			// max hitpoints
-	arCur = 0;			// current armor
-	arMax = 0;			// Max Armor
-	damage_basic = 0;	// basic damage (melee)
-	damage_range = 0;	// ranged damage
-
-	textWidth = 10;	// TEMP? This might not be the right way to do this.  Texture Width
-	textHeight = 10;	// TEMP? This might not be the right way to do this.  Texture Height
 	elapsedTime = 0;
 	body = NULL;
 
-	DEF_DRAW_COLOR.setColors(1, 1, 1, 1);
-	CONTACT_DRAW_COLOR.setColors(1, 0, 0, 1);
-
+	groundContact = false;
 	contacts = 0;		// TEMP?
-
-//	objType = NONE;
-//	setTeam(false);
 
 	// Load texture
 	textureID = TextureLoader::LoadGLTextures("test.png");
@@ -68,27 +42,27 @@ void GameObj::move(SoundManager &sm) {
 
 		if(body) {
 			// Gradual speed increase for objects with a max velocity set  // (Bullets should have max Vel ZERO) // this logic will need updating!
-			if(velocityMax) {
+			if(goSettings.getVelocityMax()) {
 				b2Vec2 vel = body->GetLinearVelocity();
-				vel.x = b2Min( vel.x + 0.1f,  velocityMax );
+				vel.x = b2Min( vel.x + 0.1f,  goSettings.getVelocityMax() );
 				body->SetLinearVelocity( vel );
 			}
 
 			t_move.Calculate_Ellapsed_Time();
 			if(t_move.TotalTime() >= TIMER_SOUND_MOVE) {
 				SoundManager::Sounds soundID;
-				switch(objID) {
-					case Settings::OBJ_T_ARCHER: soundID = sm.SND_ARCHER_MOVE; break;
-					case Settings::OBJ_T_STONEWALL: soundID = sm.SND_STONEWALL_MOVE; break;
+				switch(goSettings.getTypeID()) {
+					case Settings::OBJ_ID_ARCHER: soundID = sm.SND_ARCHER_MOVE; break;
+					case Settings::OBJ_ID_STONEWALL: soundID = sm.SND_STONEWALL_MOVE; break;
 		//			case settings.OBJ_T_DOG: soundID = sm.SND_DOG_MELEE; break;
 		//			case settings.OBJ_T_SPEARMAN: soundID = sm.SND_SPEARMAN_MELEE; break;
-		//			case settings.OBJ_T_ARCHER: soundID = sm.SND_ARCHER_MELEE; break;
+		//			case settings.OBJ_ID_ARCHER: soundID = sm.SND_ARCHER_MELEE; break;
 					default: soundID = sm.SND_DOG_MOVE; break;
 				}
 				sm.playSound(soundSourceID, soundID, body->GetPosition());
 				t_move.Reset(0.0);
 			}
-		}
+		}	
 	}
 }
 
@@ -129,12 +103,12 @@ void GameObj::attack(GameObj *enemy, SoundManager &sm) {
 		t_melee.Calculate_Ellapsed_Time();
 		if(t_melee.TotalTime() >= TIMER_SOUND_MELEE) {
 			SoundManager::Sounds soundID;
-			switch(objID) {
-				case Settings::OBJ_T_ARCHER: soundID = sm.SND_ARCHER_MELEE; break;
-				case Settings::OBJ_T_STONEWALL: soundID = sm.SND_STONEWALL_MELEE; break;
+			switch(goSettings.getTypeID()) {
+				case Settings::OBJ_ID_ARCHER: soundID = sm.SND_ARCHER_MELEE; break;
+				case Settings::OBJ_ID_STONEWALL: soundID = sm.SND_STONEWALL_MELEE; break;
 	//			case settings.OBJ_T_DOG: soundID = sm.SND_DOG_MELEE; break;
 	//			case settings.OBJ_T_SPEARMAN: soundID = sm.SND_SPEARMAN_MELEE; break;
-	//			case settings.OBJ_T_ARCHER: soundID = sm.SND_ARCHER_MELEE; break;
+	//			case settings.OBJ_ID_ARCHER: soundID = sm.SND_ARCHER_MELEE; break;
 				default: soundID = sm.SND_ARCHER_DAMAGED; break;
 			}
 			sm.playSound(soundSourceID, soundID, body->GetPosition());
@@ -142,7 +116,7 @@ void GameObj::attack(GameObj *enemy, SoundManager &sm) {
 		}
 
 		// DAMAGE ENEMY
-		enemy->damage(getDamage(), sm);
+		enemy->damage(goSettings.getDamage(), sm);
 
 		// Special Behavior (defined in derived classes)
 		attackSpecial(enemy, sm);
@@ -155,12 +129,12 @@ void GameObj::death(SoundManager &sm) {
 	t_death.Calculate_Ellapsed_Time();
 	if(t_death.TotalTime() >= TIMER_SOUND_DEATH) {
 		SoundManager::Sounds soundID;
-		switch(objID) {
-			case Settings::OBJ_T_ARCHER: soundID = sm.SND_ARCHER_DEATH; break;
-			case Settings::OBJ_T_STONEWALL: soundID = sm.SND_STONEWALL_DEATH; break;
+		switch(goSettings.getTypeID()) {
+			case Settings::OBJ_ID_ARCHER: soundID = sm.SND_ARCHER_DEATH; break;
+			case Settings::OBJ_ID_STONEWALL: soundID = sm.SND_STONEWALL_DEATH; break;
 	//			case settings.OBJ_T_DOG: soundID = sm.SND_DOG_MELEE; break;
 	//			case settings.OBJ_T_SPEARMAN: soundID = sm.SND_SPEARMAN_MELEE; break;
-	//			case settings.OBJ_T_ARCHER: soundID = sm.SND_ARCHER_MELEE; break;
+	//			case settings.OBJ_ID_ARCHER: soundID = sm.SND_ARCHER_MELEE; break;
 			default: soundID = sm.SND_ARCHER_DEATH; break;
 		}
 		sm.playSound(soundSourceID, soundID, body->GetPosition());
@@ -183,12 +157,12 @@ void GameObj::damage(int amount, SoundManager &sm) {
 	t_damaged.Calculate_Ellapsed_Time();
 	if(t_damaged.TotalTime() >= TIMER_SOUND_DAMAGED) {
 		SoundManager::Sounds soundID;
-		switch(objID) {
-			case Settings::OBJ_T_ARCHER: soundID = sm.SND_ARCHER_DAMAGED; break;
-			case Settings::OBJ_T_STONEWALL: soundID = sm.SND_STONEWALL_DAMAGED; break;
+		switch(goSettings.getTypeID()) {
+			case Settings::OBJ_ID_ARCHER: soundID = sm.SND_ARCHER_DAMAGED; break;
+			case Settings::OBJ_ID_STONEWALL: soundID = sm.SND_STONEWALL_DAMAGED; break;
 	//			case settings.OBJ_T_DOG: soundID = sm.SND_DOG_MELEE; break;
 	//			case settings.OBJ_T_SPEARMAN: soundID = sm.SND_SPEARMAN_MELEE; break;
-	//			case settings.OBJ_T_ARCHER: soundID = sm.SND_ARCHER_MELEE; break;
+	//			case settings.OBJ_ID_ARCHER: soundID = sm.SND_ARCHER_MELEE; break;
 			default: soundID = sm.SND_ARCHER_DAMAGED; break;
 		}
 		sm.playSound(soundSourceID, soundID, body->GetPosition());
@@ -214,6 +188,14 @@ void GameObj::update(SoundManager &sm) {
 		for(std::list<GameObj*>::iterator it = enemies.begin(); it != enemies.end(); ++it) {
 			if((*it)->isAlive()) {
 				attack((*it), sm);
+			}
+		}
+
+		// Proccess ground contact
+		if(groundContact) {
+			// BULLETS - disappear after striking the ground.
+			if(goSettings.getType() == Settings::OBJ_T_BULLET) {
+				goSettings.setHP(0);
 			}
 		}
 	} else {
@@ -253,8 +235,8 @@ void GameObj::draw(b2Vec2 mouse) {						// draw the object on screen
 	glLoadIdentity();
 
 	if(enemies.size() == 0)
-		glColor3f(DEF_DRAW_COLOR.r, DEF_DRAW_COLOR.g, DEF_DRAW_COLOR.b);
-	else glColor3f(CONTACT_DRAW_COLOR.r, CONTACT_DRAW_COLOR.g, CONTACT_DRAW_COLOR.b);
+		glColor3f(goSettings._DEF_DRAW_COLOR.r, goSettings._DEF_DRAW_COLOR.g, goSettings._DEF_DRAW_COLOR.b);
+	else glColor3f(goSettings._CONTACT_DRAW_COLOR.r, goSettings._CONTACT_DRAW_COLOR.g, goSettings._CONTACT_DRAW_COLOR.b);
 
 	b2Vec2 pos = body->GetPosition();
 	glTranslatef(body->GetPosition().x, body->GetPosition().y, 0);       // center position
@@ -273,13 +255,13 @@ void GameObj::draw(b2Vec2 mouse) {						// draw the object on screen
    
 		glBegin(GL_QUADS);                      // Draw A Quad
 			glTexCoord2f(0, 1);																			// Top Left
-			glVertex2d( -Util::meter2Pixel(textWidth)/2, Util::meter2Pixel(textHeight)/2);              // Top Left
+			glVertex2d( -Util::meter2Pixel(goSettings._textWidth)/2, Util::meter2Pixel(goSettings._textHeight)/2);              // Top Left
 			glTexCoord2f(1, 1);																		// Top Right
-			glVertex2d(Util::meter2Pixel(textWidth)/2, Util::meter2Pixel(textHeight)/2);              // Top Right
+			glVertex2d(Util::meter2Pixel(goSettings._textWidth)/2, Util::meter2Pixel(goSettings._textHeight)/2);              // Top Right
 			glTexCoord2f(1,  0);																	// Bottom Right
-			glVertex2d(Util::meter2Pixel(textWidth)/2, -Util::meter2Pixel(textHeight)/2);              // Bottom Right
+			glVertex2d(Util::meter2Pixel(goSettings._textWidth)/2, -Util::meter2Pixel(goSettings._textHeight)/2);              // Bottom Right
 			glTexCoord2f(0, 0);																	// Bottom Left
-			glVertex2d( - Util::meter2Pixel(textWidth)/2, -Util::meter2Pixel(textHeight)/2);      // Bottom Left
+			glVertex2d( - Util::meter2Pixel(goSettings._textWidth)/2, -Util::meter2Pixel(goSettings._textHeight)/2);      // Bottom Left
 		glEnd();                            // Done Drawing The Quad
 		//glBegin(GL_QUADS);                      // Draw A Quad
 		//	glTexCoord2f(0, 1);																			// Top Left
@@ -297,21 +279,21 @@ void GameObj::draw(b2Vec2 mouse) {						// draw the object on screen
 
 //		glTranslatef(body->GetPosition().x, body->GetPosition().y, (*settings).depth());       // Move to 0,0 in bottom left corner of coord system
 		glBegin(GL_QUADS);                      // Draw A Quad
-			glVertex2d(pos.x - Util::meter2Pixel(textWidth)/2, pos.y + Util::meter2Pixel(textHeight)/2);              // Top Left
-			glVertex2d(pos.x + Util::meter2Pixel(textWidth)/2, pos.y + Util::meter2Pixel(textHeight)/2);              // Top Right
-			glVertex2d(pos.x + Util::meter2Pixel(textWidth)/2, pos.y - Util::meter2Pixel(textHeight)/2);              // Bottom Right
-			glVertex2d(pos.x - Util::meter2Pixel(textWidth)/2, pos.y - Util::meter2Pixel(textHeight)/2);      // Bottom Left
+			glVertex2d(pos.x - Util::meter2Pixel(goSettings._textWidth)/2, pos.y + Util::meter2Pixel(goSettings._textHeight)/2);              // Top Left
+			glVertex2d(pos.x + Util::meter2Pixel(goSettings._textWidth)/2, pos.y + Util::meter2Pixel(goSettings._textHeight)/2);              // Top Right
+			glVertex2d(pos.x + Util::meter2Pixel(goSettings._textWidth)/2, pos.y - Util::meter2Pixel(goSettings._textHeight)/2);              // Bottom Right
+			glVertex2d(pos.x - Util::meter2Pixel(goSettings._textWidth)/2, pos.y - Util::meter2Pixel(goSettings._textHeight)/2);      // Bottom Left
 		glEnd();                            // Done Drawing The Quad
 
 	}	
 
 //	text.text(name, posX - (name.length()/2), textHeight, settings.depth());
 	std::stringstream ss;
-	ss << name << " " << "x=" << body->GetPosition().x << " y=" << body->GetPosition().y;
+	ss << goSettings._name << " " << "x=" << body->GetPosition().x << " y=" << body->GetPosition().y;
 	std::stringstream ss2;
 	ss2 << "hp=" << getHP() << " enemies=" << enemies.size();
-	text.text(ss, body->GetPosition().x, body->GetPosition().y+textHeight + 20, settings->depth());
-	text.text(ss2, body->GetPosition().x, body->GetPosition().y+textHeight + 10, settings->depth());
+	text.text(ss, body->GetPosition().x, body->GetPosition().y+goSettings._textHeight + 20, settings->depth());
+	text.text(ss2, body->GetPosition().x, body->GetPosition().y+goSettings._textHeight + 10, settings->depth());
 }
 
 
@@ -327,7 +309,10 @@ void GameObj::draw(b2Vec2 mouse) {						// draw the object on screen
 
 
 void GameObj::addContact(GameObj *enemy) {
-	if(enemy->isNPC() != isNPC()) {
+	if(enemy == NULL) {
+		groundContact = true;
+	}
+	else if(enemy->isNPC() != isNPC()) {
 //		contacts++; 
 		addEnemy(enemy); 
 	}
@@ -361,13 +346,13 @@ void GameObj::setupB2D(double x, double y) {
 	body = settings->getWorld()->CreateBody(&bodyDef);
 	dynamicBox.SetAsBox(Util::meter2Pixel(getTextWidth())/2,Util::meter2Pixel(getTextHeight())/2);	// Define another box shape for our dynamic body.
 	fixtureDef.shape = &dynamicBox;			// Define the dynamic body fixture.
-	fixtureDef.density = density;			// Set the box density to be non-zero, so it will be dynamic.	
-	fixtureDef.friction = friction;			// Override the default friction.
+	fixtureDef.density = goSettings._density;			// Set the box density to be non-zero, so it will be dynamic.	
+	fixtureDef.friction = goSettings._friction;			// Override the default friction.
 	fixtureDef.filter = getFixtureCollisionFilter();
 //	fixtureDef.filter.maskBits = getFixtureCollissionFilter().maskBits;
 
 
-	body->SetLinearVelocity(b2Vec2(velocityMax, 0.0));
+	body->SetLinearVelocity(b2Vec2(goSettings.getVelocityMax(), 0.0));
 	body->CreateFixture(&fixtureDef);		// Add the shape to the body.
 
 }
@@ -379,24 +364,43 @@ b2Filter GameObj::getFixtureCollisionFilter() {
 
 	// ATTACKERS
 	if(this->isNPC()) {
-		if(getType() == BULLET) {
-			filter.categoryBits = COLLISION_GROUP_NPC_BULLET;		// NPC BULLET GROUP
-			filter.maskBits = COLLISION_GROUP_PC_DEFENDER + COLLISION_GROUP_GROUND;		// List of possible targets
+		if(getType() == Settings::OBJ_T_BULLET) {
+			filter.categoryBits = Settings::COLLISION_CAT_NPC_BULLET;		// NPC BULLET GROUP
+			filter.maskBits = Settings::COLLISION_CAT_PC_DEFENDER + Settings::COLLISION_CAT_GROUND;		// List of possible targets
 		} else {
-			filter.categoryBits = COLLISION_GROUP_NPC_ATTACKER;		// NPC ATTACKER GROUP
+			filter.categoryBits = Settings::COLLISION_CAT_NPC_ATTACKER;		// NPC ATTACKER GROUP
 //			filter.maskBits = COLLISION_GROUP_PC_DEFENDER + COLLISION_GROUP_PC_BULLET;		// List of possible targets
 		}
 	
 	// DEFENDERS	
 	} else {
-		if(getType() == BULLET) {
-			filter.categoryBits = COLLISION_GROUP_PC_BULLET;		// PC BULLET GROUP
-			filter.maskBits = COLLISION_GROUP_NPC_ATTACKER + COLLISION_GROUP_GROUND;		// List of Possible targets
+		if(getType() == Settings::OBJ_T_BULLET) {
+			filter.categoryBits = Settings::COLLISION_CAT_PC_BULLET;		// PC BULLET GROUP
+			filter.maskBits = Settings::COLLISION_CAT_NPC_ATTACKER + Settings::COLLISION_CAT_GROUND;		// List of Possible targets
 		} else {
-			filter.categoryBits = COLLISION_GROUP_PC_DEFENDER;		// PC ATTACKER GROUP
+			filter.categoryBits = Settings::COLLISION_CAT_PC_DEFENDER;		// PC ATTACKER GROUP
 			//filter.maskBits = COLLISION_GROUP_PC_BULLET;		// PC defenders don't collide with defender bullets  // this may change!
 		}
 	}
 	
 	return filter;
 }
+
+
+
+
+
+// Startup / Load / Initialization routine   (Use in constructor of derived classes to setup the object!!)
+void GameObj::loadObject(std::string datFilename, double x, double y) {
+
+	// Load Settings
+	goSettings.loadFromFile(datFilename);
+	
+	// Setup Physics
+	setupB2D(x, y);
+
+	// Load Texture
+	textureID = TextureLoader::LoadGLTextures(goSettings.getTextureFilename());
+
+}
+

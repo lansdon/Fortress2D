@@ -82,6 +82,7 @@
   <ItemGroup>
     <ClCompile Include="AmmoTypes.cpp" />
     <ClCompile Include="GOAArrow.cpp" />
+    <ClCompile Include="GOSettings.cpp" />
     <ClCompile Include="Launcher.cpp" />
     <ClCompile Include="openal\include\framework\Win32\aldlist.cpp" />
     <ClCompile Include="openal\include\framework\Win32\CWaves.cpp" />
@@ -121,6 +122,7 @@
   <ItemGroup>
     <ClInclude Include="AmmoTypes.h" />
     <ClInclude Include="GOAArrow.h" />
+    <ClInclude Include="GOSettings.h" />
     <ClInclude Include="Launcher.h" />
     <ClInclude Include="openal\include\framework\Win32\aldlist.h" />
     <ClInclude Include="openal\include\framework\Win32\CWaves.h" />

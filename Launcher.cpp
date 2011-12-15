@@ -4,12 +4,12 @@
 Launcher::Launcher(Settings *settings, int x, int y) : GameObj(settings, x, y)
 {
 
-	MIN_VEL = 100;			// Lower bounds of launch velocity meters/sec
-	MAX_VEL = 500;			// Upper bounds of launch velocity meters/sec
-	LEFT_ORIENTATION = true; // true = facing left    false = facing right
-	MIN_ANGLE = -45.0;			// MIN angle allowed relative to direction facing (0 = horizontal plane. POS = up, neg = down.
-	MAX_ANGLE = 85.0;			// degrees
-	MAX_PULL_LENGTH = 75;		// (max length a user can pull on launcher to achieve max launch velocity. (meters)
+	//MIN_VEL = 100;			// Lower bounds of launch velocity meters/sec
+	//MAX_VEL = 500;			// Upper bounds of launch velocity meters/sec
+	//LEFT_ORIENTATION = true; // true = facing left    false = facing right
+	//MIN_ANGLE = -45.0;			// MIN angle allowed relative to direction facing (0 = horizontal plane. POS = up, neg = down.
+	//MAX_ANGLE = 85.0;			// degrees
+	//MAX_PULL_LENGTH = 75;		// (max length a user can pull on launcher to achieve max launch velocity. (meters)
 
 	activated = false;
 
@@ -55,8 +55,8 @@ void Launcher::draw(b2Vec2 mouse) {						// draw the object on screen
 	glLoadIdentity();
 
 	if(enemies.size() == 0)
-		glColor3f(DEF_DRAW_COLOR.r, DEF_DRAW_COLOR.g, DEF_DRAW_COLOR.b);
-	else glColor3f(CONTACT_DRAW_COLOR.r, CONTACT_DRAW_COLOR.g, CONTACT_DRAW_COLOR.b);
+		glColor3f(goSettings._DEF_DRAW_COLOR.r, goSettings._DEF_DRAW_COLOR.g, goSettings._DEF_DRAW_COLOR.b);
+	else glColor3f(goSettings._CONTACT_DRAW_COLOR.r, goSettings._CONTACT_DRAW_COLOR.g, goSettings._CONTACT_DRAW_COLOR.b);
 
 	b2Vec2 pos = body->GetPosition();
 	if(settings->useTextures()) {
@@ -73,13 +73,13 @@ void Launcher::draw(b2Vec2 mouse) {						// draw the object on screen
 //		glTranslatef(body->GetPosition().x, body->GetPosition().y, (*settings).depth());       // Move to 0,0 in bottom left corner of coord system
 		glBegin(GL_QUADS);                      // Draw A Quad
 			glTexCoord2f(0, 1);																			// Top Left
-			glVertex2d(pos.x - Util::meter2Pixel(textWidth)/2, pos.y + Util::meter2Pixel(textHeight)/2);              // Top Left
+			glVertex2d(pos.x - Util::meter2Pixel(goSettings._textWidth)/2, pos.y + Util::meter2Pixel(goSettings._textHeight)/2);              // Top Left
 			glTexCoord2f(1, 1);																		// Top Right
-			glVertex2d(pos.x + Util::meter2Pixel(textWidth)/2, pos.y + Util::meter2Pixel(textHeight)/2);              // Top Right
+			glVertex2d(pos.x + Util::meter2Pixel(goSettings._textWidth)/2, pos.y + Util::meter2Pixel(goSettings._textHeight)/2);              // Top Right
 			glTexCoord2f(1,  0);																	// Bottom Right
-			glVertex2d(pos.x + Util::meter2Pixel(textWidth)/2, pos.y - Util::meter2Pixel(textHeight)/2);              // Bottom Right
+			glVertex2d(pos.x + Util::meter2Pixel(goSettings._textWidth)/2, pos.y - Util::meter2Pixel(goSettings._textHeight)/2);              // Bottom Right
 			glTexCoord2f(0, 0);																	// Bottom Left
-			glVertex2d(pos.x - Util::meter2Pixel(textWidth)/2, pos.y - Util::meter2Pixel(textHeight)/2);      // Bottom Left
+			glVertex2d(pos.x - Util::meter2Pixel(goSettings._textWidth)/2, pos.y - Util::meter2Pixel(goSettings._textHeight)/2);      // Bottom Left
 		glEnd();                            // Done Drawing The Quad
 		glDisable(GL_TEXTURE_2D); //Switch back to using colors instead of textures
 
@@ -87,10 +87,10 @@ void Launcher::draw(b2Vec2 mouse) {						// draw the object on screen
 
 //		glTranslatef(body->GetPosition().x, body->GetPosition().y, (*settings).depth());       // Move to 0,0 in bottom left corner of coord system
 		glBegin(GL_QUADS);                      // Draw A Quad
-			glVertex2d(pos.x - Util::meter2Pixel(textWidth)/2, pos.y + Util::meter2Pixel(textHeight)/2);              // Top Left
-			glVertex2d(pos.x + Util::meter2Pixel(textWidth)/2, pos.y + Util::meter2Pixel(textHeight)/2);              // Top Right
-			glVertex2d(pos.x + Util::meter2Pixel(textWidth)/2, pos.y - Util::meter2Pixel(textHeight)/2);              // Bottom Right
-			glVertex2d(pos.x - Util::meter2Pixel(textWidth)/2, pos.y - Util::meter2Pixel(textHeight)/2);      // Bottom Left
+			glVertex2d(pos.x - Util::meter2Pixel(goSettings._textWidth)/2, pos.y + Util::meter2Pixel(goSettings._textHeight)/2);              // Top Left
+			glVertex2d(pos.x + Util::meter2Pixel(goSettings._textWidth)/2, pos.y + Util::meter2Pixel(goSettings._textHeight)/2);              // Top Right
+			glVertex2d(pos.x + Util::meter2Pixel(goSettings._textWidth)/2, pos.y - Util::meter2Pixel(goSettings._textHeight)/2);              // Bottom Right
+			glVertex2d(pos.x - Util::meter2Pixel(goSettings._textWidth)/2, pos.y - Util::meter2Pixel(goSettings._textHeight)/2);      // Bottom Left
 		glEnd();                            // Done Drawing The Quad
 
 	}	
@@ -116,11 +116,11 @@ void Launcher::draw(b2Vec2 mouse) {						// draw the object on screen
 
 //	text.text(name, posX - (name.length()/2), textHeight, settings.depth());
 	std::stringstream ss;
-	ss << name << " " << "x=" << body->GetPosition().x << " y=" << body->GetPosition().y << " Team: " << isNPC();
+	ss << goSettings._name << " " << "x=" << body->GetPosition().x << " y=" << body->GetPosition().y << " Team: " << isNPC();
 	std::stringstream ss2;
 	ss2 << "hp=" << getHP() << " enemies=" << enemies.size();
-	text.text(ss, body->GetPosition().x, body->GetPosition().y+ Util::meter2Pixel(textHeight)+20, settings->depth());
-	text.text(ss2, body->GetPosition().x, body->GetPosition().y+Util::meter2Pixel(textHeight)+10, settings->depth());
+	text.text(ss, body->GetPosition().x, body->GetPosition().y+ Util::meter2Pixel(goSettings._textHeight)+20, settings->depth());
+	text.text(ss2, body->GetPosition().x, body->GetPosition().y+Util::meter2Pixel(goSettings._textHeight)+10, settings->depth());
 }
 
 
@@ -130,8 +130,8 @@ double Launcher::calculateMouseAngle(b2Vec2 mouse) {
 	float mouseAngle = Util::rad2Deg(std::atan2(mouse.y - pos.y, mouse.x - pos.x));	// Angle of line to mouse coord
 	float drawAngle = mouseAngle;
 
-	if(drawAngle < -MAX_ANGLE) drawAngle = -MAX_ANGLE;
-	else if(drawAngle > -MIN_ANGLE) drawAngle = -MIN_ANGLE;
+	if(drawAngle < -goSettings._LAUNCH_MAX_ANGLE) drawAngle = -goSettings._LAUNCH_MAX_ANGLE;
+	else if(drawAngle > -goSettings._LAUNCH_MIN_ANGLE) drawAngle = -goSettings._LAUNCH_MIN_ANGLE;
 
 //	float maxMouseAngle = 
 
@@ -156,11 +156,11 @@ double Launcher::getLauncherDrawLength(b2Vec2 mouse) {
 	float mag = sqrt(std::pow(mouse.y - pos.y, 2) + std::pow(mouse.x - pos.x, 2));
 
 	// Limit the length of the "pull string"
-	if(mag > MAX_PULL_LENGTH) mag = MAX_PULL_LENGTH;
+	if(mag > goSettings._LAUNCH_MAX_PULL_LENGTH) mag = goSettings._LAUNCH_MAX_PULL_LENGTH;
 
 	// Set Launcher Initial Velocity
-	launchVelocity = mag * (MAX_PULL_LENGTH / MAX_VEL);					// Vel based on pull string (mouse)
-	if(launchVelocity < MIN_VEL) launchVelocity = MIN_VEL;				// Min Vel
+	launchVelocity = mag * (goSettings._LAUNCH_MAX_PULL_LENGTH / goSettings._LAUNCH_MAX_VEL);					// Vel based on pull string (mouse)
+	if(launchVelocity < goSettings._LAUNCH_MIN_VEL) launchVelocity = goSettings._LAUNCH_MIN_VEL;				// Min Vel
 
 	// Debug
 	std::stringstream ss;

@@ -3,52 +3,9 @@
 
 GOArcherTower::GOArcherTower(Settings *settings, double x, double y) : Launcher(settings, x, y)
 {
-	hpCur = 80;			// current hitpoints
-	hpMax = 80;			// max hitpoints
-	arCur = 5;			// current armor
-	arMax = 5;			// Max Armor
-	damage_basic = 0;	// basic damage (melee)
-	damage_range = 0;	// ranged damage
-	setVelocityMax(0);		// max velocity (m/s)
-	setCurrentLinearVelocity(b2Vec2(0,0));
-
-	textWidth = 3;	// TEMP? This might not be the right way to do this.  Texture Width (METERS)
-	textHeight = 5;	// TEMP? This might not be the right way to do this.  Texture Height (METERS)
-	elapsedTime = 0;
-	body = NULL;
-
-	density = 10.0;
-	friction = 5.03;
-
-	DEF_DRAW_COLOR.setColors(1, 1, 1, 1);
-	CONTACT_DRAW_COLOR.setColors(1, 0, 0, 1);
-
-	contacts = 0;
-
-	objType = OBJECT_TYPE::DEFENDER;
-	objID = Settings::OBJ_T_ARCHER_TOWER;
-
-	setTeam(false); // NPC team - DO THIS BEFORE B2D SETUP!
-	setupB2D(x, y);
-
-
-	textureID = TextureLoader::LoadGLTextures("archer.jpg");
-
-
-	// Launcher Vars
-	//	float MIN_VEL;			// Lower bounds of launch velocity meters/sec
-	//float MAX_VEL;			// Upper bounds of launch velocity meters/sec
-	//bool LEFT_ORIENTATION; // true = facing left    false = facing right
-	//int MIN_ANGLE;			// MIN angle allowed (0 = horizontal plane. POS = up, neg = down.
-	//int MAX_ANGLE;
-	//int MAX_PULL_LENGTH;		// (max length a user can pull on launcher to achieve max launch velocity. (pixels)
-
-
-	//// Variables
-	//int launchAngle;		// User defined current launch angle
-	//int launchVelocity;		// Speed the ammo is launched at
-	//bool activated;			// true if user is currently clicking on the launcher
-
+	
+	// Startup / Load / Initialization routine   (Use in constructor of derived classes to setup the object!!)
+	loadObject("archertower.dat", x, y);
 
 }
 

@@ -524,10 +524,10 @@ bool Game::activateGO(Vector3 mouse) {
 void Game::doLaunch() {
 
 	GameObj* temp = go->makeArrow(activeLauncher->body->GetPosition().x, activeLauncher->body->GetPosition().y, activeLauncher->isNPC());
-	temp->setInitVecAngle(activeLauncher->getLaunchAngle());
-	temp->setCurrentVecAngle(activeLauncher->getLaunchAngle());
-	temp->setVelocityMax(0);
-	temp->setInitLinearVelocity(b2Vec2(activeLauncher->getLaunchVelocity() * std::cos(Util::deg2Rad(activeLauncher->getLaunchAngle())),    // Vel X
+	temp->goSettings.setInitVecAngle(activeLauncher->getLaunchAngle());
+	temp->goSettings.setCurrentVecAngle(activeLauncher->getLaunchAngle());
+	temp->goSettings.setVelocityMax(0);
+	temp->goSettings.setInitLinearVelocity(b2Vec2(activeLauncher->getLaunchVelocity() * std::cos(Util::deg2Rad(activeLauncher->getLaunchAngle())),    // Vel X
 		activeLauncher->getLaunchVelocity() * std::sin(Util::deg2Rad(activeLauncher->getLaunchAngle()))));		// Vel Y);
 	temp->body->SetTransform(temp->body->GetPosition(), Util::deg2Rad(activeLauncher->getLaunchAngle()));
 	temp->body->SetLinearVelocity(
@@ -535,8 +535,9 @@ void Game::doLaunch() {
 		activeLauncher->getLaunchVelocity() * std::sin(Util::deg2Rad(activeLauncher->getLaunchAngle())))			// Vel Y
 //		activeLauncher->body->GetPosition()																			// Location
 		);
-	temp->body->ApplyAngularImpulse(1);
-	temp->setTeam(activeLauncher->isNPC());
+//	temp->body->ApplyAngularImpulse(1);
+	temp->body->SetAngularDamping(.01);
+	temp->goSettings.setTeam(activeLauncher->goSettings.isNPC());
 	temp->body->GetFixtureList()->SetFilterData(temp->getFixtureCollisionFilter());
 
 

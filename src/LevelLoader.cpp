@@ -86,34 +86,34 @@ void LevelLoader::spawn(GameObjectManager &go) {			// spawn the next creature
 std::vector<bool> LevelLoader::getSpawnListTypes() {
 
 	std::vector<bool> objVec;
-	objVec.resize(Settings::TOTAL_OBJ_TYPES + 1);
+	objVec.resize(Settings::TOTAL_OBJ_IDS + 1);
 
 	// Search for types of attackers being loaded this level
 	std::vector<unsigned int>::iterator it = spawnList.begin();
 	while(it != spawnList.end()) {
 		switch(*it) {
-			case 1: objVec[Settings::OBJ_T_DOG] = true; break;
-			case 2: objVec[Settings::OBJ_T_SPEARMAN] = true; break;
-			case 3: objVec[Settings::OBJ_T_ARCHER] = true; break;
-			case 4: objVec[Settings::OBJ_T_SEIGE_ENGINE] = true; break;
+			case 1: objVec[Settings::OBJ_ID_DOG] = true; break;
+			case 2: objVec[Settings::OBJ_ID_SPEARMAN] = true; break;
+			case 3: objVec[Settings::OBJ_ID_ARCHER] = true; break;
+			case 4: objVec[Settings::OBJ_ID_SEIGE_ENGINE] = true; break;
 		}
 		++it;
 	}
 	
 
 	// AUTOMATICALLY LOAD DEFENDER OBJECTS
-	objVec[Settings::OBJ_T_ARCHER_TOWER] = true;
-	objVec[Settings::OBJ_T_CATAPAULT] = true;
-	objVec[Settings::OBJ_T_FENCE] = true;
-	objVec[Settings::OBJ_T_MAGE_TOWER] = true;
-	objVec[Settings::OBJ_T_MOTE] = true;
-	objVec[Settings::OBJ_T_OIL_TOWER] = true;
-	objVec[Settings::OBJ_T_STONEWALL] = true;
-	objVec[Settings::OBJ_T_WOODWALL] = true;
+	objVec[Settings::OBJ_ID_ARCHER_TOWER] = true;
+	objVec[Settings::OBJ_ID_CATAPAULT] = true;
+	objVec[Settings::OBJ_ID_FENCE] = true;
+	objVec[Settings::OBJ_ID_MAGE_TOWER] = true;
+	objVec[Settings::OBJ_ID_MOTE] = true;
+	objVec[Settings::OBJ_ID_OIL_TOWER] = true;
+	objVec[Settings::OBJ_ID_STONEWALL] = true;
+	objVec[Settings::OBJ_ID_WOODWALL] = true;
 
 	// AUTOMATICALLY LOAD AMMO
-	objVec[Settings::OBJ_T_ARROW] = true;
-	objVec[Settings::OBJ_T_CANNONBALL] = true;
+	objVec[Settings::OBJ_ID_ARROW] = true;
+	objVec[Settings::OBJ_ID_CANNONBALL] = true;
 
 	return objVec;
 

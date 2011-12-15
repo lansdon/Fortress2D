@@ -53,14 +53,31 @@ class MyContactListener : public b2ContactListener {
 		//check if fixture A was a GameObj
 		void* bodyUserDataA = contact->GetFixtureA()->GetBody()->GetUserData();
 		void* bodyUserDataB = contact->GetFixtureB()->GetBody()->GetUserData();
-		if(bodyUserDataA == NULL || bodyUserDataB == NULL)
-			return;
-
 		GameObj *objA = static_cast<GameObj*> ( bodyUserDataA );
 		GameObj *objB = static_cast<GameObj*> ( bodyUserDataB );
+		
+		// No valid collision objects
+		if(bodyUserDataA == NULL && bodyUserDataB == NULL) return;	
+
+		// GROUND COLLISION
+		if(bodyUserDataA == NULL || bodyUserDataB == NULL) {
+			if(bodyUserDataA != NULL) {
+				if(objA->getType() == Settings::OBJ_T_BULLET) {
+					objA->addContact(NULL);
+				}
+			}
+			if(bodyUserDataB != NULL) {
+				if(objB->getType() == Settings::OBJ_T_BULLET) {
+					objB->addContact(NULL);
+				}
+			}
+			return;
+		}
+
 //		GameObj::OBJECT_TYPE ot;
 
-		if(objA->isNPC() != objB->isNPC()) {			// Check if objects are on opposite team.
+		// Colliding PC VS NPC OBjects
+		if(objA->goSettings.isNPC() != objB->goSettings.isNPC()) {			// Check if objects are on opposite team.
 			objA->addContact(objB);
 			objB->addContact(objA);
 		}

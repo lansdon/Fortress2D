@@ -31,15 +31,8 @@
 #include "TextureLoader.h"
 #include "SoundManager.h"
 #include "Performance_Counter.h"
-//#include "GameObjectManager.h"
+#include "GOSettings.h"
 
-//
-//struct GOSettings {
-//
-//
-//
-//}
-//
 
 
 class GameObj
@@ -56,52 +49,52 @@ public:
 	float TIMER_SOUND_DEATH;
 	float TIMER_SOUND_IDLE;
 
-	enum OBJECT_TYPE { ATTACKER, DEFENDER, BULLET, STATIC, NONE};		// General object types
-	const uint16 COLLISION_GROUP_GROUND;
-	const uint16 COLLISION_GROUP_NPC_BULLET;
-	const uint16 COLLISION_GROUP_NPC_ATTACKER;
-	const uint16 COLLISION_GROUP_PC_BULLET;
-	const uint16 COLLISION_GROUP_PC_DEFENDER;
+//	enum OBJECT_TYPE { ATTACKER, DEFENDER, BULLET, STATIC, NONE};		// General object types
+	//const uint16 COLLISION_GROUP_GROUND;
+	//const uint16 COLLISION_GROUP_NPC_BULLET;
+	//const uint16 COLLISION_GROUP_NPC_ATTACKER;
+	//const uint16 COLLISION_GROUP_PC_BULLET;
+	//const uint16 COLLISION_GROUP_PC_DEFENDER;
 
-	// Accessor functions
-	void setName(std::string str) { name = str; }
-	std::string getName() { return name; }
+//	// Accessor functions
+	void setName(std::string str) { goSettings._name = str; }
+	std::string getName() { return goSettings._name; }
 //	void setPosX(float x) { posX = x; body->}	
 //	void setPosY(float y) { posY = y; }
 //	float getPosX() { return posX; }
 //	float getPosY() { return posY; }
-	void setInitLinearVelocity(b2Vec2 vel) { initLinearVelocity = vel; }
-	b2Vec2 getInitLinearVelocity() { return initLinearVelocity; }
-	void setCurrentLinearVelocity(b2Vec2 vel) { linearVelocity = vel; }
-	b2Vec2 getCurrentLinearVelocity() { return linearVelocity; }
-	void setInitVecAngle(float theta) { initAngle = Util::normAngle(theta); } //recalculate(); }   // set vector angle of movement (degrees)
-	float getInitVecAngle() { return initAngle; };
-	void setCurrentVecAngle(float theta) { angle = Util::normAngle(theta);  } //recalculate(); }   // set vector angle of movement (degrees)
-	float getCurrentVecAngle() { return angle; };
-	void setVelocityMax(float meterPerSec) { velocityMax = meterPerSec;}   // meters per second
-	float getVelocityMax() { return velocityMax; };
-	void setHP(int num) { hpCur = num; }
-	int getHP() { return hpCur; }
-	void setHPMax(int num) { hpMax = num; }
-	int getHPMax() { return hpMax; }
-	void setArmor(int num) { arCur = num; }
-	int getArmor() { return arCur; }
-	void setArmorMax(int num) { arMax = num; }
-	int getArmorMax() { return arMax; }
-	void setTextWidth(float width) { textWidth = width; }
-	float getTextWidth() { return textWidth; }
-	void setTextHeight(float height) { textHeight = height; }
-	float getTextHeight() { return textHeight; }
-	OBJECT_TYPE getType() { return objType; }					// Generic object type
-	void setType(OBJECT_TYPE type) { objType = type; }			// Generic object type
-	Settings::OBJECT_TYPE getTypeID() { return objID; }					// specific object type
-	void setTypeID(Settings::OBJECT_TYPE typeID) { objID = typeID; }			// Specific object type
-	void setTeam(bool bNPC = true) { npcTeam = bNPC; }			
-	bool isNPC() { return npcTeam; }
-	void setDamage(int damage) { damage_basic = damage; }
-	int getDamage() { return damage_basic; }
-	void setRangeDamage(int damage) { damage_range = damage; }
-	int getRangeDamage() { return damage_range; }
+	void setInitLinearVelocity(b2Vec2 vel) { goSettings._initLinearVelocity = vel; }
+	b2Vec2 getInitLinearVelocity() { return goSettings._initLinearVelocity; }
+	void setCurrentLinearVelocity(b2Vec2 vel) { goSettings._linearVelocity = vel; }
+	b2Vec2 getCurrentLinearVelocity() { return goSettings._linearVelocity; }
+	void setInitVecAngle(float theta) { goSettings._initAngle = Util::normAngle(theta); } //recalculate(); }   // set vector angle of movement (degrees)
+	float getInitVecAngle() { return goSettings._initAngle; };
+	void setCurrentVecAngle(float theta) { goSettings._angle = Util::normAngle(theta);  } //recalculate(); }   // set vector angle of movement (degrees)
+	float getCurrentVecAngle() { return goSettings._angle; };
+	void setVelocityMax(float meterPerSec) { goSettings._velocityMax = meterPerSec;}   // meters per second
+	float getVelocityMax() { return goSettings._velocityMax; };
+	void setHP(int num) { goSettings._hpCur = num; }
+	int getHP() { return goSettings._hpCur; }
+	void setHPMax(int num) { goSettings._hpMax = num; }
+	int getHPMax() { return goSettings._hpMax; }
+	void setArmor(int num) { goSettings._arCur = num; }
+	int getArmor() { return goSettings._arCur; }
+	void setArmorMax(int num) { goSettings._arMax = num; }
+	int getArmorMax() { return goSettings._arMax; }
+	void setTextWidth(float width) { goSettings._textWidth = width; }
+	float getTextWidth() { return goSettings._textWidth; }
+	void setTextHeight(float height) { goSettings._textHeight = height; }
+	float getTextHeight() { return goSettings._textHeight; }
+	Settings::OBJECT_TYPE getType() { return goSettings._objType; }					// Generic object type
+	void setType(Settings::OBJECT_TYPE type) { goSettings._objType = type; }			// Generic object type
+	Settings::OBJECT_ID getTypeID() { return goSettings._objTypeID; }					// specific object type
+	void setTypeID(Settings::OBJECT_ID typeID) { goSettings._objTypeID = typeID; }			// Specific object type
+	void setTeam(bool bNPC = true) { goSettings._npcTeam = bNPC; }			
+	bool isNPC() { return goSettings.isNPC(); }
+//	void setDamage(int damage) { damage_basic = damage; }
+//	int getDamage() { return damage_basic; }
+//	void setRangeDamage(int damage) { damage_range = damage; }
+//	int getRangeDamage() { return damage_range; }
 	bool isAlive();
 	virtual bool activate(b2Vec2 mouse) =0;	// dummy stub - override for launcher objects.
 	virtual bool isActivated(bool reset) =0;	// dummy stub - override for launcher objects.
@@ -135,26 +128,32 @@ public:
 	// Sound
 	void setSoundSourceID(unsigned int id) { soundSourceID = id; }
 
+	// Settings!
+	GOSettings goSettings;
+
+	// Startup / Load / Initialization routine   (Use in constructor of derived classes to setup the object!!)
+	void loadObject(std::string datFilename, double x, double y);
+
 protected:
-	std::string name;	// in game name of object
-//	float posX, posY;
-	b2Vec2	linearVelocity;	// Initial Velocity (meters per sec)
-	b2Vec2	initLinearVelocity;	// Initial Velocity (meters per sec)
-	float velocityMax;		// meters per second
-	float initAngle;		// 0 = right  90 = up 180 = left   
-	float angle;		// 0 = right  90 = up 180 = left   
-//	float velX;
-//	float velY;
-	int hpCur;			// current hitpoints
-	int hpMax;			// max hitpoints
-	int arCur;			// current armor
-	int arMax;			// Max Armor
-	int damage_basic;			// base amount of damage from 
-	int damage_range;			// amount of ranged attack damage
-	float textWidth;	// TEMP? This might not be the right way to do this.  Texture Width
-	float textHeight;	// TEMP? This might not be the right way to do this.  Texture Height
-	float density;
-	float friction;
+//	std::string name;	// in game name of object
+////	float posX, posY;
+//	b2Vec2	linearVelocity;	// Initial Velocity (meters per sec)
+//	b2Vec2	initLinearVelocity;	// Initial Velocity (meters per sec)
+//	float velocityMax;		// meters per second
+//	float initAngle;		// 0 = right  90 = up 180 = left   
+//	float angle;		// 0 = right  90 = up 180 = left   
+////	float velX;
+////	float velY;
+//	int hpCur;			// current hitpoints
+//	int hpMax;			// max hitpoints
+//	int arCur;			// current armor
+//	int arMax;			// Max Armor
+//	int damage_basic;			// base amount of damage from 
+//	int damage_range;			// amount of ranged attack damage
+//	float textWidth;	// TEMP? This might not be the right way to do this.  Texture Width
+//	float textHeight;	// TEMP? This might not be the right way to do this.  Texture Height
+//	float density;
+//	float friction;
 
 	// TIMERS
 	double elapsedTime;			// REMOVE?
@@ -172,15 +171,15 @@ protected:
 
 	GLText text;
 
-	Util::Color DEF_DRAW_COLOR;
-	Util::Color CONTACT_DRAW_COLOR;
+	//Util::Color DEF_DRAW_COLOR;
+	//Util::Color CONTACT_DRAW_COLOR;
 
 	// BOX2D
-	OBJECT_TYPE objType;
+//	OBJECT_TYPE objType;
 	void setupB2D(double x, double y);
-	bool npcTeam;
+//	bool npcTeam;
 	int contacts;					// Number of contacts
-
+	bool groundContact;				// toggle true when collision with ground occurs.
 
 
 	std::list<GameObj*> enemies;				// Track enemies we're in contact with;
@@ -191,13 +190,13 @@ protected:
 
 
 	// Sound Source ID
-	Settings::OBJECT_TYPE objID;				// Specific object type ID
+//	Settings::OBJECT_ID objID;				// Specific object type ID
 	unsigned int soundSourceID;
 
 
 
 	// todo - Weapon
-	std::vector<unsigned int> ammo;
+//	std::vector<unsigned int> ammo;
 //	void *weapon;
 };
 

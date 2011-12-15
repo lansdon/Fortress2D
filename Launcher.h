@@ -21,7 +21,7 @@ class Launcher :
 public:
 	Launcher(Settings *settings, int x, int y);
 	~Launcher(void);
-	AmmoTypes &getAmmoTypes() { return ammo; }
+	AmmoTypes &getAmmoTypes() { return goSettings.getAmmoTypes(); }
 
 	void draw(b2Vec2 mouse);					// Overloaded draw function
 	void setActivated(bool bActive);			// set item to be active (true) or inactive (false)
@@ -35,14 +35,14 @@ public:
 
 protected:
 	// Launch Settings
-	float MIN_VEL;			// Lower bounds of launch velocity meters/sec
-	float MAX_VEL;			// Upper bounds of launch velocity meters/sec
-	bool LEFT_ORIENTATION; // true = facing left    false = facing right
-	int MIN_ANGLE;			// MIN angle allowed (0 = horizontal plane. POS = up, neg = down.
-	int MAX_ANGLE;
-	int MAX_PULL_LENGTH;		// (max length a user can pull on launcher to achieve max launch velocity. (pixels)
+	//float MIN_VEL;			// Lower bounds of launch velocity meters/sec
+	//float MAX_VEL;			// Upper bounds of launch velocity meters/sec
+	//bool LEFT_ORIENTATION; // true = facing left    false = facing right
+	//int MIN_ANGLE;			// MIN angle allowed (0 = horizontal plane. POS = up, neg = down.
+	//int MAX_ANGLE;
+	//int MAX_PULL_LENGTH;		// (max length a user can pull on launcher to achieve max launch velocity. (pixels)
 
-	// Variables
+	//// Variables
 	float launchAngle;		// User defined current launch angle
 	float launchVelocity;		// Speed the ammo is launched at
 	bool activated;			// true if user is currently clicking on the launcher
@@ -51,7 +51,7 @@ protected:
 	Performance_Counter launchTimer;			// Rate of Fire in seconds
 
 	// Ammo Types
-	AmmoTypes ammo;
+//	AmmoTypes ammo;
 	
 	double calculateMouseAngle(b2Vec2 mouse);
 	double Launcher::getLauncherDrawLength(b2Vec2 mouse);

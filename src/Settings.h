@@ -26,44 +26,56 @@ public:
 	//Settings(Settings &settings);		// copy constructor
 
 
-	static const int TOTAL_OBJ_TYPES = 17;		// UPDATE THIS NUMBER WHEN ADDING OBJECT_TYPES below!!! 
-	enum OBJECT_TYPE {
-		OBJ_T_NONE,
+	static const int TOTAL_OBJ_IDS = 17;		// UPDATE THIS NUMBER WHEN ADDING OBJECT_TYPES below!!! 
+	enum OBJECT_ID {
+		OBJ_ID_NONE,			// 0
 		//DEFENDERS
-		OBJ_T_MOTE, 
-		OBJ_T_FENCE, 
-		OBJ_T_WOODWALL, 
-		OBJ_T_STONEWALL, 
-		OBJ_T_ARCHER_TOWER, 
-		OBJ_T_MAGE_TOWER, 
-		OBJ_T_OIL_TOWER, 
-		OBJ_T_CATAPAULT,
+		OBJ_ID_MOTE,			// 1
+		OBJ_ID_FENCE,			// 2
+		OBJ_ID_WOODWALL,		// 3
+		OBJ_ID_STONEWALL,		// 4
+		OBJ_ID_ARCHER_TOWER,	// 5
+		OBJ_ID_MAGE_TOWER,		// 6
+		OBJ_ID_OIL_TOWER,		// 7
+		OBJ_ID_CATAPAULT,		// 8
 		// ATTACKERS
-		OBJ_T_DOG, 
-		OBJ_T_HORDE, 
-		OBJ_T_SPEARMAN, 
-		OBJ_T_ARCHER, 
-		OBJ_T_MAGE, 
-		OBJ_T_SEIGE_ENGINE,
+		OBJ_ID_DOG,				// 9
+		OBJ_ID_HORDE,			// 10
+		OBJ_ID_SPEARMAN,		// 11
+		OBJ_ID_ARCHER,			// 12
+		OBJ_ID_MAGE,			// 13
+		OBJ_ID_SEIGE_ENGINE,	// 14
 		// AMMO
-		OBJ_T_ARROW,
-		OBJ_T_CANNONBALL
+		OBJ_ID_ARROW,			// 15
+		OBJ_ID_CANNONBALL		// 16
 	};
+
+	enum OBJECT_TYPE {OBJ_T_NONE, OBJ_T_ATTACKER, OBJ_T_DEFENDER, OBJ_T_BULLET, OBJ_T_STATIC };		// General object types
+	
+	// Collision Categories used by Box2d for Collision BitMasking.  Must be powers of 2!!
+	enum COLLISION_CATEGORY { 
+		COLLISION_CAT_GROUND=1, 
+		COLLISION_CAT_NPC_BULLET=2, 
+		COLLISION_CAT_NPC_ATTACKER=4,
+		COLLISION_CAT_PC_BULLET=8,
+		COLLISION_CAT_PC_DEFENDER=16
+	};
+	//const uint16 COLLISION_GROUP_GROUND;
+	//const uint16 COLLISION_GROUP_NPC_BULLET;
+	//const uint16 COLLISION_GROUP_NPC_ATTACKER;
+	//const uint16 COLLISION_GROUP_PC_BULLET;
+	//const uint16 COLLISION_GROUP_PC_DEFENDER;
 
 	float depth() { return COORD_DEPTH; }
 	float height() { return COORD_HEIGHT; }
 	float width() { return 800.0; }
 	float floor() { return FLOOR; }
 	float mid() { return 400; }
-	//HDC hdc() { return *hDC; }
-	//HWND hwnd() { return *hWnd; }
 	void setFloor(float floor) { FLOOR = floor; }
 	void setWidth(float width) { COORD_WIDTH = width; }
 	void setHeight(float height) { COORD_HEIGHT = height; }
 	void setDepth(float depth) { COORD_DEPTH = depth; }
 	void setMid(float mid) { MID = mid; }
-	//void setHDC(HDC *hdc) { hDC = hdc; }
-	//void setHWND(HWND *hwnd) { hWnd = hwnd; }
 	b2World *getWorld() { return &world; }
 	void step() { world.Step(timeStep, velocityIterations, positionIterations); }
 //	Util::Color DEF_COLOR;
@@ -87,10 +99,6 @@ private:
 	// Settings
 	bool textures;				// toggle textures on/off
 	bool soundOn;				// toggle sound on/off
-
-	// Windows Handlers
-	//HDC			*hDC;		// Private GDI Device Context	
-	//HWND		*hWnd;		// Holds Our Window Handle
 
 	// Box2d stuff
 	float32 timeStep;

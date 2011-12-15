@@ -8,16 +8,16 @@
 // Object Derived Classes
 #include "GOArcher.h"
 #include "GOArcherTower.h"
-//#include "GOBarbarian.h"
-//#include "GOCatapult.h"
-//#include "GOFence.h"
-//#include "GOMageTower.h"
-//#include "GOMote.h"
-//#include "GOOilTower.h"
-//#include "GOSeigeEngine.h"
+#include "GOBarbarian.h"
+#include "GOCatapult.h"
+#include "GOFence.h"
+#include "GOMageTower.h"
+#include "GOMote.h"
+#include "GOOilTower.h"
+#include "GOSeigeEngine.h"
 #include "GOStoneWall.h"
-//#include "GOWarDog.h"
-//#include "GOWoodWall.h"
+#include "GOWarDog.h"
+#include "GOWoodWall.h"
 #include "GOAArrow.h"
 
 
@@ -56,15 +56,15 @@ public:
 	GameObj* makeWarDog(double x, double y);
 	GameObj* makeBarbarian(double x, double y);
 	GameObj* makeArcher(double x, double y);
-	//GameObj* makeSeigeEngine(double x, double y);
-	//GameObj* makeFence(double x, double y);
-	//GameObj* makeMote(double x, double y);
-	//GameObj* makeWoodWall(double x, double y);
+	GameObj* makeSeigeEngine(double x, double y);
+	GameObj* makeFence(double x, double y);
+	GameObj* makeMote(double x, double y);
+	GameObj* makeWoodWall(double x, double y);
 	GameObj* makeStoneWall(double x, double y);
 	GameObj* makeArcherTower(double x, double y);
-	//GameObj* makeMageTower(double x, double y);
-	//GameObj* makeOilTower(double x, double y);
-	//GameObj* makeCatapult(double x, double y);
+	GameObj* makeMageTower(double x, double y);
+	GameObj* makeOilTower(double x, double y);
+	GameObj* makeCatapult(double x, double y);
 
 	// AMMO
 	GameObj* makeArrow(double x, double y, bool bNPCTeam);

@@ -141,6 +141,9 @@
     <ClCompile Include="src\Settings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GOSettings.cpp">
+      <Filter>Source Files\GO</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\GLText.h">
@@ -250,6 +253,9 @@
     </ClInclude>
     <ClInclude Include="src\Settings.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GOSettings.h">
+      <Filter>Header Files\GO</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
