@@ -5,6 +5,8 @@ public:
 	AmmoTypes(void);
 	~AmmoTypes(void);
 
+	void reset();
+
 	// Toggle Ammo Types on or off
 	void setArrowNormal(bool bTrue = true) { _arrow_normal = bTrue; }
 	void setArrowFire(bool bTrue = true) { _arrow_fire = bTrue; }

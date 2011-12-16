@@ -20,6 +20,7 @@
 #include<string>
 #include <vector>
 #include <list>
+#include<time.h>
 
 // Box 2d
 #include <Box2D.h>
@@ -32,6 +33,11 @@
 #include "SoundManager.h"
 #include "Performance_Counter.h"
 #include "GOSettings.h"
+#include "AmmoTypes.h"
+
+
+
+
 
 
 
@@ -41,6 +47,14 @@ public:
 	GameObj(Settings *settings, double x, double y);
 	~GameObj(void);
 	
+	struct LaunchSettings {
+		LaunchSettings() { launchTriggered = false; angle = 0; velocity.SetZero();}
+		bool launchTriggered;
+		double angle;
+		b2Vec2 velocity;
+		AmmoTypes ammo;
+	};
+
 	// Timer intervals inbetween playing repeated sfx
 	float TIMER_SOUND_MOVE;
 	float TIMER_SOUND_MELEE;
@@ -48,13 +62,6 @@ public:
 	float TIMER_SOUND_DAMAGED;
 	float TIMER_SOUND_DEATH;
 	float TIMER_SOUND_IDLE;
-
-//	enum OBJECT_TYPE { ATTACKER, DEFENDER, BULLET, STATIC, NONE};		// General object types
-	//const uint16 COLLISION_GROUP_GROUND;
-	//const uint16 COLLISION_GROUP_NPC_BULLET;
-	//const uint16 COLLISION_GROUP_NPC_ATTACKER;
-	//const uint16 COLLISION_GROUP_PC_BULLET;
-	//const uint16 COLLISION_GROUP_PC_DEFENDER;
 
 //	// Accessor functions
 	void setName(std::string str) { goSettings._name = str; }
@@ -85,7 +92,7 @@ public:
 	float getTextWidth() { return goSettings._textWidth; }
 	void setTextHeight(float height) { goSettings._textHeight = height; }
 	float getTextHeight() { return goSettings._textHeight; }
-	Settings::OBJECT_TYPE getType() { return goSettings._objType; }					// Generic object type
+	Settings::OBJECT_TYPE getType() { return goSettings._objType; }						// Generic object type
 	void setType(Settings::OBJECT_TYPE type) { goSettings._objType = type; }			// Generic object type
 	Settings::OBJECT_ID getTypeID() { return goSettings._objTypeID; }					// specific object type
 	void setTypeID(Settings::OBJECT_ID typeID) { goSettings._objTypeID = typeID; }			// Specific object type
@@ -96,24 +103,26 @@ public:
 //	void setRangeDamage(int damage) { damage_range = damage; }
 //	int getRangeDamage() { return damage_range; }
 	bool isAlive();
-	virtual bool activate(b2Vec2 mouse) =0;	// dummy stub - override for launcher objects.
+	virtual bool activate(b2Vec2 mouse) =0;		// dummy stub - override for launcher objects.
 	virtual bool isActivated(bool reset) =0;	// dummy stub - override for launcher objects.
 	virtual void draw(b2Vec2 mouse);						// draw the object on screen
-//	virtual void launch(void* go) { }			//stub 
+//	virtual void launch(void* go) { }				//stub 
 
 	// update functions
-	virtual void attack(GameObj *enemy, SoundManager &sm);						// automatic attack function
+	virtual void attack(GameObj *enemy, SoundManager &sm);		// automatic attack function
+	virtual void rangedAttack(b2Vec2 nearest);					// Ranged attack
 	virtual void death(SoundManager &sm);						// death sequnce
 	virtual void damage(int amount, SoundManager &sm);			// damage taken function
 	virtual void move(SoundManager &sm);						// automatic move function (using vector quantities)
-	virtual void update(SoundManager &sm);					// Main update function
+	virtual void update(SoundManager &sm, b2Vec2 nearest);						// Main update function
 	// Virtual Specialization Calls for derived class specific behavior
 	// return TRUE to override default routine
-	virtual bool attackSpecial(GameObj *enemy, SoundManager &sm) { return false; };						// automatic attack function
+	virtual bool attackSpecial(GameObj *enemy, SoundManager &sm) { return false; };		// automatic attack function
+	virtual bool rangedAttackSpecial(b2Vec2 nearest) { return false; }									// Ranged Attack
 	virtual bool deathSpecial(SoundManager &sm) { return false; };						// death sequnce
 	virtual bool damageSpecial(int amount, SoundManager &sm) { return false; };			// damage taken function
 	virtual bool moveSpecial(SoundManager &sm) { return false; };						// automatic move function (using vector quantities)
-	virtual bool updateSpecial(SoundManager &sm) { return false; };					// Main update function
+	virtual bool updateSpecial(SoundManager &sm) { return false; };						// Main update function
 
 	// Box2d
 	b2Body *body;
@@ -134,45 +143,28 @@ public:
 	// Startup / Load / Initialization routine   (Use in constructor of derived classes to setup the object!!)
 	void loadObject(std::string datFilename, double x, double y);
 
+	// Launch Settings!
+	LaunchSettings launch;		// This object is used by outside classes to process the projectile/ranged launches
+
 protected:
-//	std::string name;	// in game name of object
-////	float posX, posY;
-//	b2Vec2	linearVelocity;	// Initial Velocity (meters per sec)
-//	b2Vec2	initLinearVelocity;	// Initial Velocity (meters per sec)
-//	float velocityMax;		// meters per second
-//	float initAngle;		// 0 = right  90 = up 180 = left   
-//	float angle;		// 0 = right  90 = up 180 = left   
-////	float velX;
-////	float velY;
-//	int hpCur;			// current hitpoints
-//	int hpMax;			// max hitpoints
-//	int arCur;			// current armor
-//	int arMax;			// Max Armor
-//	int damage_basic;			// base amount of damage from 
-//	int damage_range;			// amount of ranged attack damage
-//	float textWidth;	// TEMP? This might not be the right way to do this.  Texture Width
-//	float textHeight;	// TEMP? This might not be the right way to do this.  Texture Height
-//	float density;
-//	float friction;
 
 	// TIMERS
 	double elapsedTime;			// REMOVE?
+	// SOUND
 	Performance_Counter t_move;	// timer for move sfx intervals
 	Performance_Counter t_melee;	// timer for move sfx intervals
 	Performance_Counter t_ranged;	// timer for move sfx intervals
 	Performance_Counter t_damaged;	// timer for move sfx intervals
 	Performance_Counter t_death;	// timer for move sfx intervals
 	Performance_Counter t_idle;	// timer for move sfx intervals
-
+	// LAUNCH
+	Performance_Counter t_launch;		// Rate of Fire Timer for LAUNCHES
 
 	void recalculate();
 
 	Settings *settings;			// Contains window x, y, z and handles
 
 	GLText text;
-
-	//Util::Color DEF_DRAW_COLOR;
-	//Util::Color CONTACT_DRAW_COLOR;
 
 	// BOX2D
 //	OBJECT_TYPE objType;
@@ -190,7 +182,6 @@ protected:
 
 
 	// Sound Source ID
-//	Settings::OBJECT_ID objID;				// Specific object type ID
 	unsigned int soundSourceID;
 
 

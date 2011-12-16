@@ -106,14 +106,16 @@ public:
 		bool LAUNCH_LEFT_ORIENTATION = 0, // true = facing left    false = facing right
 		int LAUNCH_MIN_ANGLE = 0,			// MIN angle allowed (0 = horizontal plane. POS = up, neg = down.
 		int LAUNCH_MAX_ANGLE = 0,
-		int LAUNCH_MAX_PULL_LENGTH = 0		// (max length a user can pull on launcher to achieve max launch velocity. (pixels)
+		int LAUNCH_MAX_PULL_LENGTH = 0,		// (max length a user can pull on launcher to achieve max launch velocity. (pixels)
+		double RateOfFire = 0
 		) {
-		_LAUNCH_MIN_VEL = LAUNCH_MIN_VEL;			// Lower bounds of launch velocity meters/sec
-		_LAUNCH_MAX_VEL = LAUNCH_MAX_VEL;			// Upper bounds of launch velocity meters/sec
-		_LAUNCH_LEFT_ORIENTATION = LAUNCH_LEFT_ORIENTATION; // true = facing left    false = facing right
-		_LAUNCH_MIN_ANGLE = LAUNCH_MIN_ANGLE;			// MIN angle allowed (0 = horizontal plane. POS = up, neg = down.
-		_LAUNCH_MAX_ANGLE = LAUNCH_MAX_ANGLE;
-		_LAUNCH_MAX_PULL_LENGTH = LAUNCH_MAX_PULL_LENGTH;		// (max length a user can pull on launcher to achieve max launch velocity. (pixels)
+			_LAUNCH_MIN_VEL = LAUNCH_MIN_VEL;			// Lower bounds of launch velocity meters/sec
+			_LAUNCH_MAX_VEL = LAUNCH_MAX_VEL;			// Upper bounds of launch velocity meters/sec
+			_LAUNCH_LEFT_ORIENTATION = LAUNCH_LEFT_ORIENTATION; // true = facing left    false = facing right
+			_LAUNCH_MIN_ANGLE = LAUNCH_MIN_ANGLE;			// MIN angle allowed (0 = horizontal plane. POS = up, neg = down.
+			_LAUNCH_MAX_ANGLE = LAUNCH_MAX_ANGLE;
+			_LAUNCH_MAX_PULL_LENGTH = LAUNCH_MAX_PULL_LENGTH;		// (max length a user can pull on launcher to achieve max launch velocity. (pixels)
+			_RoF = RateOfFire;
 		}
 
 	// Returns reference to the ammo struct where ammo types can be toggled on/off
@@ -229,5 +231,8 @@ public:
 
 	// Ammo Types
 	AmmoTypes ammo;
+
+	// Rate of Fire
+	double _RoF;
 };
 

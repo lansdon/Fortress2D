@@ -18,8 +18,6 @@ public:
 	GLText(Settings *settings = NULL, int size = 12, std::string fontName = "Courier New");
 	~GLText(void);
 	// Text Functions
-	GLvoid BuildFont(int size = 12, std::string fontName = "Courier New");
-	GLvoid KillFont(GLvoid);
 	void text(std::stringstream &ss, double x, double y, double z, int size = 12); // Print routine that allows coord specifications
 	void text(std::string &str, double x, double y, double z, int size = 12); // overloaded Print routine that allows coord specifications
 	void setSettings(Settings *settings) { this->settings = settings; }
@@ -27,10 +25,8 @@ public:
 
 
 private:
-	GLuint	base;				// Base Display List For The Font Set
 	std::string fontName;
 	unsigned int fontSize;
-	bool fontBuilt;
 	Settings *settings;
 
 

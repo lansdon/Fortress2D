@@ -53,6 +53,8 @@ class GameObjectManager
 public:
 	GameObjectManager(Settings *settings, SoundManager &soundManager);
 	~GameObjectManager();
+
+	// CREATE OBJECTS
 	GameObj* makeWarDog(double x, double y);
 	GameObj* makeBarbarian(double x, double y);
 	GameObj* makeArcher(double x, double y);
@@ -65,20 +67,30 @@ public:
 	GameObj* makeMageTower(double x, double y);
 	GameObj* makeOilTower(double x, double y);
 	GameObj* makeCatapult(double x, double y);
-
 	// AMMO
 	GameObj* makeArrow(double x, double y, bool bNPCTeam);
 
+	// Cleanup object
 	std::list<GameObj*>::iterator destroyObject(GameObj *obj2Kill);
 
+	// Update / Draw
 	void updateDefenders();
 	void updateAttackers();
 	void drawAll(b2Vec2 mouse);
 
+	// Attacker/Defender Lists
 	std::list<GameObj*> &getAttackers() { return attackers; }
 	std::list<GameObj*> &getDefenders() { return defenders; }
 
+	// Game Settings Reference
 	void setSettings(Settings *settings) { this->settings = settings; }
+
+	// Search functions
+	b2Vec2 findNearestEnemy(GameObj *source);
+
+	// Process launches
+	void GameObjectManager::doLaunch(GameObj *launcher);
+
 
 private:
 

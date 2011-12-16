@@ -98,7 +98,7 @@ void GameObj::removeEnemy(GameObj *enemy, bool ranged) {
 
 
 void GameObj::attack(GameObj *enemy, SoundManager &sm) {
-	if(enemy->isAlive()) {
+//	if(enemy->isAlive()) {
 		// SFX
 		t_melee.Calculate_Ellapsed_Time();
 		if(t_melee.TotalTime() >= TIMER_SOUND_MELEE) {
@@ -120,7 +120,60 @@ void GameObj::attack(GameObj *enemy, SoundManager &sm) {
 
 		// Special Behavior (defined in derived classes)
 		attackSpecial(enemy, sm);
+//	}
+}
+
+// This function will calculate launche parameters and save them in the launch struct to be processed by calling object
+void GameObj::rangedAttack(b2Vec2 nearest) {				// Ranged attack
+	// Check timer
+	t_launch.Calculate_Ellapsed_Time();
+	if(t_launch.TotalTime() < (1 / goSettings._RoF)) {
+		return;
 	}
+
+
+	std::srand( time(NULL));
+	float accuracy = 75.0;							// TEMP - This should be a GoSettings variable 
+	if(accuracy > 100) accuracy = 100;				// Accuracy from 0-100 (percent)  95 means it will hit approx 95/100 times
+	int randomAdj =  (100-accuracy)*2;		// double to account for +/-
+	double adjustment = rand() % randomAdj - randomAdj/2;
+	int maxRange = (pow(goSettings._LAUNCH_MAX_VEL, 2) * sin((Util::PI/4)*2))/9.8;					// (v_0^2 sin(theta)) / g
+	
+	// Closest enemy is out of range    (maybe don't bother shooting?)
+	if(maxRange < nearest.x) { 
+		// launch at max velocity  +  45 + (45* (adjustment/100))
+		// to do
+		// need a way to launch arrows... (preload??) 
+
+		// Don't shoot until in range!
+		//launch.angle = 45.0 + (45.0 * (adjustment/100.0));
+		//launch.velocity.Set(goSettings._LAUNCH_MAX_VEL * cos(Util::deg2Rad(launch.angle)), goSettings._LAUNCH_MAX_VEL * sin(Util::deg2Rad(launch.angle)));
+		//launch.ammo = goSettings.ammo;
+		//launch.launchTriggered = true;
+	}
+	// ENEMY IN RANGE
+	// Need to add random adjustment to velocity AND angle.
+	else {
+		// ANGLE
+		float angle = 45.0 + (45.0 * (adjustment/100.0));					// Take angle with random adjustment
+		if(angle > goSettings._LAUNCH_MAX_ANGLE) angle = goSettings._LAUNCH_MAX_ANGLE;
+		if(angle < goSettings._LAUNCH_MIN_ANGLE) angle = goSettings._LAUNCH_MIN_ANGLE;		
+		launch.angle = angle;
+		
+		// VELOCITY
+		// Use angle to calculate a launch velocity to get "near" the target     v = sqrt( (R*g) / sin(2theta))
+		float range = Util::pixel2Meter(abs(nearest.x - body->GetPosition().x));	// meters to enemy
+		int v0 = sqrt( (range * 9.8) / sin(Util::deg2Rad(2 * launch.angle)));
+		v0 += (v0 * adjustment);
+		if(v0 > goSettings._LAUNCH_MAX_VEL) v0 = goSettings._LAUNCH_MAX_VEL;
+		if(v0 < goSettings._LAUNCH_MIN_VEL) v0 = goSettings._LAUNCH_MIN_VEL;
+		launch.velocity.Set(v0 * cos(Util::deg2Rad(launch.angle)), v0 * sin(Util::deg2Rad(launch.angle)));
+		
+		launch.ammo = goSettings.ammo; // TODO - Need to add ammo selection for objects with more than 1 type of ammo?
+		launch.launchTriggered = true;
+	}
+
+	t_launch.Reset(0.0);
 }
 
 
@@ -178,16 +231,26 @@ void GameObj::damage(int amount, SoundManager &sm) {
 	}
 }
 
-void GameObj::update(SoundManager &sm) {
+void GameObj::update(SoundManager &sm, b2Vec2 nearest) {
 //	this->elapsedTime = elapsedTime;
 	// TO DO - Add all update functionality such as collision, movement, attacking, dying.
+	bool doRanged = true;
 
 	if(isAlive()) {
 		move(sm);
 
+		// Melee Attacks
 		for(std::list<GameObj*>::iterator it = enemies.begin(); it != enemies.end(); ++it) {
 			if((*it)->isAlive()) {
 				attack((*it), sm);
+				doRanged = false;
+			}
+		}
+
+		// Ranged attacks
+		if(doRanged) {
+			if(goSettings._LAUNCH_MAX_VEL) {
+				rangedAttack(nearest);
 			}
 		}
 
@@ -314,7 +377,9 @@ void GameObj::addContact(GameObj *enemy) {
 	}
 	else if(enemy->isNPC() != isNPC()) {
 //		contacts++; 
-		addEnemy(enemy); 
+		if(enemy->getType() != Settings::OBJ_T_BULLET) {
+			addEnemy(enemy); 
+		}
 	}
 }
 
@@ -369,7 +434,7 @@ b2Filter GameObj::getFixtureCollisionFilter() {
 			filter.maskBits = Settings::COLLISION_CAT_PC_DEFENDER + Settings::COLLISION_CAT_GROUND;		// List of possible targets
 		} else {
 			filter.categoryBits = Settings::COLLISION_CAT_NPC_ATTACKER;		// NPC ATTACKER GROUP
-//			filter.maskBits = COLLISION_GROUP_PC_DEFENDER + COLLISION_GROUP_PC_BULLET;		// List of possible targets
+			filter.maskBits = Settings::COLLISION_CAT_PC_DEFENDER + Settings::COLLISION_CAT_GROUND + Settings::COLLISION_CAT_PC_BULLET;		// List of possible targets
 		}
 	
 	// DEFENDERS	
@@ -379,7 +444,7 @@ b2Filter GameObj::getFixtureCollisionFilter() {
 			filter.maskBits = Settings::COLLISION_CAT_NPC_ATTACKER + Settings::COLLISION_CAT_GROUND;		// List of Possible targets
 		} else {
 			filter.categoryBits = Settings::COLLISION_CAT_PC_DEFENDER;		// PC ATTACKER GROUP
-			//filter.maskBits = COLLISION_GROUP_PC_BULLET;		// PC defenders don't collide with defender bullets  // this may change!
+			filter.maskBits = Settings::COLLISION_CAT_PC_DEFENDER + Settings::COLLISION_CAT_GROUND + Settings::COLLISION_CAT_NPC_ATTACKER + Settings::COLLISION_CAT_NPC_BULLET;		// PC defenders don't collide with defender bullets  // this may change!
 		}
 	}
 	

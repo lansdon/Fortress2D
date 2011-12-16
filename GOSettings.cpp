@@ -82,6 +82,7 @@ bool GOSettings::isValidParameter(std::stringstream &parameter) {
 		parameter.str() == "LAUNCH MAX VEL:" ||
 		parameter.str() == "LAUNCH MIN ANGLE:" ||
 		parameter.str() == "LAUNCH MAX ANGLE:" ||
+		parameter.str() == "RATE OF FIRE:" ||
 		parameter.str() == "ORIENTATION:" ||
 		parameter.str() == "PULL LENGTH:" ||
 		parameter.str() == "AMMO ARROW:" ||
@@ -162,6 +163,8 @@ void GOSettings::parseFileData(std::stringstream &parameter, std::stringstream &
 		value >> this->_LAUNCH_MIN_ANGLE;
 	} else if(parameter.str() == "LAUNCH MAX ANGLE:") {
 		value >> this->_LAUNCH_MAX_ANGLE;
+	} else if(parameter.str() == "RATE OF FIRE:") {
+		value >> this->_RoF;
 	} else if(parameter.str() == "ORIENTATION:") {
 		if(value == "LEFT") _LAUNCH_LEFT_ORIENTATION = true;
 		else _LAUNCH_LEFT_ORIENTATION = false;

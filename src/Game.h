@@ -74,8 +74,6 @@ class MyContactListener : public b2ContactListener {
 			return;
 		}
 
-//		GameObj::OBJECT_TYPE ot;
-
 		// Colliding PC VS NPC OBjects
 		if(objA->goSettings.isNPC() != objB->goSettings.isNPC()) {			// Check if objects are on opposite team.
 			objA->addContact(objB);

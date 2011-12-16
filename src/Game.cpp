@@ -381,8 +381,6 @@ void Game::processInput() {
 				doLaunch();
 			}
 			
-
-
 			// FORT MENU BUTTONS
 			else if(fortMenu->activate(mouse)) {
 				text.text(std::string("ACTIVATED A BUTTON!"), 300.0, 510.0, settings.depth());
