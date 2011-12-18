@@ -133,6 +133,7 @@ public:
 	bool cleanEnemiesList();
 	b2Vec2 getPos() { return body->GetPosition(); }
 	b2Filter getFixtureCollisionFilter();
+	void setGroundContact(bool bContact) { groundContact = bContact; }
 
 	// Sound
 	void setSoundSourceID(unsigned int id) { soundSourceID = id; }
@@ -145,6 +146,9 @@ public:
 
 	// Launch Settings!
 	LaunchSettings launch;		// This object is used by outside classes to process the projectile/ranged launches
+
+	// Ammo
+	void addAmmo(GameObj *newAmmo) { ammo.push_back(newAmmo); }
 
 protected:
 
@@ -184,8 +188,11 @@ protected:
 	// Sound Source ID
 	unsigned int soundSourceID;
 
-
-
+	// Ammo - Preloaded with object and recycled    (will need to handle switching ammo someday?)
+	std::vector<GameObj*> ammo;			// preloaded ammo
+	GameObj* GameObj::nextAmmo();		// Find unused ammo to fire
+	void GameObj::doLaunch();			// launch an unused ammo using saved launch settings
+	void resetObjectState();			// reset an object so i can be re-used
 	// todo - Weapon
 //	std::vector<unsigned int> ammo;
 //	void *weapon;

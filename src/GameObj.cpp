@@ -140,7 +140,7 @@ void GameObj::rangedAttack(b2Vec2 nearest) {				// Ranged attack
 	int maxRange = (pow(goSettings._LAUNCH_MAX_VEL, 2) * sin((Util::PI/4)*2))/9.8;					// (v_0^2 sin(theta)) / g
 	
 	// Closest enemy is out of range    (maybe don't bother shooting?)
-	if(maxRange < nearest.x) { 
+	if(maxRange < abs(getPos().x - nearest.x)) { 
 		// launch at max velocity  +  45 + (45* (adjustment/100))
 		// to do
 		// need a way to launch arrows... (preload??) 
@@ -171,11 +171,58 @@ void GameObj::rangedAttack(b2Vec2 nearest) {				// Ranged attack
 		
 		launch.ammo = goSettings.ammo; // TODO - Need to add ammo selection for objects with more than 1 type of ammo?
 		launch.launchTriggered = true;
+
+		// FIRE!
+		doLaunch();
+
 	}
 
 	t_launch.Reset(0.0);
 }
 
+
+// Process calculated launches for individual objects.   (currently this is for processing AI launches)
+void GameObj::doLaunch() {
+	GameObj* newAmmo = nextAmmo();
+	if(newAmmo != NULL && launch.launchTriggered) {
+	
+		if(!isNPC()) {
+			launch.angle += 90;
+		}
+
+		//newAmmo->body->SetActive(true);
+		//newAmmo->body->SetAwake(true);
+		//newAmmo->goSettings.setHP(newAmmo->goSettings.getHPMax());
+		//newAmmo->goSettings.setHP(1);
+		//setGroundContact(false);
+		newAmmo->resetObjectState();
+
+		newAmmo->goSettings.setInitVecAngle(launch.angle);
+		newAmmo->goSettings.setCurrentVecAngle(launch.angle);
+		newAmmo->goSettings.setVelocityMax(0);
+		newAmmo->goSettings.setInitLinearVelocity(launch.velocity); 
+		newAmmo->body->SetTransform(this->body->GetPosition(), Util::deg2Rad(launch.angle));
+		newAmmo->body->SetLinearVelocity(launch.velocity);
+		newAmmo->body->SetAngularDamping(.01);
+		newAmmo->goSettings.setTeam(goSettings.isNPC());
+		newAmmo->body->GetFixtureList()->SetFilterData(newAmmo->getFixtureCollisionFilter());
+		launch.launchTriggered = false;
+	}
+}
+
+
+
+// Find unused ammo object
+GameObj* GameObj::nextAmmo() {
+	std::vector<GameObj*>::iterator it = ammo.begin();
+	while(it != ammo.end()) {
+		if((*it)->body->IsActive() == false || this->isAlive() == false || (*it)->body->IsAwake() == false) {
+			return *it;
+		}
+		++it;
+	}
+	return NULL;
+}
 
 void GameObj::death(SoundManager &sm) { 
 	// SFX
@@ -233,7 +280,11 @@ void GameObj::damage(int amount, SoundManager &sm) {
 
 void GameObj::update(SoundManager &sm, b2Vec2 nearest) {
 //	this->elapsedTime = elapsedTime;
-	// TO DO - Add all update functionality such as collision, movement, attacking, dying.
+
+	if(!body->IsActive()) {
+		return;
+	}
+
 	bool doRanged = true;
 
 	if(isAlive()) {
@@ -259,6 +310,7 @@ void GameObj::update(SoundManager &sm, b2Vec2 nearest) {
 			// BULLETS - disappear after striking the ground.
 			if(goSettings.getType() == Settings::OBJ_T_BULLET) {
 				goSettings.setHP(0);
+//				body->SetActive(false);
 			}
 		}
 	} else {
@@ -295,6 +347,10 @@ bool GameObj::cleanEnemiesList() {
 
 
 void GameObj::draw(b2Vec2 mouse) {						// draw the object on screen
+	if(!body->IsActive()) {
+//		return;
+	}
+
 	glLoadIdentity();
 
 	if(enemies.size() == 0)
@@ -326,36 +382,27 @@ void GameObj::draw(b2Vec2 mouse) {						// draw the object on screen
 			glTexCoord2f(0, 0);																	// Bottom Left
 			glVertex2d( - Util::meter2Pixel(goSettings._textWidth)/2, -Util::meter2Pixel(goSettings._textHeight)/2);      // Bottom Left
 		glEnd();                            // Done Drawing The Quad
-		//glBegin(GL_QUADS);                      // Draw A Quad
-		//	glTexCoord2f(0, 1);																			// Top Left
-		//	glVertex2d(pos.x - Util::meter2Pixel(textWidth)/2, pos.y + Util::meter2Pixel(textHeight)/2);              // Top Left
-		//	glTexCoord2f(1, 1);																		// Top Right
-		//	glVertex2d(pos.x + Util::meter2Pixel(textWidth)/2, pos.y + Util::meter2Pixel(textHeight)/2);              // Top Right
-		//	glTexCoord2f(1,  0);																	// Bottom Right
-		//	glVertex2d(pos.x + Util::meter2Pixel(textWidth)/2, pos.y - Util::meter2Pixel(textHeight)/2);              // Bottom Right
-		//	glTexCoord2f(0, 0);																	// Bottom Left
-		//	glVertex2d(pos.x - Util::meter2Pixel(textWidth)/2, pos.y - Util::meter2Pixel(textHeight)/2);      // Bottom Left
-		//glEnd();                            // Done Drawing The Quad
 		glDisable(GL_TEXTURE_2D); //Switch back to using colors instead of textures
 
 	} else {		// NO TEXTURES
 
 //		glTranslatef(body->GetPosition().x, body->GetPosition().y, (*settings).depth());       // Move to 0,0 in bottom left corner of coord system
 		glBegin(GL_QUADS);                      // Draw A Quad
-			glVertex2d(pos.x - Util::meter2Pixel(goSettings._textWidth)/2, pos.y + Util::meter2Pixel(goSettings._textHeight)/2);              // Top Left
-			glVertex2d(pos.x + Util::meter2Pixel(goSettings._textWidth)/2, pos.y + Util::meter2Pixel(goSettings._textHeight)/2);              // Top Right
-			glVertex2d(pos.x + Util::meter2Pixel(goSettings._textWidth)/2, pos.y - Util::meter2Pixel(goSettings._textHeight)/2);              // Bottom Right
-			glVertex2d(pos.x - Util::meter2Pixel(goSettings._textWidth)/2, pos.y - Util::meter2Pixel(goSettings._textHeight)/2);      // Bottom Left
+			glVertex2d(-Util::meter2Pixel(goSettings._textWidth)/2, Util::meter2Pixel(goSettings._textHeight)/2);              // Top Left
+			glVertex2d(Util::meter2Pixel(goSettings._textWidth)/2, Util::meter2Pixel(goSettings._textHeight)/2);              // Top Right
+			glVertex2d(Util::meter2Pixel(goSettings._textWidth)/2, -Util::meter2Pixel(goSettings._textHeight)/2);              // Bottom Right
+			glVertex2d(-Util::meter2Pixel(goSettings._textWidth)/2, -Util::meter2Pixel(goSettings._textHeight)/2);      // Bottom Left
 		glEnd();                            // Done Drawing The Quad
 
 	}	
 
 //	text.text(name, posX - (name.length()/2), textHeight, settings.depth());
 	std::stringstream ss;
-	ss << goSettings._name << " " << "x=" << body->GetPosition().x << " y=" << body->GetPosition().y;
+//	ss << goSettings._name << " " << "x=" << body->GetPosition().x << " y=" << body->GetPosition().y;
 	std::stringstream ss2;
-	ss2 << "hp=" << getHP() << " enemies=" << enemies.size();
-	text.text(ss, body->GetPosition().x, body->GetPosition().y+goSettings._textHeight + 20, settings->depth());
+//	ss2 << "hp=" << getHP() << " enemies=" << enemies.size();
+	ss2 << "hp=" << getHP();
+//	text.text(ss, body->GetPosition().x, body->GetPosition().y+goSettings._textHeight + 20, settings->depth());
 	text.text(ss2, body->GetPosition().x, body->GetPosition().y+goSettings._textHeight + 10, settings->depth());
 }
 
@@ -469,3 +516,11 @@ void GameObj::loadObject(std::string datFilename, double x, double y) {
 
 }
 
+void GameObj::resetObjectState() {			// reset an object so i can be re-used
+	this->cleanEnemiesList();
+	this->setHP(getHPMax());
+	this->body->SetActive(true);
+	this->body->SetAwake(true);
+	this->setGroundContact(false);
+
+}

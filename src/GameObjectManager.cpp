@@ -34,6 +34,10 @@ GameObj* GameObjectManager::makeArcher(double x, double y) {
 	GOArcher *temp = new GOArcher(settings, x, y);
 //	GOArcher *temp = new GameObject(settings, x, y);
 	temp->setSoundSourceID(sm.registerObject());				// Register new object with sound manager
+
+	// Preload ammo objects and set references on object
+	loadAmmo(*temp);
+
 	addObject(temp);
 	return temp;
 }
@@ -104,6 +108,23 @@ GameObj* GameObjectManager::makeArrow(double x, double y, bool bNPCTeam) {
 
 
 
+// Preload ammo objects and set references on object
+void GameObjectManager::loadAmmo(GameObj &obj) {
+	switch(obj.goSettings.getTypeID()) {
+		// ARROWS
+		case Settings::OBJ_ID_ARCHER_TOWER: 
+		case Settings::OBJ_ID_ARCHER: 
+		{
+			for(int i=0; i<3; ++i) {
+				GameObj *ammo = makeArrow(-500, 50, obj.isNPC());
+				ammo->body->SetActive(false);
+				ammo->goSettings.setHP(0);
+				obj.addAmmo(ammo);
+			}
+		}
+	}
+
+}
 
 
 // Remove Object from master list and destory references to that object
@@ -205,7 +226,13 @@ void GameObjectManager::updateDefenders() {
 	if(it!=defenders.end()) nearest = findNearestEnemy(*it);
 	while(it != defenders.end()) {
 		if(!(*it)->isAlive()) {											// Cleanup expired objects
-			it = destroyObject(*it);
+			if((*it)->goSettings.getType() == Settings::OBJ_T_BULLET) {
+				(*it)->body->SetActive(false);
+				(*it)->body->SetTransform(b2Vec2(-500, 50), 0);
+				++it;
+			} else {
+				it = destroyObject(*it);
+			}
 		} else {
 			(*it)->update(sm, nearest);
 			++it;
@@ -218,16 +245,23 @@ void GameObjectManager::updateDefenders() {
 void GameObjectManager::updateAttackers() {
 
 	std::list<GameObj*>::iterator it = attackers.begin();
+	b2Vec2 nearest(settings->mid(), settings->floor());
+	if(it!=attackers.end()) nearest = findNearestEnemy(*it);
 	while(it != attackers.end()) {
-		b2Vec2 nearest;
-		if(it!=attackers.end()) nearest = findNearestEnemy(*it);
 		if(!(*it)->isAlive()) {											// Cleanup expired objects
-			it = destroyObject(*it);
+//			if((*it)->goSettings.getType() == Settings::OBJ_T_BULLET && (*it)->body->IsActive() == true) {
+			if((*it)->goSettings.getType() == Settings::OBJ_T_BULLET ) {
+//				(*it)->body->SetActive(false);
+//	   			(*it)->body->SetTransform(b2Vec2(-500, 50), 0);
+				++it;
+			} else {
+				it = destroyObject(*it);
+			}
 		} else {
 			(*it)->update(sm, nearest);
-			if((*it)->launch.launchTriggered) {
-				doLaunch(*it);
-			}
+			//if((*it)->launch.launchTriggered) {
+			//	doLaunch(*it);
+			//}
 			++it;
 		}
 	}
@@ -239,9 +273,9 @@ void GameObjectManager::drawAll(b2Vec2 mouse) {
 
 	std::list<GameObj*>::iterator it = attackers.begin();
 	while(it != attackers.end()) {
-		if((*it)->isAlive()) {
+//		if((*it)->isAlive()) {
 			(*it)->draw(mouse);
-		}
+//		}
 		++it;
 	}
 	it = defenders.begin();
@@ -256,19 +290,21 @@ void GameObjectManager::drawAll(b2Vec2 mouse) {
 
 
 b2Vec2 GameObjectManager::findNearestEnemy(GameObj *source) {
-	b2Vec2 nearest(0,0);
+	b2Vec2 nearest;
 	std::list<GameObj*>::iterator cur, end;
 	if(source->isNPC()) {
+		nearest.Set(settings->mid(), settings->floor());	// default to mid point
 		cur = defenders.begin();
 		end = defenders.end();
 	} else {
+		nearest.Set(0, settings->floor());	// default to start point
 		cur = attackers.begin();
 		end = attackers.end();
 	}
 
 //	GameObj *nearest = NULL;
 	while(cur != end) {
-		if((*cur)->isAlive()) {
+		if((*cur)->isAlive() && (*cur)->body->IsActive() && (*cur)->getType() != Settings::OBJ_T_BULLET)  {
 			if(source->isNPC()) {
 				if((*cur)->body->GetPosition().x < nearest.x) {
 					nearest = (*cur)->getPos();
@@ -284,32 +320,32 @@ b2Vec2 GameObjectManager::findNearestEnemy(GameObj *source) {
 	return nearest;
 }
 
-
-// Process calculated launches for individual objects.   (currently this is for processing AI launches)
-void GameObjectManager::doLaunch(GameObj *launcher) {
-
-	// TODO - need to adjust for PC objects by adjusting angle + 90 degrees
-	if(!launcher->isNPC())
-		launcher->launch.angle += 90;
-
-	GameObj* temp = makeArrow(launcher->body->GetPosition().x, launcher->body->GetPosition().y, launcher->isNPC());
-	temp->goSettings.setInitVecAngle(launcher->launch.angle);
-	temp->goSettings.setCurrentVecAngle(launcher->launch.angle);
-	temp->goSettings.setVelocityMax(0);
-	temp->goSettings.setInitLinearVelocity(launcher->launch.velocity);  // pre-calculated vectors
-	temp->body->SetTransform(temp->body->GetPosition(), Util::deg2Rad(launcher->launch.angle));
-	temp->body->SetLinearVelocity(launcher->launch.velocity);
-		//b2Vec2(launcher->getLaunchVelocity() * std::cos(Util::deg2Rad(launcher->getLaunchAngle())),    // Vel X
-		//launcher->getLaunchVelocity() * std::sin(Util::deg2Rad(launcher->getLaunchAngle())))			// Vel Y
-//		activeLauncher->body->GetPosition()																			// Location
-//		);
-//	temp->body->ApplyAngularImpulse(1);
-	temp->body->SetAngularDamping(.01);
-	temp->goSettings.setTeam(launcher->goSettings.isNPC());
-	temp->body->GetFixtureList()->SetFilterData(temp->getFixtureCollisionFilter());
-	launcher->launch.launchTriggered = false;
-}
-
+//
+//// Process calculated launches for individual objects.   (currently this is for processing AI launches)
+//void GameObjectManager::doLaunch(GameObj *launcher) {
+//
+//	// TODO - need to adjust for PC objects by adjusting angle + 90 degrees
+//	if(!launcher->isNPC())
+//		launcher->launch.angle += 90;
+//
+//	GameObj* temp = makeArrow(launcher->body->GetPosition().x, launcher->body->GetPosition().y, launcher->isNPC());
+//	temp->goSettings.setInitVecAngle(launcher->launch.angle);
+//	temp->goSettings.setCurrentVecAngle(launcher->launch.angle);
+//	temp->goSettings.setVelocityMax(0);
+//	temp->goSettings.setInitLinearVelocity(launcher->launch.velocity);  // pre-calculated vectors
+//	temp->body->SetTransform(temp->body->GetPosition(), Util::deg2Rad(launcher->launch.angle));
+//	temp->body->SetLinearVelocity(launcher->launch.velocity);
+//		//b2Vec2(launcher->getLaunchVelocity() * std::cos(Util::deg2Rad(launcher->getLaunchAngle())),    // Vel X
+//		//launcher->getLaunchVelocity() * std::sin(Util::deg2Rad(launcher->getLaunchAngle())))			// Vel Y
+////		activeLauncher->body->GetPosition()																			// Location
+////		);
+////	temp->body->ApplyAngularImpulse(1);
+//	temp->body->SetAngularDamping(.01);
+//	temp->goSettings.setTeam(launcher->goSettings.isNPC());
+//	temp->body->GetFixtureList()->SetFilterData(temp->getFixtureCollisionFilter());
+//	launcher->launch.launchTriggered = false;
+//}
+//
 
 
 

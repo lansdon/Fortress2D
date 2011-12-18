@@ -1,7 +1,7 @@
 #include "LevelLoader.h"
 
 
-LevelLoader::LevelLoader(void) : DEF_SPAWN_X(5), DEF_SPAWN_Y(40)
+LevelLoader::LevelLoader(void) : DEF_SPAWN_X(100), DEF_SPAWN_Y(40), DEF_DISTANCE_BETWEEN_SPAWNS(20)
 {
 	currentID = 0;
 	DEF_DIRECTORY = "level/";
@@ -16,7 +16,7 @@ LevelLoader::~LevelLoader(void)
 }
 
 
-void LevelLoader::loadLevel(int level) {
+void LevelLoader::loadLevel(int level, GameObjectManager &go) {
 
 	bool begin = false;
 	std::stringstream fName;
@@ -24,7 +24,7 @@ void LevelLoader::loadLevel(int level) {
 	std::ifstream file(fName.str());
 	if(file.is_open()) {							// valid file
 		currentLevel = level;
-		spawnList.clear();
+//		spawnList.clear();
 		while(!file.eof()) {			// loop through file
 			// TODO- Add search for multiple tags here  (creatures, level timer, etc)
 			if(!begin) {				// begin flag indicates the start of level data
@@ -39,7 +39,7 @@ void LevelLoader::loadLevel(int level) {
 				int newID = -1;
 				file >> newID;
 				if(newID > 0 && newID < 20) {
-					spawnList.push_back(newID);
+					spawnList.push(newID);
 				}
 			}
 		}	// end loop
@@ -52,30 +52,39 @@ void LevelLoader::loadLevel(int level) {
 }
 
 int LevelLoader::nextID() {
-	++currentID;
-	if(currentID < spawnList.size()) {
-		return spawnList[currentID];
+	//++currentID;
+	//if(currentID < spawnList.size()) {
+	//	return spawnList[currentID];
+	//}
+	if(spawnList.empty())
+		return -1;
+	else {
+		return spawnList.front();
 	}
-	return -1;
 }
 
 
 void LevelLoader::spawn(GameObjectManager &go) {			// spawn the next creature
-	int id = nextID();
+	// TODO ADD LOADING SCREEN
+	
+	int xSpawn = DEF_SPAWN_X;
+	while(!spawnList.empty()) {
+		xSpawn -= DEF_DISTANCE_BETWEEN_SPAWNS;
 
-	switch(id) {
-		case 1: go.makeArcher(DEF_SPAWN_X, DEF_SPAWN_Y); break;		// War Dog
-		case 2: go.makeArcher(DEF_SPAWN_X, DEF_SPAWN_Y); break;		// Barbarian
-		case 3: go.makeArcher(DEF_SPAWN_X, DEF_SPAWN_Y); break;		// Archer
-		case 4: go.makeArcher(DEF_SPAWN_X, DEF_SPAWN_Y); break;		// Seige Engine
-		default: // do nothing
-			break;
+		switch(spawnList.front()) {
+			case 1: go.makeArcher(xSpawn, DEF_SPAWN_Y); break;		// War Dog
+			case 2: go.makeArcher(xSpawn, DEF_SPAWN_Y); break;		// Barbarian
+			case 3: go.makeArcher(xSpawn, DEF_SPAWN_Y); break;		// Archer
+			case 4: go.makeArcher(xSpawn, DEF_SPAWN_Y); break;		// Seige Engine
+			default: break;											// do nothing
+		}
+		spawnList.pop();
 	}
 }
 
 
 
-// Numbers used in leve.dat files   (need to convert level files into Settings::OBJECT_TYPE
+// Numbers used in leve.dat files   (need to convert level files into Settings::OBJECT_ID
 //0=NONE
 //1=WARDOG
 //2=SPEARMAN
@@ -85,36 +94,36 @@ void LevelLoader::spawn(GameObjectManager &go) {			// spawn the next creature
 
 std::vector<bool> LevelLoader::getSpawnListTypes() {
 
-	std::vector<bool> objVec;
-	objVec.resize(Settings::TOTAL_OBJ_IDS + 1);
+
+	spawnListTypeID.resize(Settings::TOTAL_OBJ_IDS + 1);
+	std::queue<unsigned int> temp(spawnList);		// Chronological list of objects to spawn.
 
 	// Search for types of attackers being loaded this level
-	std::vector<unsigned int>::iterator it = spawnList.begin();
-	while(it != spawnList.end()) {
-		switch(*it) {
-			case 1: objVec[Settings::OBJ_ID_DOG] = true; break;
-			case 2: objVec[Settings::OBJ_ID_SPEARMAN] = true; break;
-			case 3: objVec[Settings::OBJ_ID_ARCHER] = true; break;
-			case 4: objVec[Settings::OBJ_ID_SEIGE_ENGINE] = true; break;
+	while(!temp.empty()) {
+		switch(temp.front()) {
+			case 1: spawnListTypeID[Settings::OBJ_ID_DOG] = true; break;
+			case 2: spawnListTypeID[Settings::OBJ_ID_SPEARMAN] = true; break;
+			case 3: spawnListTypeID[Settings::OBJ_ID_ARCHER] = true; break;
+			case 4: spawnListTypeID[Settings::OBJ_ID_SEIGE_ENGINE] = true; break;
 		}
-		++it;
+		temp.pop();
 	}
 	
 
 	// AUTOMATICALLY LOAD DEFENDER OBJECTS
-	objVec[Settings::OBJ_ID_ARCHER_TOWER] = true;
-	objVec[Settings::OBJ_ID_CATAPAULT] = true;
-	objVec[Settings::OBJ_ID_FENCE] = true;
-	objVec[Settings::OBJ_ID_MAGE_TOWER] = true;
-	objVec[Settings::OBJ_ID_MOTE] = true;
-	objVec[Settings::OBJ_ID_OIL_TOWER] = true;
-	objVec[Settings::OBJ_ID_STONEWALL] = true;
-	objVec[Settings::OBJ_ID_WOODWALL] = true;
+	spawnListTypeID[Settings::OBJ_ID_ARCHER_TOWER] = true;
+	spawnListTypeID[Settings::OBJ_ID_CATAPAULT] = true;
+	spawnListTypeID[Settings::OBJ_ID_FENCE] = true;
+	spawnListTypeID[Settings::OBJ_ID_MAGE_TOWER] = true;
+	spawnListTypeID[Settings::OBJ_ID_MOTE] = true;
+	spawnListTypeID[Settings::OBJ_ID_OIL_TOWER] = true;
+	spawnListTypeID[Settings::OBJ_ID_STONEWALL] = true;
+	spawnListTypeID[Settings::OBJ_ID_WOODWALL] = true;
 
 	// AUTOMATICALLY LOAD AMMO
-	objVec[Settings::OBJ_ID_ARROW] = true;
-	objVec[Settings::OBJ_ID_CANNONBALL] = true;
+	spawnListTypeID[Settings::OBJ_ID_ARROW] = true;
+	spawnListTypeID[Settings::OBJ_ID_CANNONBALL] = true;
 
-	return objVec;
+	return spawnListTypeID;
 
 }

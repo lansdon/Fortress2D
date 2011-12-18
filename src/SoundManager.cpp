@@ -142,7 +142,7 @@ void SoundManager::setSourcePos(ALuint objID, b2Vec2 pos) {
 
 
 
-void SoundManager::loadSounds(std::vector<bool> objVec) {				// Argument = A list of object types loaded into a vector (from level Loader)
+void SoundManager::loadSounds(std::vector<bool> spawnListTypeID) {				// Argument = A list of object types loaded into a vector (from level Loader)
 
 	// Check if sound is on
 	if(!getSoundEngineStatus()) 
@@ -151,7 +151,7 @@ void SoundManager::loadSounds(std::vector<bool> objVec) {				// Argument = A lis
 	reset();
 
 	// ARCHER SFX
-	if(objVec[Settings::OBJ_ID_ARCHER]) {			
+	if(spawnListTypeID[Settings::OBJ_ID_ARCHER]) {			
 		bufferMap.insert( std::pair<unsigned int, ALuint>(SND_ARCHER_DAMAGED, loadSound("archer_damaged.wav")));
 		bufferMap.insert( std::pair<unsigned int, ALuint>(SND_ARCHER_DEATH, loadSound("archer_death.wav")));
 		bufferMap.insert( std::pair<unsigned int, ALuint>(SND_ARCHER_IDLE, loadSound("archer_idle.wav")));
@@ -161,7 +161,7 @@ void SoundManager::loadSounds(std::vector<bool> objVec) {				// Argument = A lis
 	}
 
 	// ARCHER TOWER SFX
-	if(objVec[Settings::OBJ_ID_ARCHER_TOWER]) {			
+	if(spawnListTypeID[Settings::OBJ_ID_ARCHER_TOWER]) {			
 		bufferMap.insert( std::pair<unsigned int, ALuint>(SND_ARCHER_DAMAGED, loadSound("archer_damaged.wav")));
 		bufferMap.insert( std::pair<unsigned int, ALuint>(SND_ARCHER_DEATH, loadSound("archer_death.wav")));
 		bufferMap.insert( std::pair<unsigned int, ALuint>(SND_ARCHER_IDLE, loadSound("archer_idle.wav")));
@@ -170,7 +170,7 @@ void SoundManager::loadSounds(std::vector<bool> objVec) {				// Argument = A lis
 		bufferMap.insert( std::pair<unsigned int, ALuint>(SND_ARCHER_RANGED, loadSound("archer_ranged.wav")));
 	}
 	// ARROW SFX
-	if(objVec[Settings::OBJ_ID_ARROW]) {			
+	if(spawnListTypeID[Settings::OBJ_ID_ARROW]) {			
 		bufferMap.insert( std::pair<unsigned int, ALuint>(SND_ARCHER_DAMAGED, loadSound("archer_damaged.wav")));
 		bufferMap.insert( std::pair<unsigned int, ALuint>(SND_ARCHER_DEATH, loadSound("archer_death.wav")));
 		bufferMap.insert( std::pair<unsigned int, ALuint>(SND_ARCHER_IDLE, loadSound("archer_idle.wav")));
@@ -179,7 +179,7 @@ void SoundManager::loadSounds(std::vector<bool> objVec) {				// Argument = A lis
 		bufferMap.insert( std::pair<unsigned int, ALuint>(SND_ARCHER_RANGED, loadSound("archer_ranged.wav")));
 	}
 	// STONEWALL SFX
-	if(objVec[Settings::OBJ_ID_STONEWALL]) {
+	if(spawnListTypeID[Settings::OBJ_ID_STONEWALL]) {
 //		bufferMap.insert( std::pair<unsigned int, ALuint>(SND_STONEWALL_MELEE, loadSound("stonewall_melee.wav")));
 //		bufferMap.insert( std::pair<unsigned int, ALuint>(SND_STONEWALL_RANGED, loadSound("stonewall_ranged.wav")));
 //		bufferMap.insert( std::pair<unsigned int, ALuint>(SND_STONEWALL_MOVE, loadSound("stonewall_move.wav")));
@@ -190,7 +190,7 @@ void SoundManager::loadSounds(std::vector<bool> objVec) {				// Argument = A lis
 	
 
 	// ARCHER SFX
-	if(objVec[Settings::OBJ_ID_ARCHER]) {			
+	if(spawnListTypeID[Settings::OBJ_ID_ARCHER]) {			
 		bufferMap.insert( std::pair<unsigned int, ALuint>(SND_ARCHER_DAMAGED, loadSound("archer_damaged.wav")));
 		bufferMap.insert( std::pair<unsigned int, ALuint>(SND_ARCHER_DEATH, loadSound("archer_death.wav")));
 		bufferMap.insert( std::pair<unsigned int, ALuint>(SND_ARCHER_IDLE, loadSound("archer_idle.wav")));
@@ -199,7 +199,7 @@ void SoundManager::loadSounds(std::vector<bool> objVec) {				// Argument = A lis
 		bufferMap.insert( std::pair<unsigned int, ALuint>(SND_ARCHER_RANGED, loadSound("archer_ranged.wav")));
 	}
 	// ARCHER SFX
-	if(objVec[Settings::OBJ_ID_ARCHER]) {			
+	if(spawnListTypeID[Settings::OBJ_ID_ARCHER]) {			
 		bufferMap.insert( std::pair<unsigned int, ALuint>(SND_ARCHER_DAMAGED, loadSound("archer_damaged.wav")));
 		bufferMap.insert( std::pair<unsigned int, ALuint>(SND_ARCHER_DEATH, loadSound("archer_death.wav")));
 		bufferMap.insert( std::pair<unsigned int, ALuint>(SND_ARCHER_IDLE, loadSound("archer_idle.wav")));
@@ -208,7 +208,7 @@ void SoundManager::loadSounds(std::vector<bool> objVec) {				// Argument = A lis
 		bufferMap.insert( std::pair<unsigned int, ALuint>(SND_ARCHER_RANGED, loadSound("archer_ranged.wav")));
 	}
 	// ARCHER SFX
-	if(objVec[Settings::OBJ_ID_ARCHER]) {			
+	if(spawnListTypeID[Settings::OBJ_ID_ARCHER]) {			
 		bufferMap.insert( std::pair<unsigned int, ALuint>(SND_ARCHER_DAMAGED, loadSound("archer_damaged.wav")));
 		bufferMap.insert( std::pair<unsigned int, ALuint>(SND_ARCHER_DEATH, loadSound("archer_death.wav")));
 		bufferMap.insert( std::pair<unsigned int, ALuint>(SND_ARCHER_IDLE, loadSound("archer_idle.wav")));
@@ -217,7 +217,7 @@ void SoundManager::loadSounds(std::vector<bool> objVec) {				// Argument = A lis
 		bufferMap.insert( std::pair<unsigned int, ALuint>(SND_ARCHER_RANGED, loadSound("archer_ranged.wav")));
 	}
 	// ARCHER SFX
-	if(objVec[Settings::OBJ_ID_ARCHER]) {			
+	if(spawnListTypeID[Settings::OBJ_ID_ARCHER]) {			
 		bufferMap.insert( std::pair<unsigned int, ALuint>(SND_ARCHER_DAMAGED, loadSound("archer_damaged.wav")));
 		bufferMap.insert( std::pair<unsigned int, ALuint>(SND_ARCHER_DEATH, loadSound("archer_death.wav")));
 		bufferMap.insert( std::pair<unsigned int, ALuint>(SND_ARCHER_IDLE, loadSound("archer_idle.wav")));
@@ -226,7 +226,7 @@ void SoundManager::loadSounds(std::vector<bool> objVec) {				// Argument = A lis
 		bufferMap.insert( std::pair<unsigned int, ALuint>(SND_ARCHER_RANGED, loadSound("archer_ranged.wav")));
 	}
 	// ARCHER SFX
-	if(objVec[Settings::OBJ_ID_ARCHER]) {			
+	if(spawnListTypeID[Settings::OBJ_ID_ARCHER]) {			
 		bufferMap.insert( std::pair<unsigned int, ALuint>(SND_ARCHER_DAMAGED, loadSound("archer_damaged.wav")));
 		bufferMap.insert( std::pair<unsigned int, ALuint>(SND_ARCHER_DEATH, loadSound("archer_death.wav")));
 		bufferMap.insert( std::pair<unsigned int, ALuint>(SND_ARCHER_IDLE, loadSound("archer_idle.wav")));
@@ -235,7 +235,7 @@ void SoundManager::loadSounds(std::vector<bool> objVec) {				// Argument = A lis
 		bufferMap.insert( std::pair<unsigned int, ALuint>(SND_ARCHER_RANGED, loadSound("archer_ranged.wav")));
 	}
 	// ARCHER SFX
-	if(objVec[Settings::OBJ_ID_ARCHER]) {			
+	if(spawnListTypeID[Settings::OBJ_ID_ARCHER]) {			
 		bufferMap.insert( std::pair<unsigned int, ALuint>(SND_ARCHER_DAMAGED, loadSound("archer_damaged.wav")));
 		bufferMap.insert( std::pair<unsigned int, ALuint>(SND_ARCHER_DEATH, loadSound("archer_death.wav")));
 		bufferMap.insert( std::pair<unsigned int, ALuint>(SND_ARCHER_IDLE, loadSound("archer_idle.wav")));
@@ -244,7 +244,7 @@ void SoundManager::loadSounds(std::vector<bool> objVec) {				// Argument = A lis
 		bufferMap.insert( std::pair<unsigned int, ALuint>(SND_ARCHER_RANGED, loadSound("archer_ranged.wav")));
 	}
 	// ARCHER SFX
-	if(objVec[Settings::OBJ_ID_ARCHER]) {			
+	if(spawnListTypeID[Settings::OBJ_ID_ARCHER]) {			
 		bufferMap.insert( std::pair<unsigned int, ALuint>(SND_ARCHER_DAMAGED, loadSound("archer_damaged.wav")));
 		bufferMap.insert( std::pair<unsigned int, ALuint>(SND_ARCHER_DEATH, loadSound("archer_death.wav")));
 		bufferMap.insert( std::pair<unsigned int, ALuint>(SND_ARCHER_IDLE, loadSound("archer_idle.wav")));
@@ -253,7 +253,7 @@ void SoundManager::loadSounds(std::vector<bool> objVec) {				// Argument = A lis
 		bufferMap.insert( std::pair<unsigned int, ALuint>(SND_ARCHER_RANGED, loadSound("archer_ranged.wav")));
 	}
 	// ARCHER SFX
-	if(objVec[Settings::OBJ_ID_ARCHER]) {			
+	if(spawnListTypeID[Settings::OBJ_ID_ARCHER]) {			
 		bufferMap.insert( std::pair<unsigned int, ALuint>(SND_ARCHER_DAMAGED, loadSound("archer_damaged.wav")));
 		bufferMap.insert( std::pair<unsigned int, ALuint>(SND_ARCHER_DEATH, loadSound("archer_death.wav")));
 		bufferMap.insert( std::pair<unsigned int, ALuint>(SND_ARCHER_IDLE, loadSound("archer_idle.wav")));
@@ -262,7 +262,7 @@ void SoundManager::loadSounds(std::vector<bool> objVec) {				// Argument = A lis
 		bufferMap.insert( std::pair<unsigned int, ALuint>(SND_ARCHER_RANGED, loadSound("archer_ranged.wav")));
 	}
 	// ARCHER SFX
-	if(objVec[Settings::OBJ_ID_ARCHER]) {			
+	if(spawnListTypeID[Settings::OBJ_ID_ARCHER]) {			
 		bufferMap.insert( std::pair<unsigned int, ALuint>(SND_ARCHER_DAMAGED, loadSound("archer_damaged.wav")));
 		bufferMap.insert( std::pair<unsigned int, ALuint>(SND_ARCHER_DEATH, loadSound("archer_death.wav")));
 		bufferMap.insert( std::pair<unsigned int, ALuint>(SND_ARCHER_IDLE, loadSound("archer_idle.wav")));

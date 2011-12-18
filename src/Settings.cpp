@@ -4,7 +4,7 @@ const b2Vec2 Settings::gravity = b2Vec2(0, -10);
 
 Settings::Settings()  : world(b2Vec2(0, -10))
 {
-
+	world.SetAllowSleeping(true);
 	FLOOR = 10.0;			// The Y-AXIS of ground level
 	COORD_WIDTH = 800.0;	// COORD system dimensions
 	COORD_HEIGHT = 600.0;	// COORD system dimensions

@@ -50,7 +50,7 @@ public:
 	ALuint registerObject();								// create a new source and tie it to the calling object
 	void playSound(ALuint objID, Sounds sndID, b2Vec2 pos);										// Calling Objects supply ID acquired when registered and specify a sound (attack, etc)
 	void setSourcePos(ALuint objID, b2Vec2 pos);
-	void loadSounds(std::vector<bool> objVec);					// Argument = A list of object types loaded into a vector (from level Loader)
+	void loadSounds(std::vector<bool> spawnListTypeID);					// Argument = A list of object types loaded into a vector (from level Loader)
 
 	int getSourceCount() { return sourceCount; }
 	int getBufferCount() { return bufferCount; }

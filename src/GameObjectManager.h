@@ -89,7 +89,7 @@ public:
 	b2Vec2 findNearestEnemy(GameObj *source);
 
 	// Process launches
-	void GameObjectManager::doLaunch(GameObj *launcher);
+//	void GameObjectManager::doLaunch(GameObj *launcher);
 
 
 private:
@@ -102,6 +102,8 @@ private:
 
 	void addObject(GameObj *newObj); // Adds object to appropriate tracking list
 //	bool removeObject(GameObj *deadObj);
+
+	void loadAmmo(GameObj &obj);
 
 	void resetAttackers();
 

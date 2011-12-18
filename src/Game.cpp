@@ -155,8 +155,8 @@ bool Game::update() {
 	// To-do Need to add level loading
 	if(!lvl) {
 		lvl = 1;
-		level.loadLevel(lvl);
 		sm.loadSounds(level.getSpawnListTypes());
+		level.loadLevel(lvl, *go);
 		return true;
 	}
 
@@ -296,8 +296,9 @@ void Game::updateAttackers() {
 	if(t_lvlSpawn.TotalTime() >= CREATURE_SPAWNER_INTERVAL) {
 		level.spawn(*go);
 		t_lvlSpawn.Reset(0.0);
+	} else {
+		go->updateAttackers();
 	}
-	go->updateAttackers();
 }
 
 
