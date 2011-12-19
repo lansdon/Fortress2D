@@ -57,15 +57,15 @@ void passiveMousePos(int x, int y) {
 void init(void)
 {
 
-  /* Setup the view of the cube. */
-  glMatrixMode(GL_PROJECTION);
-  gluPerspective( /* field of view in degree */ 45.0,
-    /* aspect ratio */ (GLfloat)game.getScreenWidth() / (GLfloat)game.getScreenWidth(),
-    /* Z near */ 0.1, /* Z far */ 1000.0);
-  glMatrixMode(GL_MODELVIEW);
-  gluLookAt(0.0, 0.0, 5.0,  /* eye is at (0,0,5) */
-    0.0, 0.0, 0.0,      /* center is at (0,0,0) */
-    0.0, 1.0, 0.);      /* up is in positive Y direction */
+  ///* Setup the view of the cube. */
+  //glMatrixMode(GL_PROJECTION);
+  //gluPerspective( /* field of view in degree */ 45.0,
+  //  /* aspect ratio */ (GLfloat)game.getScreenWidth() / (GLfloat)game.getScreenWidth(),
+  //  /* Z near */ 0.1, /* Z far */ 1000.0);
+  //glMatrixMode(GL_MODELVIEW);
+  //gluLookAt(0.0, 0.0, 5.0,  /* eye is at (0,0,5) */
+  //  0.0, 0.0, 0.0,      /* center is at (0,0,0) */
+  //  0.0, 1.0, 0.);      /* up is in positive Y direction */
 
 
   game.initGL();
@@ -75,7 +75,7 @@ int main(int argc, char **argv)
 {
 	// Window Setup / Init
 	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
 	glutInitWindowSize(game.getScreenWidth(), game.getScreenHeight());
 	glutCreateWindow("GLUT F2D TEST");
  

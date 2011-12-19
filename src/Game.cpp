@@ -92,6 +92,20 @@ Game::~Game(void) {
 }
 
 bool Game::initGL() {
+	/* Setup the view of the cube. */
+	glMatrixMode(GL_PROJECTION);
+	gluPerspective( /* field of view in degree */ 45.0,
+		/* aspect ratio */ (GLfloat)getScreenWidth() / (GLfloat)getScreenWidth(),
+		/* Z near */ 0.1, 
+		/* Z far */ 1000.0);
+	glMatrixMode(GL_MODELVIEW);
+	gluLookAt(0.0, 0.0, 5.0,  /* eye is at (0,0,5) */
+		0.0, 0.0, 0.0,      /* center is at (0,0,0) */
+		0.0, 1.0, 0.);      /* up is in positive Y direction */
+
+	glColor4f(1.0f,1.0f,1.0f,0.5f);         // Full Brightness, 50% Alpha ( NEW )
+	glBlendFunc(GL_SRC_ALPHA,GL_ONE);       // Blending Function For Translucency Based On Source Alpha Value ( NEW )
+
 
 	sm.init();								// Sound Manager
 
@@ -107,6 +121,7 @@ bool Game::initGL() {
 
 
 void Game::draw() {
+	dt.start(dt_draw);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);     // Clear The Screen And The Depth Buffer
 	glLoadIdentity();
@@ -147,6 +162,8 @@ void Game::draw() {
 	glDisable2D();
 	// Last step - swap buffers
 	glutSwapBuffers();
+
+	dt.stop(dt_draw);
 
 }
 
@@ -197,9 +214,9 @@ bool Game::update() {
 //	dt.stop(dt_updateInput);
 
 	// Draw Functions
-	dt.start(dt_draw);
+//	dt.start(dt_draw);
 	glutPostRedisplay();
-	dt.stop(dt_draw);
+//	dt.stop(dt_draw);
 
 	// END ! Last! - This timer reset should be at the very end of update function
 	frameElapsedTime = 0.0;
@@ -308,12 +325,12 @@ void Game::glDisable2D() {
 // This function updates the attacking mobs / movement / collision / attacks
 void Game::updateAttackers() {
 	t_lvlSpawn.Calculate_Ellapsed_Time();	// Timer for tracking spawn rate of attackers
-	if(t_lvlSpawn.TotalTime() >= CREATURE_SPAWNER_INTERVAL) {
+//	if(t_lvlSpawn.TotalTime() >= CREATURE_SPAWNER_INTERVAL) {
 //		level.spawn(*go);
 //		t_lvlSpawn.Reset(0.0);
-	} else {
+//	} else {
 		go->updateAttackers();
-	}
+//	}
 }
 
 
@@ -557,6 +574,8 @@ bool Game::activateGO(Vector3 mouse) {
 
 
 void Game::doLaunch() {
+	if(activeLauncher == NULL) return;
+
 
 	GameObj* temp = go->makeArrow(activeLauncher->body->GetPosition().x, activeLauncher->body->GetPosition().y, activeLauncher->isNPC());
 	temp->goSettings.setInitVecAngle(activeLauncher->getLaunchAngle());

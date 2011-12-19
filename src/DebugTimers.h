@@ -20,9 +20,9 @@ public:
 		DebugTimer() { name="DebugTimer"; total=0.0; }
 		std::string name;
 		Performance_Counter timer;
-		double total, last;
+		double total, last, lastDisplay, totalDisplay;
 		void start() { timer.Reset(0);};
-		void stop() { timer.Calculate_Ellapsed_Time(); last += timer.TotalTime(); total += last; }
+		void stop() { timer.Calculate_Ellapsed_Time(); last += timer.TotalTime(); total += timer.TotalTime(); }
 		void resetLast() { last = 0.0; }
 	};
 
@@ -33,7 +33,7 @@ public:
 
 	std::vector<DebugTimer> timers;
 
-	long double total, lastTotal;
+	long double total, lastTotal, displayTotal;
 
 	// Refresh timer
 	float DRAW_REFRESH_RATE;

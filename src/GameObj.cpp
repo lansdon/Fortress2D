@@ -38,6 +38,7 @@ GameObj::~GameObj(void)
 
 
 void GameObj::move(SoundManager &sm) {
+
 	if(!moveSpecial(sm)) {
 
 		if(body) {
@@ -363,8 +364,12 @@ void GameObj::draw(b2Vec2 mouse) {						// draw the object on screen
 
 	if(settings->useTextures()) {
 		glEnable(GL_TEXTURE_2D); //Switch back to using colors instead of textures
+		// Blend the color key into oblivion! (optional)
+		glEnable( GL_BLEND );
+		glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+
 		glBindTexture(GL_TEXTURE_2D, textureID);
-		glColor3f(1, 1, 1);
+		glColor4f(1, 1, 1, 0.5);
 		 //Use blurry texture mapping (replace GL_LINEAR with GL_NEAREST for blocky)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
 	//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
@@ -395,6 +400,10 @@ void GameObj::draw(b2Vec2 mouse) {						// draw the object on screen
 		glEnd();                            // Done Drawing The Quad
 
 	}	
+
+
+	glDisable( GL_BLEND );
+
 
 //	text.text(name, posX - (name.length()/2), textHeight, settings.depth());
 	std::stringstream ss;

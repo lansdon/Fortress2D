@@ -32,6 +32,7 @@ GameObjectManager::~GameObjectManager() {
 
 GameObj* GameObjectManager::makeArcher(double x, double y) {
 	GOArcher *temp = new GOArcher(settings, x, y);
+	temp->body->SetSleepingAllowed(false);
 //	GOArcher *temp = new GameObject(settings, x, y);
 	temp->setSoundSourceID(sm.registerObject());				// Register new object with sound manager
 

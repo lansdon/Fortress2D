@@ -30,10 +30,14 @@ void DebugTimers::draw(int x, int y) {
 	double elapsed = t_refresh.TotalTime();
 	if(elapsed >= DRAW_REFRESH_RATE) {
 		lastTotal = 0;
+		total = 0;
 		std::vector<DebugTimer>::iterator it = timers.begin();
 		while(it != timers.end()) {
 			lastTotal += (*it).last;
+			(*it).totalDisplay = (*it).total;
+			(*it).lastDisplay = (*it).last;
 			total += (*it).total;
+			(*it).resetLast();
 			++it;
 		}
 		t_refresh.Reset(0.0);
@@ -44,9 +48,9 @@ void DebugTimers::draw(int x, int y) {
 		if(total == 0.0 || lastTotal == 0.0) {
 			ss << "No time recorded.";
 		} else {
-			ss << std::fixed << std::setprecision(0) << "%" << ((timers[i].last/lastTotal)*100) << " - " << timers[i].name << "(Total:" << ((timers[i].total/total)*100) << ")";
+			ss << std::fixed << std::setprecision(0) << "%" << ((timers[i].lastDisplay/lastTotal)*100) << " - " << timers[i].name << "(Total:" << ((timers[i].total/total)*100) << ")";
 		}		
-		text.text(ss, x, y - (10*++i), 0);
+		text.text(ss, x, y - (10*i), 0);
 	}
 
 }
