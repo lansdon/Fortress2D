@@ -129,19 +129,22 @@
     <ClCompile Include="src\SoundManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Launcher.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AmmoTypes.cpp">
-      <Filter>Source Files\Ammo</Filter>
-    </ClCompile>
-    <ClCompile Include="GOAArrow.cpp">
-      <Filter>Source Files\Ammo</Filter>
-    </ClCompile>
     <ClCompile Include="src\Settings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GOSettings.cpp">
+    <ClCompile Include="src\Launcher.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DebugTimers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GOAArrow.cpp">
+      <Filter>Source Files\Ammo</Filter>
+    </ClCompile>
+    <ClCompile Include="src\AmmoTypes.cpp">
+      <Filter>Source Files\Ammo</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GOSettings.cpp">
       <Filter>Source Files\GO</Filter>
     </ClCompile>
   </ItemGroup>
@@ -242,20 +245,23 @@
     <ClInclude Include="src\SoundManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Launcher.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AmmoTypes.h">
-      <Filter>Header Files\Ammo</Filter>
-    </ClInclude>
-    <ClInclude Include="GOAArrow.h">
-      <Filter>Header Files\Ammo</Filter>
-    </ClInclude>
     <ClInclude Include="src\Settings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GOSettings.h">
+    <ClInclude Include="src\Launcher.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DebugTimers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GOAArrow.h">
+      <Filter>Header Files\Ammo</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GOSettings.h">
       <Filter>Header Files\GO</Filter>
+    </ClInclude>
+    <ClInclude Include="src\AmmoTypes.h">
+      <Filter>Header Files\Ammo</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

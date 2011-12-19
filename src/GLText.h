@@ -7,10 +7,12 @@
 #include <stdarg.h>			// Header File For Variable Argument Routines
 #include <gl\gl.h>			// Header File For The OpenGL32 Library
 #include <gl\glu.h>			// Header File For The GLu32 Library
+#include <gl\freeglut.h>
+
 #include <string>
 #include <sstream>
-#include "settings.h"
-#include <gl\freeglut.h>
+
+#include "Settings.h"
 
 class GLText
 {

@@ -44,7 +44,7 @@
 #include "LevelLoader.h"
 #include "SoundManager.h"
 #include "Launcher.h"
-
+#include "DebugTimers.h"
 
 class MyContactListener : public b2ContactListener {
 
@@ -110,8 +110,11 @@ public:
 	int getScreenHeight() { return settings.height(); }
 	int getScreenDepth() { return settings.depth(); }
 
-	// Input
+	// User Input
 	Input in;
+	void processInput();
+	void keyPressed(unsigned char key, int x, int y);
+	void specialKeyPressed(int key, int x, int y);
 
 
 private:
@@ -137,17 +140,26 @@ private:
 	int timeStepCount;
 	double frameElapsedTime;			// Amount of time passed since last frame
 	double lastFrameElapsedTime;		// previous frame time for draw function reference
-//	double t;
-//	const double dt;
 	double accumulator;
-//	double previousState;
-//	double currentState;
 	Performance_Counter Timer;	// timer object for tracking high resolution time inbetween updates
 	Performance_Counter leftBtnTimer;	// timer object for tracking high resolution time inbetween updates
 	float LEFT_BUTTON_INTERVAL;			// amount of time inbetween single mouse clicks
 	std::map<std::string, Performance_Counter> timers;
 	Performance_Counter t_lvlSpawn;	// Timer for tracking spawn rate of attackers
 	double CREATURE_SPAWNER_INTERVAL;
+
+	// DEBUG Performance Timers
+	DebugTimers dt;				// debug
+	int dt_update_attacker;
+	int dt_update_defender;
+	int dt_updateInput;
+	int dt_draw;
+	int dt_physics;
+	int dt_in_keypress;
+	int dt_in_btnpress;
+	int dt_in_fortmenu;
+	int dt_in_launchers;
+
 
 	float SCOREBOARD_HEIGHT;
 
@@ -168,10 +180,6 @@ private:
 	void glEnable2D();
 	void glDisable2D();
 
-	// User Input
-	void processInput();
-	void keyPressed(unsigned char key, int x, int y);
-	void Game::specialKeyPressed(int key, int x, int y);
 
 	// TEMP - Testing game objects - This will eventually be managed in containers
 	void Game::makeAttacker();

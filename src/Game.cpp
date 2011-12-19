@@ -58,19 +58,20 @@ Game::Game() {
 
 	// Initialization of objects
 	fort.start();
-}
 
-//void Game::setGLObj(HDC *hDC, HWND *hWnd) { // pass main windown handle and hardware device context
-//	settings.setHDC(hDC); 
-//	settings.setHWND(hWnd); 
-//
-//	//// Pass windows paremeters to child objects
-//	in.setSettings(&settings);
-//	text.setSettings(&settings);
-//	fort.setSettings(&settings);
-//	fortMenu->setSettings(&settings);
-//	go->setSettings(&settings);
-//} 
+
+	// DEBUG Performance Timers
+	dt_update_attacker = dt.newTimer("attacker update");
+	dt_update_defender = dt.newTimer("defender update");
+//	dt_updateInput = dt.newTimer("input update");
+	dt_draw = dt.newTimer("draw");
+	dt_physics = dt.newTimer("physics");
+	dt_in_keypress = dt.newTimer("key press");
+	dt_in_btnpress = dt.newTimer("btn press");
+//	dt_in_fortmenu = dt.newTimer("fortmenu");
+//	dt_in_launchers = dt.newTimer("launchers");
+
+}
 
 
 Game::~Game(void) {
@@ -138,6 +139,9 @@ void Game::draw() {
 		ss << "MOUSE x=" << in.getMousePos().x() << " Y=" << in.getMousePos().y();
 		text.text(ss, in.getMousePos().x(), in.getMousePos().y(), settings.depth());			
 	}
+
+	// Performance Timers
+	dt.draw(500, 450);
 	// End Debug /////////////////////////////////////////////////////////////////////////////////////////////
 
 	glDisable2D();
@@ -169,22 +173,33 @@ bool Game::update() {
 	//	frameElapsedTime = 0.25;
 
 	// Physics Update - Box2d
+	dt.start(dt_physics);
 	double ts = settings.getTimeStep();
 	while( accumulator >= ts ) {
 		++timeStepCount;
 		settings.step();
 		accumulator -= settings.getTimeStep();
 	}
+	dt.stop(dt_physics);
 
 	// Game Objects
+	dt.start(dt_update_defender);
 	go->updateDefenders();
+	dt.stop(dt_update_defender);
+
+	dt.start(dt_update_attacker);
 	updateAttackers();
+	dt.stop(dt_update_attacker);
 
 	// Input
+//	dt.start(dt_updateInput);
 	processInput();
+//	dt.stop(dt_updateInput);
 
 	// Draw Functions
+	dt.start(dt_draw);
 	glutPostRedisplay();
+	dt.stop(dt_draw);
 
 	// END ! Last! - This timer reset should be at the very end of update function
 	frameElapsedTime = 0.0;
@@ -294,8 +309,8 @@ void Game::glDisable2D() {
 void Game::updateAttackers() {
 	t_lvlSpawn.Calculate_Ellapsed_Time();	// Timer for tracking spawn rate of attackers
 	if(t_lvlSpawn.TotalTime() >= CREATURE_SPAWNER_INTERVAL) {
-		level.spawn(*go);
-		t_lvlSpawn.Reset(0.0);
+//		level.spawn(*go);
+//		t_lvlSpawn.Reset(0.0);
 	} else {
 		go->updateAttackers();
 	}
@@ -311,6 +326,7 @@ void Game::makeAttacker() {
 }
 
 void Game::keyPressed(unsigned char key, int x, int y) {
+	dt.start(dt_in_keypress);
 	// Get modifiers
 	int alt, ctrl, modifiers, shift;
 	modifiers = glutGetModifiers();
@@ -324,9 +340,14 @@ void Game::keyPressed(unsigned char key, int x, int y) {
 		case 'l': {
 			std::string msg("L IS PRESSED!!");
 			text.text(msg, 300.0, 200.0, settings.depth());
-//			makeAttacker();
+			if(t_lvlSpawn.TotalTime() >= CREATURE_SPAWNER_INTERVAL) {
+				go->makeArcher(50, 20);
+				t_lvlSpawn.Reset(0.0);
+			}
 		} break;
 	}
+
+	dt.stop(dt_in_keypress);
 }
 
 
@@ -357,14 +378,28 @@ void Game::processInput() {
 
 	// Add Keyboard input HERE!
 
-	// L //
-	if (in.isKeyPressed('L') || in.isKeyPressed('l')) {
-		std::string msg("L IS PRESSED!!");
-		text.text(msg, 300.0, 200.0, settings.depth());
-//		makeAttacker();
-//		sm.playtest();										// Testing Sound!
-	}
 
+	// L //
+//	dt.start(dt_in_keypress);
+//	if (in.isKeyPressed('L') || in.isKeyPressed('l')) {
+//		std::string msg("L IS PRESSED!!");
+//		text.text(msg, 300.0, 200.0, settings.depth());
+////		makeAttacker();
+////		sm.playtest();										// Testing Sound!
+//		if(t_lvlSpawn.TotalTime() >= CREATURE_SPAWNER_INTERVAL) {
+//			go->makeArcher(50, 20);
+//			t_lvlSpawn.Reset(0.0);
+//		}
+//	}
+//	else 
+//    {
+//		text.text(std::string("WTF"), 300.0, 200.0, settings.depth());
+////        std::cout << "WTF?!" << std::endl;  // <== Add that.  see if it's being called.
+//    }
+ 
+//	dt.stop(dt_in_keypress);
+
+	dt.start(dt_in_btnpress);
 	// LEFT MOUSE BUTTON
 	if (in.isBtnPressed(GLUT_LEFT_BUTTON)) {
 		Vector3 mouse = in.getMousePos();
@@ -401,6 +436,7 @@ void Game::processInput() {
 		std::string msg("Left mouse button IS HELD!!");
 		text.text(msg, 275.0, 200.0, settings.depth());
 	}
+	dt.stop(dt_in_btnpress);
 
 	// RIGHT MOUSE BUTTON
 	if (in.isBtnPressed(GLUT_RIGHT_BUTTON)) {

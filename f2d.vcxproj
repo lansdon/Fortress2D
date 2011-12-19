@@ -80,20 +80,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AmmoTypes.cpp" />
-    <ClCompile Include="GOAArrow.cpp" />
-    <ClCompile Include="GOSettings.cpp" />
-    <ClCompile Include="Launcher.cpp" />
     <ClCompile Include="openal\include\framework\Win32\aldlist.cpp" />
     <ClCompile Include="openal\include\framework\Win32\CWaves.cpp" />
     <ClCompile Include="openal\include\framework\Win32\Framework.cpp" />
     <ClCompile Include="openal\include\framework\Win32\LoadOAL.cpp" />
+    <ClCompile Include="src\AmmoTypes.cpp" />
+    <ClCompile Include="src\DebugTimers.cpp" />
     <ClCompile Include="src\Fort.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\GameObj.cpp" />
     <ClCompile Include="src\GameObjectFactory.cpp" />
     <ClCompile Include="src\GameObjectManager.cpp" />
     <ClCompile Include="src\GLText.cpp" />
+    <ClCompile Include="src\GOAArrow.cpp" />
     <ClCompile Include="src\GOArcher.cpp" />
     <ClCompile Include="src\GOArcherTower.cpp" />
     <ClCompile Include="src\GOBarbarian.cpp" />
@@ -103,12 +102,14 @@
     <ClCompile Include="src\GOMote.cpp" />
     <ClCompile Include="src\GOOilTower.cpp" />
     <ClCompile Include="src\GOSeigeEngine.cpp" />
+    <ClCompile Include="src\GOSettings.cpp" />
     <ClCompile Include="src\GOStoneWall.cpp" />
     <ClCompile Include="src\GOWarDog.cpp" />
     <ClCompile Include="src\GOWoodWall.cpp" />
     <ClCompile Include="src\GUIButton.cpp" />
     <ClCompile Include="src\GUIButtonMenu.cpp" />
     <ClCompile Include="src\Input.cpp" />
+    <ClCompile Include="src\Launcher.cpp" />
     <ClCompile Include="src\LevelLoader.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\MyContactListener.cpp" />
@@ -120,20 +121,19 @@
     <ClCompile Include="src\Settings.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AmmoTypes.h" />
-    <ClInclude Include="GOAArrow.h" />
-    <ClInclude Include="GOSettings.h" />
-    <ClInclude Include="Launcher.h" />
     <ClInclude Include="openal\include\framework\Win32\aldlist.h" />
     <ClInclude Include="openal\include\framework\Win32\CWaves.h" />
     <ClInclude Include="openal\include\framework\Win32\Framework.h" />
     <ClInclude Include="openal\include\framework\Win32\LoadOAL.h" />
+    <ClInclude Include="src\AmmoTypes.h" />
+    <ClInclude Include="src\DebugTimers.h" />
     <ClInclude Include="src\Fort.h" />
     <ClInclude Include="src\Game.h" />
     <ClInclude Include="src\GameObj.h" />
     <ClInclude Include="src\GameObjectFactory.h" />
     <ClInclude Include="src\GameObjectManager.h" />
     <ClInclude Include="src\GLText.h" />
+    <ClInclude Include="src\GOAArrow.h" />
     <ClInclude Include="src\GOArcher.h" />
     <ClInclude Include="src\GOArcherTower.h" />
     <ClInclude Include="src\GOBarbarian.h" />
@@ -143,12 +143,14 @@
     <ClInclude Include="src\GOMote.h" />
     <ClInclude Include="src\GOOilTower.h" />
     <ClInclude Include="src\GOSeigeEngine.h" />
+    <ClInclude Include="src\GOSettings.h" />
     <ClInclude Include="src\GOStoneWall.h" />
     <ClInclude Include="src\GOWarDog.h" />
     <ClInclude Include="src\GOWoodWall.h" />
     <ClInclude Include="src\GUIButton.h" />
     <ClInclude Include="src\GUIButtonMenu.h" />
     <ClInclude Include="src\Input.h" />
+    <ClInclude Include="src\Launcher.h" />
     <ClInclude Include="src\LevelLoader.h" />
     <ClInclude Include="src\MyContactListener.h" />
     <ClInclude Include="src\Performance_Counter.h" />

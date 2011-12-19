@@ -30,7 +30,8 @@ void reshape (int w, int h) {
 }
 
 void addKeyDown(unsigned char key, int x, int y) {
-	game.in.addKeyDown (key, x, y);
+//	game.in.addKeyDown (key, x, y);//
+	game.keyPressed(key, x, y);
 }
 
 void addKeyUp(unsigned char key, int x, int y) {
