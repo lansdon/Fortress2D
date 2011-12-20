@@ -9,7 +9,7 @@ Game::Game() {
 	settings.setWidth(800);
 	settings.setFloor(20);
 	settings.setMid(settings.width()/2);
-	settings.setTextures(true);				// TOGGLE TEXTURES OFF / ON
+	settings.setTextures(false);				// TOGGLE TEXTURES OFF / ON
 	settings.setSound(false);					// SOUND ON / OFF
 	sm.setSoundEngineStatus(settings.useSound());		// pass sound status to sound engine.
 
@@ -115,6 +115,11 @@ bool Game::initGL() {
 	fort.setSettings(&settings);
 	fortMenu->setSettings(&settings);
 	go->setSettings(&settings);
+
+
+	loadTextures();
+
+
 	return true;
 }
 
@@ -174,12 +179,12 @@ bool Game::update() {
 
 	// TEMP - Load an object for testing
 	// To-do Need to add level loading
-	if(!lvl) {
-		lvl = 1;
-		sm.loadSounds(level.getSpawnListTypes());
-		level.loadLevel(lvl, *go);
-		return true;
-	}
+	//if(!lvl) {
+	//	lvl = 1;
+	//	sm.loadSounds(level.getSpawnListTypes());
+	//	level.loadLevel(lvl, *go);
+	//	return true;
+	//}
 
 	// Timer - Get elapsed time since last update
 	Timer.Calculate_Ellapsed_Time();
@@ -214,7 +219,7 @@ bool Game::update() {
 //	dt.stop(dt_updateInput);
 
 	// Draw Functions
-//	dt.start(dt_draw);
+//	dt.start(dt_draw); /// timer moved to actual draw function
 	glutPostRedisplay();
 //	dt.stop(dt_draw);
 
@@ -598,6 +603,33 @@ void Game::doLaunch() {
 	//	b2Fixture *fixture = temp->body->GetFixtureList();
 	activeLauncher->setActivated(false);
 	activeLauncher = NULL;
+
+}
+
+
+
+
+
+// Textures
+void Game::loadTextures() {
+
+	TextureLoader::LoadGLTextures("default.png", Settings::OBJ_ID_NONE);
+	TextureLoader::LoadGLTextures("archer.jpg", Settings::OBJ_ID_ARCHER);
+	TextureLoader::LoadGLTextures("archer.jpg", Settings::OBJ_ID_ARCHER_TOWER);
+	TextureLoader::LoadGLTextures("arrow.jpg", Settings::OBJ_ID_ARROW);
+	TextureLoader::LoadGLTextures("archer.jpg", Settings::OBJ_ID_CANNONBALL);
+	TextureLoader::LoadGLTextures("archer.jpg", Settings::OBJ_ID_CATAPAULT);
+	TextureLoader::LoadGLTextures("archer.jpg", Settings::OBJ_ID_FENCE);
+	TextureLoader::LoadGLTextures("archer.jpg", Settings::OBJ_ID_HORDE);
+	TextureLoader::LoadGLTextures("archer.jpg", Settings::OBJ_ID_MAGE);
+	TextureLoader::LoadGLTextures("archer.jpg", Settings::OBJ_ID_MAGE_TOWER);
+	TextureLoader::LoadGLTextures("archer.jpg", Settings::OBJ_ID_MOTE);
+	TextureLoader::LoadGLTextures("archer.jpg", Settings::OBJ_ID_OIL_TOWER);
+	TextureLoader::LoadGLTextures("archer.jpg", Settings::OBJ_ID_SEIGE_ENGINE);
+	TextureLoader::LoadGLTextures("archer.jpg", Settings::OBJ_ID_SPEARMAN);
+	TextureLoader::LoadGLTextures("stonewall.jpg", Settings::OBJ_ID_STONEWALL);
+	TextureLoader::LoadGLTextures("woodwall.jpg", Settings::OBJ_ID_WOODWALL);
+
 
 }
 

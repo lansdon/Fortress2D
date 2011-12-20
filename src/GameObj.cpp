@@ -21,7 +21,7 @@ GameObj::GameObj(Settings *settings, double x, double y) // :
 	contacts = 0;		// TEMP?
 
 	// Load texture
-	textureID = TextureLoader::LoadGLTextures("test.png");
+//	textureID = TextureLoader::LoadGLTextures("test.png");
 
 	// Sound ID
 	soundSourceID = 0;
@@ -368,8 +368,8 @@ void GameObj::draw(b2Vec2 mouse) {						// draw the object on screen
 		glEnable( GL_BLEND );
 		glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
-		glBindTexture(GL_TEXTURE_2D, textureID);
-		glColor4f(1, 1, 1, 0.5);
+		glBindTexture(GL_TEXTURE_2D, goSettings.getTypeID());
+		glColor4f(1, 1, 1, 0.9);
 		 //Use blurry texture mapping (replace GL_LINEAR with GL_NEAREST for blocky)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
 	//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
@@ -521,7 +521,7 @@ void GameObj::loadObject(std::string datFilename, double x, double y) {
 	setupB2D(x, y);
 
 	// Load Texture
-	textureID = TextureLoader::LoadGLTextures(goSettings.getTextureFilename());
+//	textureID = TextureLoader::LoadGLTextures(goSettings.getTextureFilename());
 
 }
 

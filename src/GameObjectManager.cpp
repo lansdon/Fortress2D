@@ -117,7 +117,8 @@ void GameObjectManager::loadAmmo(GameObj &obj) {
 		case Settings::OBJ_ID_ARCHER: 
 		{
 			for(int i=0; i<3; ++i) {
-				GameObj *ammo = makeArrow(-500, 50, obj.isNPC());
+				GameObj *ammo = makeArrow(50+((attackers.size() + defenders.size())*10), 450-(i*10), obj.isNPC());
+				ammo->body->SetAwake(false);
 				ammo->body->SetActive(false);
 				ammo->goSettings.setHP(0);
 				obj.addAmmo(ammo);

@@ -203,7 +203,8 @@ private:
 	bool Game::activateGO(Vector3 mouse);			// Searches for a Launcher being activated
 	void Game::doLaunch();					// Launch an object from the currently selected launch object
 
-
+	// Textures
+	void loadTextures();
 };
 
 
